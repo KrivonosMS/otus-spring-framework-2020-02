@@ -14,19 +14,19 @@ class CheckListTest {
         rows.add(new String[]{"question1", "answer1"});
         rows.add(new String[]{"question2", "answer2"});
 
-        CheckList checkList = CheckList.from(rows);
+        CheckList checkList = CheckList.createInstanceFrom(rows);
 
-        Map<QuestionNumber, Question> questions = checkList.questions();
+        Map<QuestionNumber, Question> questions = checkList.unmodifiableQuestions();
         assertEquals(2, questions.size());
-        assertEquals("question1", questions.get(QuestionNumber.from(1)).question());
-        assertEquals(1, questions.get(QuestionNumber.from(1)).questionNumber().number());
-        assertEquals("question2", questions.get(QuestionNumber.from(2)).question());
-        assertEquals(2, questions.get(QuestionNumber.from(2)).questionNumber().number());
-        Map<QuestionNumber, CorrectTestAnswer> answers = checkList.answers();
-        assertEquals("answer1", answers.get(QuestionNumber.from(1)).answer());
-        assertEquals(1, answers.get(QuestionNumber.from(1)).questionNumber().number());
-        assertEquals("answer2", answers.get(QuestionNumber.from(2)).answer());
-        assertEquals(2, answers.get(QuestionNumber.from(2)).questionNumber().number());
+        assertEquals("question1", questions.get(QuestionNumber.createInstanceFrom(1)).question());
+        assertEquals(1, questions.get(QuestionNumber.createInstanceFrom(1)).questionNumber().number());
+        assertEquals("question2", questions.get(QuestionNumber.createInstanceFrom(2)).question());
+        assertEquals(2, questions.get(QuestionNumber.createInstanceFrom(2)).questionNumber().number());
+        Map<QuestionNumber, CorrectTestAnswer> answers = checkList.unmodifiableCorrectTestAnswers();
+        assertEquals("answer1", answers.get(QuestionNumber.createInstanceFrom(1)).answer());
+        assertEquals(1, answers.get(QuestionNumber.createInstanceFrom(1)).questionNumber().number());
+        assertEquals("answer2", answers.get(QuestionNumber.createInstanceFrom(2)).answer());
+        assertEquals(2, answers.get(QuestionNumber.createInstanceFrom(2)).questionNumber().number());
     }
 
     @Test
@@ -36,7 +36,7 @@ class CheckListTest {
         rows.add(new String[]{"question2", null});
 
         CheckListCreationException exception = Assertions.assertThrows(CheckListCreationException.class, () -> {
-            CheckList.from(rows);
+            CheckList.createInstanceFrom(rows);
         });
 
         assertEquals("Ошибка при создании ответа из строки № 2", exception.getMessage());
@@ -50,7 +50,7 @@ class CheckListTest {
         rows.add(new String[]{"question2", ""});
 
         CheckListCreationException exception = Assertions.assertThrows(CheckListCreationException.class, () -> {
-            CheckList.from(rows);
+            CheckList.createInstanceFrom(rows);
         });
 
         assertEquals("Ошибка при создании ответа из строки № 2", exception.getMessage());
@@ -64,7 +64,7 @@ class CheckListTest {
         rows.add(new String[]{null, "answer2"});
 
         CheckListCreationException exception = Assertions.assertThrows(CheckListCreationException.class, () -> {
-            CheckList.from(rows);
+            CheckList.createInstanceFrom(rows);
         });
 
         assertEquals("Ошибка при создании вопроса из строки № 2", exception.getMessage());
@@ -78,7 +78,7 @@ class CheckListTest {
         rows.add(new String[]{"", "answer2"});
 
         CheckListCreationException exception = Assertions.assertThrows(CheckListCreationException.class, () -> {
-            CheckList.from(rows);
+            CheckList.createInstanceFrom(rows);
         });
 
         assertEquals("Ошибка при создании вопроса из строки № 2", exception.getMessage());
@@ -91,12 +91,12 @@ class CheckListTest {
         rows.add(new String[]{"question1", "answer1"});
         rows.add(new String[]{"question2", "answer2"});
         rows.add(new String[]{"question3", "answer3"});
-        CheckList checkListTest = CheckList.from(rows);
+        CheckList checkListTest = CheckList.createInstanceFrom(rows);
         Map<QuestionNumber, String> answers = new HashMap<>();
-        answers.put(QuestionNumber.from(1), "answer1");
-        answers.put(QuestionNumber.from(3), "answer3");
-        answers.put(QuestionNumber.from(2), "not_correct_answer");
-        PersonAnswers personAnswers = PersonAnswers.from(answers, "test_user");
+        answers.put(QuestionNumber.createInstanceFrom(1), "answer1");
+        answers.put(QuestionNumber.createInstanceFrom(3), "answer3");
+        answers.put(QuestionNumber.createInstanceFrom(2), "not_correct_answer");
+        PersonAnswers personAnswers = PersonAnswers.createInstanceFrom(answers, "test_user");
 
         double result = checkListTest.calculateResult(personAnswers);
 
@@ -109,12 +109,12 @@ class CheckListTest {
         rows.add(new String[]{"question1", "answer1"});
         rows.add(new String[]{"question2", "answer2"});
         rows.add(new String[]{"question3", "answer3"});
-        CheckList checkListTest = CheckList.from(rows);
+        CheckList checkListTest = CheckList.createInstanceFrom(rows);
         Map<QuestionNumber, String> answers = new HashMap<>();
-        answers.put(QuestionNumber.from(1), "answer1");
-        answers.put(QuestionNumber.from(3), "answer3");
-        answers.put(QuestionNumber.from(2), null);
-        PersonAnswers personAnswers = PersonAnswers.from(answers, "test_user");
+        answers.put(QuestionNumber.createInstanceFrom(1), "answer1");
+        answers.put(QuestionNumber.createInstanceFrom(3), "answer3");
+        answers.put(QuestionNumber.createInstanceFrom(2), null);
+        PersonAnswers personAnswers = PersonAnswers.createInstanceFrom(answers, "test_user");
 
         double result = checkListTest.calculateResult(personAnswers);
 
@@ -127,12 +127,12 @@ class CheckListTest {
         rows.add(new String[]{"question1", "answer1"});
         rows.add(new String[]{"question2", "answer2"});
         rows.add(new String[]{"question3", "answer3"});
-        CheckList checkListTest = CheckList.from(rows);
+        CheckList checkListTest = CheckList.createInstanceFrom(rows);
         Map<QuestionNumber, String> answers = new HashMap<>();
-        answers.put(QuestionNumber.from(1), "answer1");
-        answers.put(QuestionNumber.from(3), "answer3");
-        answers.put(QuestionNumber.from(2), "");
-        PersonAnswers personAnswers = PersonAnswers.from(answers, "test_user");
+        answers.put(QuestionNumber.createInstanceFrom(1), "answer1");
+        answers.put(QuestionNumber.createInstanceFrom(3), "answer3");
+        answers.put(QuestionNumber.createInstanceFrom(2), "");
+        PersonAnswers personAnswers = PersonAnswers.createInstanceFrom(answers, "test_user");
 
         double result = checkListTest.calculateResult(personAnswers);
 

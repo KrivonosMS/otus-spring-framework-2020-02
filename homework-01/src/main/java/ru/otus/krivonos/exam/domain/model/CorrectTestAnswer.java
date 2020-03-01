@@ -9,7 +9,7 @@ public class CorrectTestAnswer {
 		addQuestionNumber(questionNumber);
 	}
 
-	static CorrectTestAnswer from(String[] row, QuestionNumber questionNumber) throws AnswerCreationException {
+	static CorrectTestAnswer createInstanceFrom(String[] row, QuestionNumber questionNumber) throws AnswerCreationException {
 		return new CorrectTestAnswer(row, questionNumber);
 	}
 

@@ -9,7 +9,7 @@ public class Question {
 		setQuestionNumber(questionNumber);
 	}
 
-	static Question from(String[] row, QuestionNumber questionNumber) throws QuestionCreationException {
+	static Question createInstanceFrom(String[] row, QuestionNumber questionNumber) throws QuestionCreationException {
 		return new Question(row, questionNumber);
 	}
 

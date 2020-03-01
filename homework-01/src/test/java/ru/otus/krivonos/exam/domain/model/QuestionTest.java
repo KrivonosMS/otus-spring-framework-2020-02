@@ -10,10 +10,10 @@ class QuestionTest {
     void checkCreationQuestionWhenOk() throws Exception {
         String[] row = new String[]{"question", "answer"};
 
-        Question question = Question.from(row, QuestionNumber.from(1));
+        Question question = Question.createInstanceFrom(row, QuestionNumber.createInstanceFrom(1));
 
         assertEquals("question", question.question());
-        assertEquals(QuestionNumber.from(1), question.questionNumber());
+        assertEquals(QuestionNumber.createInstanceFrom(1), question.questionNumber());
     }
 
     @Test
@@ -21,7 +21,7 @@ class QuestionTest {
         String[] row = new String[]{null, "answer"};
 
         QuestionCreationException exception = Assertions.assertThrows(QuestionCreationException.class, () -> {
-            Question.from(row, QuestionNumber.from(1));
+            Question.createInstanceFrom(row, QuestionNumber.createInstanceFrom(1));
         });
 
         assertEquals("Отсутствует вопрос теста", exception.getMessage());
@@ -32,7 +32,7 @@ class QuestionTest {
         String[] row = new String[]{"", "answer"};
 
         QuestionCreationException exception = Assertions.assertThrows(QuestionCreationException.class, () -> {
-            Question.from(row, QuestionNumber.from(1));
+            Question.createInstanceFrom(row, QuestionNumber.createInstanceFrom(1));
         });
 
         assertEquals("Отсутствует вопрос теста", exception.getMessage());

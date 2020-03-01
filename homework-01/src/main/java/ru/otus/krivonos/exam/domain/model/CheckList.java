@@ -3,6 +3,7 @@ package ru.otus.krivonos.exam.domain.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,36 +11,38 @@ import java.util.Map;
 public class CheckList {
 	public static final Logger LOG = LoggerFactory.getLogger(CheckList.class);
 
-	private Map<QuestionNumber, Question> questions;
-	private Map<QuestionNumber, CorrectTestAnswer> correctTestAnswers;
+	private final Map<QuestionNumber, Question> unmodifiableQuestions;
+	private final Map<QuestionNumber, CorrectTestAnswer> unmodifiableCorrectTestAnswers;
 
-	private CheckList() {
-		questions = new HashMap<>();
-		correctTestAnswers = new HashMap<>();
+	private CheckList(Map<QuestionNumber, Question> questions, Map<QuestionNumber, CorrectTestAnswer> correctTestAnswers) {
+		this.unmodifiableQuestions = Collections.unmodifiableMap(questions);
+		this.unmodifiableCorrectTestAnswers = Collections.unmodifiableMap(correctTestAnswers);
 	}
 
-	public static CheckList from(List<String[]> rowsData) throws CheckListCreationException {
+	public static CheckList createInstanceFrom(List<String[]> rowsData) throws CheckListCreationException {
 		if (rowsData == null || rowsData.isEmpty()) {
 			throw new CheckListCreationException("Отсутствуют данные для формирования теста");
 		}
 		LOG.debug("method=from action=\"формирование теста\"");
 
-		CheckList checkList = new CheckList();
 		int rowsSize = rowsData.size();
+		Map<QuestionNumber, Question> questions = new HashMap<>();
+		Map<QuestionNumber, CorrectTestAnswer> answers = new HashMap<>();
 		for (int i = 0; i < rowsSize; i++) {
 			try {
 				String[] row = rowsData.get(i);
-				QuestionNumber questionNumber = QuestionNumber.from(i + 1);
-				Question question = Question.from(row, questionNumber);
-				checkList.setQuestion(questionNumber, question);
-				CorrectTestAnswer answer = CorrectTestAnswer.from(row, questionNumber);
-				checkList.setAnswer(questionNumber, answer);
+				QuestionNumber questionNumber = QuestionNumber.createInstanceFrom(i + 1);
+				Question question = Question.createInstanceFrom(row, questionNumber);
+				questions.put(questionNumber, question);
+				CorrectTestAnswer answer = CorrectTestAnswer.createInstanceFrom(row, questionNumber);
+				answers.put(questionNumber, answer);
 			} catch (QuestionCreationException e) {
 				throw new CheckListCreationException("Ошибка при создании вопроса из строки № " + (i + 1), e);
 			} catch (AnswerCreationException e) {
 				throw new CheckListCreationException("Ошибка при создании ответа из строки № " + (i + 1), e);
 			}
 		}
+		CheckList checkList = new CheckList(questions,answers);
 
 		LOG.debug("method=from action=\"завершение формирования теста\" rowSize={} test={}", rowsSize, checkList);
 
@@ -55,37 +58,29 @@ public class CheckList {
 		Map<QuestionNumber, String> answers = personAnswers.personAnswers();
 		int correctCountAnswer = 0;
 		for (QuestionNumber questionNumber : answers.keySet()) {
-			if (correctTestAnswers.get(questionNumber).answer().equalsIgnoreCase(answers.get(questionNumber))) {
+			if (unmodifiableCorrectTestAnswers.get(questionNumber).answer().equalsIgnoreCase(answers.get(questionNumber))) {
 				correctCountAnswer++;
 			}
 		}
 
-		LOG.debug("method=calculateResult action=\"завершение вычисления результатов тестроивания\" username={} correctCountAnswer={} allQuestionCount={}", personAnswers.username(), correctCountAnswer, correctTestAnswers.size());
+		LOG.debug("method=calculateResult action=\"завершение вычисления результатов тестроивания\" username={} correctCountAnswer={} allQuestionCount={}", personAnswers.username(), correctCountAnswer, unmodifiableCorrectTestAnswers.size());
 
-		return (double) correctCountAnswer / correctTestAnswers.size();
+		return (double) correctCountAnswer / unmodifiableCorrectTestAnswers.size();
 	}
 
-	private void setQuestion(QuestionNumber questionNumber, Question question) {
-		questions.put(questionNumber, question);
+	public Map<QuestionNumber, Question> unmodifiableQuestions() {
+		return this.unmodifiableQuestions;
 	}
 
-	private void setAnswer(QuestionNumber questionNumber, CorrectTestAnswer answer) {
-		correctTestAnswers.put(questionNumber, answer);
-	}
-
-	public Map<QuestionNumber, Question> questions() {
-		return this.questions;
-	}
-
-	Map<QuestionNumber, CorrectTestAnswer> answers() {
-		return this.correctTestAnswers;
+	Map<QuestionNumber, CorrectTestAnswer> unmodifiableCorrectTestAnswers() {
+		return this.unmodifiableCorrectTestAnswers;
 	}
 
 	@Override
 	public String toString() {
 		return "CheckList{" +
-			"questions=" + questions +
-			", correctTestAnswers=" + correctTestAnswers +
+			"questions=" + unmodifiableQuestions +
+			", correctTestAnswers=" + unmodifiableCorrectTestAnswers +
 			'}';
 	}
 }

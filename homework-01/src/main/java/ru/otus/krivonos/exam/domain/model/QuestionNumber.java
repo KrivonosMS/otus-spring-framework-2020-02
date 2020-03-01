@@ -9,7 +9,7 @@ public class QuestionNumber {
 		setNumber(number);
 	}
 
-	static QuestionNumber from(int rowNumber) {
+	static QuestionNumber createInstanceFrom(int rowNumber) {
 		return new QuestionNumber(rowNumber);
 	}
 

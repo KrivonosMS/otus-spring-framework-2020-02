@@ -12,12 +12,12 @@ public class PersonAnswers {
 	private String username;
 
 	private PersonAnswers(Map<QuestionNumber, String> personAnswers, String username) throws PersonAnswersCreationException {
-		addPersonAnswers(personAnswers);
+		setPersonAnswers(personAnswers);
 		addUsername(username);
 
 	}
 
-	public static PersonAnswers from(Map<QuestionNumber, String> personAnswers, String username) throws PersonAnswersCreationException {
+	public static PersonAnswers createInstanceFrom(Map<QuestionNumber, String> personAnswers, String username) throws PersonAnswersCreationException {
 		LOG.debug("method=from action=\"формирование доменного объекта с ответами тестируемого\"");
 
 		PersonAnswers answers = new PersonAnswers(personAnswers, username);
@@ -27,7 +27,7 @@ public class PersonAnswers {
 		return answers;
 	}
 
-	private void addPersonAnswers(Map<QuestionNumber, String> personAnswers) throws PersonAnswersCreationException {
+	private void setPersonAnswers(Map<QuestionNumber, String> personAnswers) throws PersonAnswersCreationException {
 		if (personAnswers == null) {
 			throw new PersonAnswersCreationException("Отсутствуют ответы тестируемого пользователя");
 		}

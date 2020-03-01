@@ -10,10 +10,10 @@ class CorrectTestAnswerTest {
     void checkCreationCorrectTestAnswerWhenOk() throws Exception {
         String[] row = new String[]{"question", "answer"};
 
-        CorrectTestAnswer answer = CorrectTestAnswer.from(row, QuestionNumber.from(1));
+        CorrectTestAnswer answer = CorrectTestAnswer.createInstanceFrom(row, QuestionNumber.createInstanceFrom(1));
 
         assertEquals("answer", answer.answer());
-        assertEquals(QuestionNumber.from(1), answer.questionNumber());
+        assertEquals(QuestionNumber.createInstanceFrom(1), answer.questionNumber());
     }
 
     @Test
@@ -21,7 +21,7 @@ class CorrectTestAnswerTest {
         String[] row = new String[]{"questiom", null};
 
         AnswerCreationException exception = Assertions.assertThrows(AnswerCreationException.class, () -> {
-            CorrectTestAnswer.from(row, QuestionNumber.from(1));
+            CorrectTestAnswer.createInstanceFrom(row, QuestionNumber.createInstanceFrom(1));
         });
 
         assertEquals("Отсутствует ответ для вопроса теста", exception.getMessage());
@@ -32,7 +32,7 @@ class CorrectTestAnswerTest {
         String[] row = new String[]{"questiom", ""};
 
         AnswerCreationException exception = Assertions.assertThrows(AnswerCreationException.class, () -> {
-            CorrectTestAnswer.from(row, QuestionNumber.from(1));
+            CorrectTestAnswer.createInstanceFrom(row, QuestionNumber.createInstanceFrom(1));
         });
 
         assertEquals("Отсутствует ответ для вопроса теста", exception.getMessage());

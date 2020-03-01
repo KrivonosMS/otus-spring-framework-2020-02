@@ -29,13 +29,13 @@ public class ApplicationService {
 			greeting();
 			System.out.println("Пожалуйста, введите свое имя: ");
 			String username = scanReader.nextLine();
-			Map<QuestionNumber, Question> questions = checkList.questions();
+			Map<QuestionNumber, Question> questions = checkList.unmodifiableQuestions();
 			Map<QuestionNumber, String> answers = new HashMap<>();
 			for (QuestionNumber questionNumber : questions.keySet()) {
 				System.out.println(questions.get(questionNumber).question());
 				answers.put(questionNumber, scanReader.nextLine());
 			}
-			PersonAnswers personAnswers = PersonAnswers.from(answers, username);
+			PersonAnswers personAnswers = PersonAnswers.createInstanceFrom(answers, username);
 			double result = checkList.calculateResult(personAnswers);
 			System.out.printf("%s, Вы успешно ответили на %.0f%% вопросов.", personAnswers.username(), result * 100);
 

@@ -32,7 +32,7 @@ public class CsvFileTestRepository implements TestRepository {
 
 			LOG.debug("method=obtainTest action=\"получение теста\" fileRowSize={}", rows.size());
 
-			CheckList checkList = CheckList.from(rows);
+			CheckList checkList = CheckList.createInstanceFrom(rows);
 
 			LOG.debug("method=obtainTest action=\"завершение получения теста\" fileRowSize={}", rows.size());
 
