@@ -5,33 +5,35 @@ import org.slf4j.LoggerFactory;
 import ru.otus.krivonos.exam.domain.TestRepository;
 import ru.otus.krivonos.exam.domain.TestRepositoryException;
 import ru.otus.krivonos.exam.domain.model.*;
+import ru.otus.krivonos.exam.infrastructore.ScanReader;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class ApplicationService {
 	public static final Logger LOG = LoggerFactory.getLogger(ApplicationService.class);
 
 	private final TestRepository repository;
+	private final ScanReader scanReader;
 
-	public ApplicationService(TestRepository repository) {
+	public ApplicationService(TestRepository repository, ScanReader scanReader) {
 		this.repository = repository;
+		this.scanReader = scanReader;
 	}
 
-	public void startTest(Scanner scanner) throws ApplicationServiceException {
+	public void startTest() throws ApplicationServiceException {
 		try {
 			LOG.debug("method=startTest action=\"проведение тестирование\"");
 
 			CheckList checkList = repository.obtainTest();
 			greeting();
 			System.out.println("Пожалуйста, введите свое имя: ");
-			String username = scanner.nextLine();
+			String username = scanReader.nextLine();
 			Map<QuestionNumber, Question> questions = checkList.questions();
 			Map<QuestionNumber, String> answers = new HashMap<>();
 			for (QuestionNumber questionNumber : questions.keySet()) {
 				System.out.println(questions.get(questionNumber).question());
-				answers.put(questionNumber, scanner.nextLine());
+				answers.put(questionNumber, scanReader.nextLine());
 			}
 			PersonAnswers personAnswers = PersonAnswers.from(answers, username);
 			double result = checkList.calculateResult(personAnswers);
@@ -44,6 +46,8 @@ public class ApplicationService {
 			throw new ApplicationServiceException("Произошла ошибка во время формирования объекта с пользовательскими ответами на вопросы тестирования", e);
 		} catch (CalculatedResultException e) {
 			throw new ApplicationServiceException("Произошла ошибка во время вычисления результатов тестирования", e);
+		} finally {
+			scanReader.close();
 		}
 	}
 

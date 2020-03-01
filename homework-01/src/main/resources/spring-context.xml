@@ -8,7 +8,10 @@
         <constructor-arg name="testCsvFilePathResource" value="/csv/questions.csv"/>
     </bean>
 
+    <bean id="windowsConsoleScanReader" class="ru.otus.krivonos.exam.infrastructore.WindowsConsoleScanReader"/>
+
     <bean id="applicationService" class="ru.otus.krivonos.exam.application.ApplicationService">
         <constructor-arg name="repository" ref="testRepository"/>
+        <constructor-arg name="scanReader" ref="windowsConsoleScanReader"/>
     </bean>
 </beans>
