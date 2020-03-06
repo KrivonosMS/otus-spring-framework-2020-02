@@ -1,5 +1,7 @@
 package ru.otus.krivonos.exam.domain.model;
 
+import java.util.Objects;
+
 public class Result {
 	private String username;
 	private double successResultPercent;
@@ -11,7 +13,7 @@ public class Result {
 		setUserCorrectAnswersPercent(userCorrectAnswersPercent);
 	}
 
-	static Result createInstanceFrom(String username, double successResultPercent, double userCorrectAnswersPercent) throws ResultCreationException {
+	public static Result createInstanceFrom(String username, double successResultPercent, double userCorrectAnswersPercent) throws ResultCreationException {
 		return new Result(username, successResultPercent, userCorrectAnswersPercent);
 	}
 
@@ -40,6 +42,21 @@ public class Result {
 
 	private void setUserCorrectAnswersPercent(double userCorrectAnswers) {
 		this.userCorrectAnswersPercent = userCorrectAnswers * 100;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Result result = (Result) o;
+		return Double.compare(result.successResultPercent, successResultPercent) == 0 &&
+			Double.compare(result.userCorrectAnswersPercent, userCorrectAnswersPercent) == 0 &&
+			Objects.equals(username, result.username);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(username, successResultPercent, userCorrectAnswersPercent);
 	}
 
 	@Override
