@@ -1,6 +1,11 @@
 package ru.otus.krivonos.exam.application;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import ru.otus.krivonos.exam.domain.TestRepository;
 import ru.otus.krivonos.exam.domain.model.CheckList;
 import ru.otus.krivonos.exam.domain.model.Localization;
@@ -14,8 +19,21 @@ import java.util.List;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-
 class ApplicationServiceTest {
+	@Mock
+	private TestRepository repository;
+	@Mock
+	private ScanReader scanReader;
+	@Mock
+	private MessagePrinter messagePrinter;
+	@InjectMocks
+	private ApplicationService applicationService;
+
+	@BeforeEach
+	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
+	}
+
 	@Test
 	void startTestWhenOk() throws Exception {
 		List<String[]> rows = new ArrayList<>();
@@ -23,16 +41,12 @@ class ApplicationServiceTest {
 		rows.add(new String[]{"question2", "answer2"});
 		rows.add(new String[]{"question3", "answer3"});
 		CheckList checkList = CheckList.createInstanceFrom(rows, 50);
-		TestRepository repository = mock(TestRepository.class);
 		when(repository.obtainTest(any())).thenReturn(checkList);
-		ScanReader scanReader = mock(ScanReader.class);
 		when(scanReader.nextLine())
 			.thenReturn("test_user")
 			.thenReturn("answer1")
 			.thenReturn("ans")
 			.thenReturn("answer3");
-		MessagePrinter messagePrinter = mock(MessagePrinter.class);
-		ApplicationService applicationService = new ApplicationService(repository, scanReader, messagePrinter);
 
 		applicationService.startTest("ru");
 

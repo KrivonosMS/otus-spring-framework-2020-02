@@ -38,7 +38,6 @@ public class ApplicationService {
 			Map<QuestionNumber, Question> questions = checkList.unmodifiableQuestions();
 			Map<QuestionNumber, String> answers = new HashMap<>();
 			for (QuestionNumber questionNumber : questions.keySet()) {
-				System.out.println(questions.get(questionNumber).question());
 				answers.put(questionNumber, scanReader.nextLine());
 			}
 			PersonAnswers personAnswers = PersonAnswers.createInstanceFrom(answers, username);
