@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="testRepository" class="ru.otus.krivonos.exam.infrastructore.CsvFileTestRepository">
+    <bean id="testRepository" class="ru.otus.krivonos.exam.infrastructore.CsvFileExamRepository">
         <constructor-arg name="testCsvFilePathResource" value="/csv/questions.csv"/>
     </bean>
 
