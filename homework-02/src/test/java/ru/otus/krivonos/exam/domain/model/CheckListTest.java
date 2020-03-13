@@ -27,9 +27,7 @@ class CheckListTest {
 		assertEquals(2, questions.get(QuestionNumber.createInstanceFrom(2)).questionNumber().number());
 		Map<QuestionNumber, CorrectTestAnswer> answers = checkList.unmodifiableCorrectTestAnswers();
 		assertEquals("answer1", answers.get(QuestionNumber.createInstanceFrom(1)).answer());
-		assertEquals(1, answers.get(QuestionNumber.createInstanceFrom(1)).questionNumber().number());
 		assertEquals("answer2", answers.get(QuestionNumber.createInstanceFrom(2)).answer());
-		assertEquals(2, answers.get(QuestionNumber.createInstanceFrom(2)).questionNumber().number());
 	}
 
 	@Test

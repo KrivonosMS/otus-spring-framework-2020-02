@@ -9,7 +9,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 @Configuration
 public class Config {
 	@Bean
-	PropertySourcesPlaceholderConfigurer propertyConfig() {
+	public PropertySourcesPlaceholderConfigurer propertyConfig() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 

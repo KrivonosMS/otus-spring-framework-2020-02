@@ -28,11 +28,6 @@ public class CorrectTestAnswer {
 		return answer;
 	}
 
-	QuestionNumber questionNumber() {
-		return questionNumber;
-	}
-
-
 	@Override
 	public String toString() {
 		return "CorrectTestAnswer{" +

@@ -9,7 +9,7 @@ public enum Localization {
 	private Locale locale;
 	private String questionCatalog;
 
-	Localization(String questionCatalog, Locale locale) {
+	private Localization(String questionCatalog, Locale locale) {
 		this.questionCatalog = questionCatalog;
 		this.locale = locale;
 	}

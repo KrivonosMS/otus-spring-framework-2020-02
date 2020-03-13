@@ -13,7 +13,6 @@ class CorrectTestAnswerTest {
         CorrectTestAnswer answer = CorrectTestAnswer.createInstanceFrom(row, QuestionNumber.createInstanceFrom(1));
 
         assertEquals("answer", answer.answer());
-        assertEquals(QuestionNumber.createInstanceFrom(1), answer.questionNumber());
     }
 
     @Test
