@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
-	private String filePathQuestions;
+	private String questionFilePath;
 	private double successPercentResult;
 	private String localization;
 
-	public String getFilePathQuestions() {
-		return filePathQuestions;
+	public String getQuestionFilePath() {
+		return questionFilePath;
 	}
 
 	public double getSuccessPercentResult() {
@@ -22,8 +22,8 @@ public class ApplicationProperties {
 		return localization;
 	}
 
-	public void setFilePathQuestions(String filePathQuestions) {
-		this.filePathQuestions = filePathQuestions;
+	public void setQuestionFilePath(String questionFilePath) {
+		this.questionFilePath = questionFilePath;
 	}
 
 	public void setSuccessPercentResult(double successPercentResult) {

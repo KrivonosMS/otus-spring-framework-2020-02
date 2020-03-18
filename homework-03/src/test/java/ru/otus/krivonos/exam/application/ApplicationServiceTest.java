@@ -6,10 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ru.otus.krivonos.exam.domain.ExamRepository;
+import ru.otus.krivonos.exam.domain.IOService;
 import ru.otus.krivonos.exam.domain.model.CheckList;
 import ru.otus.krivonos.exam.domain.model.Result;
 import ru.otus.krivonos.exam.infrastructore.MessagePrinter;
-import ru.otus.krivonos.exam.infrastructore.ScanReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ class ApplicationServiceTest {
 	@Mock
 	private ExamRepository repository;
 	@Mock
-	private ScanReader scanReader;
+	private IOService scanReader;
 	@Mock
 	private MessagePrinter messagePrinter;
 	@InjectMocks
@@ -39,7 +39,7 @@ class ApplicationServiceTest {
 		rows.add(new String[]{"question3", "answer3"});
 		CheckList checkList = CheckList.createInstanceFrom(rows, 50);
 		when(repository.obtainTest()).thenReturn(checkList);
-		when(scanReader.nextLine())
+		when(scanReader.readMessage())
 			.thenReturn("test_user")
 			.thenReturn("answer1")
 			.thenReturn("ans")

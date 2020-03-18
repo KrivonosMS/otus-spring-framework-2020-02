@@ -3,7 +3,6 @@ package ru.otus.krivonos.exam.infrastructore;
 import au.com.bytecode.opencsv.CSVReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Repository;
 import ru.otus.krivonos.exam.config.ApplicationProperties;
 import ru.otus.krivonos.exam.domain.ExamRepository;
@@ -16,17 +15,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Locale;
 
 @Repository
 public class CsvFileExamRepository implements ExamRepository {
 	public static final Logger LOG = LoggerFactory.getLogger(CsvFileExamRepository.class);
 
-	private final MessageSource messageSource;
+	private final String filePath;
 	private final double successPercentResult;
 
-	public CsvFileExamRepository(ApplicationProperties applicationProperties, MessageSource messageSource) {
-		this.messageSource = messageSource;
+	public CsvFileExamRepository(ApplicationProperties applicationProperties) {
+		this.filePath = applicationProperties.getQuestionFilePath();
 		this.successPercentResult = applicationProperties.getSuccessPercentResult();
 	}
 
@@ -34,7 +32,7 @@ public class CsvFileExamRepository implements ExamRepository {
 	public CheckList obtainTest() throws ExamRepositoryException {
 		LOG.debug("method=obtainTest action=\"получение теста\"");
 
-		try (CSVReader csvReader = new CSVReader(new InputStreamReader(getClass().getResourceAsStream(messageSource.getMessage("file.path", new String[]{}, Locale.getDefault())), StandardCharsets.UTF_8), ',')) {
+		try (CSVReader csvReader = new CSVReader(new InputStreamReader(getClass().getResourceAsStream(filePath), StandardCharsets.UTF_8), ',')) {
 			List<String[]> rows = csvReader.readAll();
 
 			LOG.debug("method=obtainTest action=\"получение теста\" fileRowSize={}", rows.size());

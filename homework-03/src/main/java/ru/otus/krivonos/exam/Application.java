@@ -20,24 +20,14 @@ public class Application {
 
 	public static void main(String[] args) {
 		try {
+			Locale.setDefault(new Locale("ru", "RU"));
 			ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
 			ApplicationService applicationService = context.getBean(ApplicationService.class);
-			ApplicationProperties applicationProperties = context.getBean(ApplicationProperties.class);
-			setLocale(applicationProperties.getLocalization());
 			applicationService.startTest();
 		} catch (ApplicationServiceException e) {
 			LOG.error("Возникла ошибка в работе приложения", e);
 		} catch (Exception e) {
 			LOG.error("Возникла непредвиденная ошибка", e);
-		}
-	}
-
-	private static void setLocale(String locale) {
-		List<String> localeList = Arrays.asList(locale.split("_"));
-		if(!localeList.isEmpty() && localeList.size() > 1) {
-			Locale.setDefault(new Locale(localeList.get(0), localeList.get(1)));
-		} else {
-			Locale.setDefault(new Locale("ru", "RU"));
 		}
 	}
 }

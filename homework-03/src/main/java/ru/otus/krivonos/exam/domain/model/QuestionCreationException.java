@@ -1,8 +1,6 @@
 package ru.otus.krivonos.exam.domain.model;
 
-import ru.otus.krivonos.exam.domain.DomainException;
-
-class QuestionCreationException extends DomainException {
+class QuestionCreationException extends Exception {
 	QuestionCreationException(String message) {
 		super(message);
 	}
