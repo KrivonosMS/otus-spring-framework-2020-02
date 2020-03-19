@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.otus.krivonos.exam.domain.DomainException;
 import ru.otus.krivonos.exam.domain.TestRepository;
 import ru.otus.krivonos.exam.domain.model.*;
-import ru.otus.krivonos.exam.infrastructore.MessagePrinter;
-import ru.otus.krivonos.exam.infrastructore.ScanReader;
+import ru.otus.krivonos.exam.infrastructure.MessagePrinter;
+import ru.otus.krivonos.exam.infrastructure.ScanReader;
 
 import java.util.HashMap;
 import java.util.Map;

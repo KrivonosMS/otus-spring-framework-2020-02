@@ -4,15 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
 import ru.otus.krivonos.exam.application.ApplicationService;
 import ru.otus.krivonos.exam.application.ApplicationServiceException;
-import ru.otus.krivonos.exam.config.ApplicationProperties;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
 
 @SpringBootApplication
 public class Application {
@@ -20,7 +14,6 @@ public class Application {
 
 	public static void main(String[] args) {
 		try {
-			Locale.setDefault(new Locale("ru", "RU"));
 			ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
 			ApplicationService applicationService = context.getBean(ApplicationService.class);
 			applicationService.startTest();

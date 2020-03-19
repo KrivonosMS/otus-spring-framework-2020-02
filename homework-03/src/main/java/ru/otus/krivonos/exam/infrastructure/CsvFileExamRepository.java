@@ -1,12 +1,12 @@
-package ru.otus.krivonos.exam.infrastructore;
+package ru.otus.krivonos.exam.infrastructure;
 
 import au.com.bytecode.opencsv.CSVReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.otus.krivonos.exam.config.ApplicationProperties;
-import ru.otus.krivonos.exam.domain.ExamRepository;
-import ru.otus.krivonos.exam.domain.ExamRepositoryException;
+import ru.otus.krivonos.exam.domain.model.ExamRepository;
+import ru.otus.krivonos.exam.domain.model.ExamRepositoryException;
 import ru.otus.krivonos.exam.domain.model.CheckList;
 import ru.otus.krivonos.exam.domain.model.CheckListCreationException;
 
@@ -21,11 +21,9 @@ public class CsvFileExamRepository implements ExamRepository {
 	public static final Logger LOG = LoggerFactory.getLogger(CsvFileExamRepository.class);
 
 	private final String filePath;
-	private final double successPercentResult;
 
 	public CsvFileExamRepository(ApplicationProperties applicationProperties) {
 		this.filePath = applicationProperties.getQuestionFilePath();
-		this.successPercentResult = applicationProperties.getSuccessPercentResult();
 	}
 
 	@Override
@@ -37,7 +35,7 @@ public class CsvFileExamRepository implements ExamRepository {
 
 			LOG.debug("method=obtainTest action=\"получение теста\" fileRowSize={}", rows.size());
 
-			CheckList checkList = CheckList.createInstanceFrom(rows, successPercentResult);
+			CheckList checkList = CheckList.createInstanceFrom(rows);
 
 			LOG.debug("method=obtainTest action=\"завершение получения теста\" fileRowSize={}", rows.size());
 

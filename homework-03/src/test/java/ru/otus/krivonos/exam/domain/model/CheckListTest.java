@@ -17,7 +17,7 @@ class CheckListTest {
 		rows.add(new String[]{"question1", "answer1"});
 		rows.add(new String[]{"question2", "answer2"});
 
-		CheckList checkList = CheckList.createInstanceFrom(rows, 50);
+		CheckList checkList = CheckList.createInstanceFrom(rows);
 
 		Map<QuestionNumber, Question> questions = checkList.unmodifiableQuestions();
 		assertEquals(2, questions.size());
@@ -37,7 +37,7 @@ class CheckListTest {
 		rows.add(new String[]{"question2", null});
 
 		CheckListCreationException exception = Assertions.assertThrows(CheckListCreationException.class, () -> {
-			CheckList.createInstanceFrom(rows, 50);
+			CheckList.createInstanceFrom(rows);
 		});
 
 		assertEquals("Ошибка при создании ответа из строки № 2", exception.getMessage());
@@ -51,7 +51,7 @@ class CheckListTest {
 		rows.add(new String[]{"question2", ""});
 
 		CheckListCreationException exception = Assertions.assertThrows(CheckListCreationException.class, () -> {
-			CheckList.createInstanceFrom(rows, 50);
+			CheckList.createInstanceFrom(rows);
 		});
 
 		assertEquals("Ошибка при создании ответа из строки № 2", exception.getMessage());
@@ -65,7 +65,7 @@ class CheckListTest {
 		rows.add(new String[]{null, "answer2"});
 
 		CheckListCreationException exception = Assertions.assertThrows(CheckListCreationException.class, () -> {
-			CheckList.createInstanceFrom(rows, 50);
+			CheckList.createInstanceFrom(rows);
 		});
 
 		assertEquals("Ошибка при создании вопроса из строки № 2", exception.getMessage());
@@ -79,7 +79,7 @@ class CheckListTest {
 		rows.add(new String[]{"", "answer2"});
 
 		CheckListCreationException exception = Assertions.assertThrows(CheckListCreationException.class, () -> {
-			CheckList.createInstanceFrom(rows, 50);
+			CheckList.createInstanceFrom(rows);
 		});
 
 		assertEquals("Ошибка при создании вопроса из строки № 2", exception.getMessage());
@@ -92,14 +92,14 @@ class CheckListTest {
 		rows.add(new String[]{"question1", "answer1"});
 		rows.add(new String[]{"question2", "answer2"});
 		rows.add(new String[]{"question3", "answer3"});
-		CheckList checkListTest = CheckList.createInstanceFrom(rows, 50);
+		CheckList checkListTest = CheckList.createInstanceFrom(rows);
 		Map<QuestionNumber, String> answers = new HashMap<>();
 		answers.put(QuestionNumber.createInstanceFrom(1), "answer1");
 		answers.put(QuestionNumber.createInstanceFrom(3), "answer3");
 		answers.put(QuestionNumber.createInstanceFrom(2), "not_correct_answer");
 		PersonAnswers personAnswers = PersonAnswers.createInstanceFrom(answers, "test_user");
 
-		Result result = checkListTest.calculateResult(personAnswers);
+		Result result = checkListTest.calculateResult(personAnswers, 50);
 
 		assertEquals((double) 2 / 3 * 100, result.userPercentResult());
 	}
@@ -110,14 +110,14 @@ class CheckListTest {
 		rows.add(new String[]{"question1", "answer1"});
 		rows.add(new String[]{"question2", "answer2"});
 		rows.add(new String[]{"question3", "answer3"});
-		CheckList checkListTest = CheckList.createInstanceFrom(rows, 50);
+		CheckList checkListTest = CheckList.createInstanceFrom(rows);
 		Map<QuestionNumber, String> answers = new HashMap<>();
 		answers.put(QuestionNumber.createInstanceFrom(1), "answer1");
 		answers.put(QuestionNumber.createInstanceFrom(3), "answer3");
 		answers.put(QuestionNumber.createInstanceFrom(2), null);
 		PersonAnswers personAnswers = PersonAnswers.createInstanceFrom(answers, "test_user");
 
-		Result result = checkListTest.calculateResult(personAnswers);
+		Result result = checkListTest.calculateResult(personAnswers, 50);
 
 		assertEquals((double) 2 / 3 * 100, result.userPercentResult());
 	}
@@ -128,14 +128,14 @@ class CheckListTest {
 		rows.add(new String[]{"question1", "answer1"});
 		rows.add(new String[]{"question2", "answer2"});
 		rows.add(new String[]{"question3", "answer3"});
-		CheckList checkListTest = CheckList.createInstanceFrom(rows, 50);
+		CheckList checkListTest = CheckList.createInstanceFrom(rows);
 		Map<QuestionNumber, String> answers = new HashMap<>();
 		answers.put(QuestionNumber.createInstanceFrom(1), "answer1");
 		answers.put(QuestionNumber.createInstanceFrom(3), "answer3");
 		answers.put(QuestionNumber.createInstanceFrom(2), "");
 		PersonAnswers personAnswers = PersonAnswers.createInstanceFrom(answers, "test_user");
 
-		Result result = checkListTest.calculateResult(personAnswers);
+		Result result = checkListTest.calculateResult(personAnswers, 50);
 
 		assertEquals((double) 2 / 3 * 100, result.userPercentResult());
 	}

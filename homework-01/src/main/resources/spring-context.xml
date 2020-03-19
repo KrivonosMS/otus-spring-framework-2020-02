@@ -4,11 +4,11 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="testRepository" class="ru.otus.krivonos.exam.infrastructore.CsvFileExamRepository">
+    <bean id="testRepository" class="ru.otus.krivonos.exam.infrastructure.CsvFileExamRepository">
         <constructor-arg name="testCsvFilePathResource" value="/csv/questions.csv"/>
     </bean>
 
-    <bean id="windowsConsoleScanReader" class="ru.otus.krivonos.exam.infrastructore.WindowsConsoleScanReader"/>
+    <bean id="windowsConsoleScanReader" class="ru.otus.krivonos.exam.infrastructure.WindowsConsoleScanReader"/>
 
     <bean id="applicationService" class="ru.otus.krivonos.exam.application.ApplicationService">
         <constructor-arg name="repository" ref="testRepository"/>

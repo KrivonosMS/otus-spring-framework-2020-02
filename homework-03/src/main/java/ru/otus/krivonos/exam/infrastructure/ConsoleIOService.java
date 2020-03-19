@@ -1,8 +1,6 @@
-package ru.otus.krivonos.exam.infrastructore;
+package ru.otus.krivonos.exam.infrastructure;
 
 import org.springframework.stereotype.Service;
-import ru.otus.krivonos.exam.config.ConsoleContext;
-import ru.otus.krivonos.exam.domain.ExamService;
 import ru.otus.krivonos.exam.domain.IOService;
 import ru.otus.krivonos.exam.domain.IOServiceException;
 

@@ -1,54 +1,39 @@
 package ru.otus.krivonos.exam.domain;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.krivonos.exam.domain.model.ExamRepository;
 import ru.otus.krivonos.exam.domain.model.Result;
 
-import java.util.Locale;
+import static org.mockito.Mockito.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-
-@SpringBootTest()
+@SpringBootTest
+@DisplayName("проверяет сервис проведения экзамена")
 class ExamServiceImplIT {
 	@Autowired
 	private ExamRepository examRepository;
 	@MockBean
 	private IOService scanReader;
+	@MockBean
+	private MessageRepository messageRepository;
 
 	@Test
-	void startTestWhenRussianLocale() throws Exception {
-		Locale.setDefault(Locale.ENGLISH);
+	@DisplayName("тест должен быть пройден успешно пройден с результатом 60%")
+	void shouldGetSuccessfulMessageAfterTesting() throws Exception {
 		when(scanReader.readMessage())
+			.thenReturn("Миша")
 			.thenReturn("Москва")
 			.thenReturn("Луна")
 			.thenReturn("Гагарин")
 			.thenReturn("ф")
 			.thenReturn("е");
-		ExamServiceImpl examService = new ExamServiceImpl(examRepository, scanReader);
+		ExamServiceImpl examService = new ExamServiceImpl(examRepository, messageRepository,scanReader,50);
 
-		Result result = examService.startExam("test_use");
+		examService.startExam();
 
-		assertTrue(result.isSuccess());
-		assertEquals(60.0, result.userPercentResult());
-	}
-
-	@Test
-	void startTestWhenEnglishLocale() throws Exception {
-		Locale.setDefault(Locale.ENGLISH);
-		when(scanReader.readMessage())
-			.thenReturn("Moscow")
-			.thenReturn("a")
-			.thenReturn("a")
-			.thenReturn("a")
-			.thenReturn("d");
-		ExamServiceImpl examService = new ExamServiceImpl(examRepository, scanReader);
-
-		Result result = examService.startExam("test_use");
-
-		assertFalse(result.isSuccess());
-		assertEquals(20.0, result.userPercentResult());
+		verify(messageRepository, times(1)).successResultMessage(Result.createInstanceFrom("Миша", 50, (double) 3/5));
 	}
 }

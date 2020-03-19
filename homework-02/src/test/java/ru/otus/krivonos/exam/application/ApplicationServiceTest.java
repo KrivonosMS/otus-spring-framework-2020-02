@@ -10,8 +10,8 @@ import ru.otus.krivonos.exam.domain.TestRepository;
 import ru.otus.krivonos.exam.domain.model.CheckList;
 import ru.otus.krivonos.exam.domain.model.Localization;
 import ru.otus.krivonos.exam.domain.model.Result;
-import ru.otus.krivonos.exam.infrastructore.MessagePrinter;
-import ru.otus.krivonos.exam.infrastructore.ScanReader;
+import ru.otus.krivonos.exam.infrastructure.MessagePrinter;
+import ru.otus.krivonos.exam.infrastructure.ScanReader;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import ru.otus.krivonos.exam.domain.ExamRepository;
+import ru.otus.krivonos.exam.config.ApplicationProperties;
+import ru.otus.krivonos.exam.domain.MessageRepository;
+import ru.otus.krivonos.exam.domain.model.ExamRepository;
 import ru.otus.krivonos.exam.domain.IOService;
 import ru.otus.krivonos.exam.domain.model.CheckList;
 import ru.otus.krivonos.exam.domain.model.Result;
-import ru.otus.krivonos.exam.infrastructore.MessagePrinter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,11 @@ class ApplicationServiceTest {
 	@Mock
 	private ExamRepository repository;
 	@Mock
+	private MessageRepository messageRepository;
+	@Mock
 	private IOService scanReader;
 	@Mock
-	private MessagePrinter messagePrinter;
+	private ApplicationProperties applicationProperties;
 	@InjectMocks
 	private ApplicationService applicationService;
 
@@ -32,12 +35,13 @@ class ApplicationServiceTest {
 	}
 
 	@Test
-	void startTestWhenOk() throws Exception {
+	void startTestWhenSuccessResult() throws Exception {
 		List<String[]> rows = new ArrayList<>();
 		rows.add(new String[]{"question1", "answer1"});
 		rows.add(new String[]{"question2", "answer2"});
 		rows.add(new String[]{"question3", "answer3"});
-		CheckList checkList = CheckList.createInstanceFrom(rows, 50);
+		CheckList checkList = CheckList.createInstanceFrom(rows);
+		when(applicationProperties.getSuccessPercentResult()).thenReturn(Double.valueOf(50));
 		when(repository.obtainTest()).thenReturn(checkList);
 		when(scanReader.readMessage())
 			.thenReturn("test_user")
@@ -48,6 +52,27 @@ class ApplicationServiceTest {
 		applicationService.startTest();
 
 		Result result = Result.createInstanceFrom("test_user", 50, (double) 2 / 3);
-		verify(messagePrinter, times(1)).printSuccessResult(result);
+		verify(messageRepository, times(1)).successResultMessage(result);
+	}
+
+	@Test
+	void startTestWhenBadResult() throws Exception {
+		List<String[]> rows = new ArrayList<>();
+		rows.add(new String[]{"question1", "answer1"});
+		rows.add(new String[]{"question2", "answer2"});
+		rows.add(new String[]{"question3", "answer3"});
+		CheckList checkList = CheckList.createInstanceFrom(rows);
+		when(applicationProperties.getSuccessPercentResult()).thenReturn(Double.valueOf(50));
+		when(repository.obtainTest()).thenReturn(checkList);
+		when(scanReader.readMessage())
+			.thenReturn("test_user")
+			.thenReturn("answer1")
+			.thenReturn("ans")
+			.thenReturn("ans");
+
+		applicationService.startTest();
+
+		Result result = Result.createInstanceFrom("test_user", 50, (double) 1 / 3);
+		verify(messageRepository, times(1)).badResultMessage(result);
 	}
 }

@@ -1,4 +1,4 @@
-package ru.otus.krivonos.exam.domain;
+package ru.otus.krivonos.exam.domain.model;
 
 public class ExamRepositoryException extends Exception {
 	public ExamRepositoryException(String message, Throwable cause) {

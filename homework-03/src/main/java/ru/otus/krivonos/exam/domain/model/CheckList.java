@@ -19,11 +19,11 @@ public class CheckList {
 		this.unmodifiableCorrectTestAnswers = Collections.unmodifiableMap(correctTestAnswers);
 	}
 
-	public static CheckList createInstanceFrom(List<String[]> rowsData, double successResultPercent) throws CheckListCreationException {
+	public static CheckList createInstanceFrom(List<String[]> rowsData) throws CheckListCreationException {
 		if (rowsData == null || rowsData.isEmpty()) {
 			throw new CheckListCreationException("Отсутствуют данные для формирования теста");
 		}
-		LOG.debug("method=from action=\"формирование теста\" rowSize={} successResultPercent={}", rowsData.size(), successResultPercent);
+		LOG.debug("method=from action=\"формирование теста\" rowSize={}", rowsData.size());
 
 		int rowsSize = rowsData.size();
 		Map<QuestionNumber, Question> questions = new HashMap<>();
@@ -44,12 +44,12 @@ public class CheckList {
 		}
 		CheckList checkList = new CheckList(questions, answers);
 
-		LOG.debug("method=from action=\"завершение формирования теста\" rowSize={} test={} successResultPercent={}", rowsSize, checkList, successResultPercent);
+		LOG.debug("method=from action=\"завершение формирования теста\" rowSize={} checkList={}", rowsSize, checkList);
 
 		return checkList;
 	}
 
-	public Result calculateResult(PersonAnswers personAnswers) throws CalculatedResultException, ResultCreationException {
+	public Result calculateResult(PersonAnswers personAnswers, double successThresholdPercent) throws CalculatedResultException, ResultCreationException {
 		if (personAnswers == null) {
 			throw new CalculatedResultException("Не заданы ответы пользователя");
 		}
@@ -65,7 +65,7 @@ public class CheckList {
 
 		LOG.debug("method=calculateResult action=\"завершение вычисления результатов тестроивания\" username={} correctCountAnswer={} allQuestionCount={}", personAnswers.username(), correctCountAnswer, unmodifiableCorrectTestAnswers.size());
 
-		return Result.createInstanceFrom (personAnswers.username(), 50, (double) correctCountAnswer / unmodifiableCorrectTestAnswers.size());
+		return Result.createInstanceFrom (personAnswers.username(), successThresholdPercent, (double) correctCountAnswer / unmodifiableCorrectTestAnswers.size());
 	}
 
 	public Map<QuestionNumber, Question> unmodifiableQuestions() {

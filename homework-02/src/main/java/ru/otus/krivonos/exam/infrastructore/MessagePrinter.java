@@ -1,4 +1,4 @@
-package ru.otus.krivonos.exam.infrastructore;
+package ru.otus.krivonos.exam.infrastructure;
 
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
