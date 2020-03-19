@@ -31,10 +31,13 @@ public class CheckList {
 		for (int i = 0; i < rowsSize; i++) {
 			try {
 				String[] row = rowsData.get(i);
+				if (row == null || row.length < 2) {
+					throw new  CheckListCreationException("Недостаточно данных для инициализазции экзаминационных вопросов/ответов");
+				}
 				QuestionNumber questionNumber = QuestionNumber.createInstanceFrom(i + 1);
-				Question question = Question.createInstanceFrom(row, questionNumber);
+				Question question = Question.createInstanceFrom(row[0], questionNumber);
 				questions.put(questionNumber, question);
-				CorrectTestAnswer answer = CorrectTestAnswer.createInstanceFrom(row, questionNumber);
+				CorrectTestAnswer answer = CorrectTestAnswer.createInstanceFrom(row[1], questionNumber);
 				answers.put(questionNumber, answer);
 			} catch (QuestionCreationException e) {
 				throw new CheckListCreationException("Ошибка при создании вопроса из строки № " + (i + 1), e);

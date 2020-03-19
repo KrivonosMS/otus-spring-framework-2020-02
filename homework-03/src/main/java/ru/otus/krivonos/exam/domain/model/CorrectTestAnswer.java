@@ -4,20 +4,20 @@ public class CorrectTestAnswer {
 	private String answer;
 	private QuestionNumber questionNumber;
 
-	private CorrectTestAnswer(String[] row, QuestionNumber questionNumber) throws AnswerCreationException {
-		addAnswer(row);
+	private CorrectTestAnswer(String answer, QuestionNumber questionNumber) throws AnswerCreationException {
+		addAnswer(answer);
 		addQuestionNumber(questionNumber);
 	}
 
-	static CorrectTestAnswer createInstanceFrom(String[] row, QuestionNumber questionNumber) throws AnswerCreationException {
-		return new CorrectTestAnswer(row, questionNumber);
+	static CorrectTestAnswer createInstanceFrom(String answer, QuestionNumber questionNumber) throws AnswerCreationException {
+		return new CorrectTestAnswer(answer, questionNumber);
 	}
 
-	private void addAnswer(String[] row) throws AnswerCreationException {
-		if (row == null || row.length < 2 || row[1] == null || "".equals(row[1])) {
+	private void addAnswer(String answer) throws AnswerCreationException {
+		if (answer == null || "".equals(answer.trim())) {
 			throw new AnswerCreationException("Отсутствует ответ для вопроса теста");
 		}
-		this.answer = row[1].trim();
+		this.answer = answer.trim();
 	}
 
 	private void addQuestionNumber(QuestionNumber questionNumber) {

@@ -4,20 +4,20 @@ public class Question {
 	private String question;
 	private QuestionNumber questionNumber;
 
-	private Question(String[] row, QuestionNumber questionNumber) throws QuestionCreationException {
-		setQuestion(row);
+	private Question(String question, QuestionNumber questionNumber) throws QuestionCreationException {
+		setQuestion(question);
 		setQuestionNumber(questionNumber);
 	}
 
-	static Question createInstanceFrom(String[] row, QuestionNumber questionNumber) throws QuestionCreationException {
-		return new Question(row, questionNumber);
+	static Question createInstanceFrom(String question, QuestionNumber questionNumber) throws QuestionCreationException {
+		return new Question(question, questionNumber);
 	}
 
-	private void setQuestion(String[] row) throws QuestionCreationException {
-		if (row == null || row.length < 1 || row[0] == null || "".equals(row[0])) {
+	private void setQuestion(String question) throws QuestionCreationException {
+		if (question == null || "".equals(question.trim())) {
 			throw new QuestionCreationException("Отсутствует вопрос теста");
 		}
-		this.question = row[0].trim();
+		this.question = question.trim();
 	}
 
 	private void setQuestionNumber(QuestionNumber questionNumber) {
