@@ -63,7 +63,7 @@ public class BundleMessageRepository implements MessageRepository {
 			return messageSource.getMessage(
 				"bad.result",
 				new String[]{result.username(), String.valueOf(result.userPercentResult())},
-				Locale.getDefault()
+				locale
 			);
 		} catch (Exception e) {
 			throw new MessageRepositoryException("Непредвиденная ошибка при получении сообщения отрицательного результата прохождения тестирования", e);

@@ -47,6 +47,5 @@ public class CsvFileExamRepositoryIT {
 	@EnableConfigurationProperties
 	@ComponentScan({"ru.otus.krivonos.exam.infrastructure", "ru.otus.krivonos.exam.config"})
 	public static class TestContextConfig {
-
 	}
 }

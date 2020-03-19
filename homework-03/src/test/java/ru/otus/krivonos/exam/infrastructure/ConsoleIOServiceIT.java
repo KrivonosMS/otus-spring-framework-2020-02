@@ -39,9 +39,6 @@ class ConsoleIOServiceIT {
 	}
 
 	@Configuration
-	@EnableConfigurationProperties
-	@ComponentScan({"ru.otus.krivonos.exam.config"})
 	public static class TestContextConfig {
-
 	}
 }
