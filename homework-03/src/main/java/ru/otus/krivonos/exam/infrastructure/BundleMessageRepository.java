@@ -9,6 +9,7 @@ import ru.otus.krivonos.exam.domain.model.Result;
 import java.util.Locale;
 
 @Component
+//TODO реализовать тесты для класса
 public class BundleMessageRepository implements MessageRepository {
 	private final MessageSource messageSource;
 	private final Locale locale;
