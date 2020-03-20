@@ -6,17 +6,14 @@ import ru.otus.krivonos.exam.domain.MessageRepository;
 import ru.otus.krivonos.exam.domain.MessageRepositoryException;
 import ru.otus.krivonos.exam.domain.model.Result;
 
-import java.util.Locale;
-
 @Component
-//TODO реализовать тесты для класса
 public class BundleMessageRepository implements MessageRepository {
 	private final MessageSource messageSource;
-	private final Locale locale;
+	private final Localization localization;
 
 	public BundleMessageRepository(MessageSource messageSource, Localization localization) {
 		this.messageSource = messageSource;
-		this.locale = localization.locale();
+		this.localization = localization;
 	}
 
 	@Override
@@ -25,7 +22,7 @@ public class BundleMessageRepository implements MessageRepository {
 			return messageSource.getMessage(
 				"greeting",
 				new String[]{},
-				locale
+				localization.locale()
 			);
 		} catch (Exception e) {
 			throw new MessageRepositoryException("Непредвиденная ошибка при получении сообщения с приветствием", e);
@@ -38,7 +35,7 @@ public class BundleMessageRepository implements MessageRepository {
 			return messageSource.getMessage(
 				"ask.name",
 				new String[]{},
-				locale
+				localization.locale()
 			);
 		} catch (Exception e) {
 			throw new MessageRepositoryException("Непредвиденная ошибка при получении сообщения с просьбой представиться", e);
@@ -51,7 +48,7 @@ public class BundleMessageRepository implements MessageRepository {
 			return messageSource.getMessage(
 				"success.result",
 				new String[]{result.username(), String.valueOf(result.userPercentResult())},
-				locale
+				localization.locale()
 			);
 		} catch (Exception e) {
 			throw new MessageRepositoryException("Непредвиденная ошибка при получении сообщения положительного результата прохождения тестирования", e);
@@ -64,7 +61,7 @@ public class BundleMessageRepository implements MessageRepository {
 			return messageSource.getMessage(
 				"bad.result",
 				new String[]{result.username(), String.valueOf(result.userPercentResult())},
-				locale
+				localization.locale()
 			);
 		} catch (Exception e) {
 			throw new MessageRepositoryException("Непредвиденная ошибка при получении сообщения отрицательного результата прохождения тестирования", e);

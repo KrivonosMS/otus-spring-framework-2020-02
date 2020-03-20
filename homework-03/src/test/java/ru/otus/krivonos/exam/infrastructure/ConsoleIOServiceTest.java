@@ -3,9 +3,7 @@ package ru.otus.krivonos.exam.infrastructure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import ru.otus.krivonos.exam.domain.IOService;
 
@@ -16,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DisplayName("тестирование сервиса IOService")
-class ConsoleIOServiceIT {
+class ConsoleIOServiceTest {
 	private static final String MESSAGE = "тестовое сообщение";
 
 	private ByteArrayOutputStream bos;
@@ -36,9 +34,5 @@ class ConsoleIOServiceIT {
 		ioService.printMessage(MESSAGE);
 		Thread.sleep(1000);
 		assertThat(bos.toString()).isEqualTo(MESSAGE + "\r\n");
-	}
-
-	@Configuration
-	public static class TestContextConfig {
 	}
 }

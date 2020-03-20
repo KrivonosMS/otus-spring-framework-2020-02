@@ -3,11 +3,7 @@ package ru.otus.krivonos.exam.infrastructure;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import ru.otus.krivonos.exam.domain.model.CheckList;
 import ru.otus.krivonos.exam.domain.model.Question;
 
@@ -18,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @DisplayName("репозиторий экзаминационных вопросов должен")
-public class CsvFileExamRepositoryIT {
+public class CsvFileExamRepositoryTest {
 	@Autowired
 	private CsvFileExamRepository fileExamRepository;
 
@@ -41,11 +37,5 @@ public class CsvFileExamRepositoryIT {
 		assertEquals("Фамилия первого космонавта?", questions.get(2).question());
 		assertEquals("Самая длинная река в мире?", questions.get(3).question());
 		assertEquals("Единица измерения силы тока?", questions.get(4).question());
-	}
-
-	@Configuration
-	@EnableConfigurationProperties
-	@ComponentScan({"ru.otus.krivonos.exam.infrastructure", "ru.otus.krivonos.exam.config"})
-	public static class TestContextConfig {
 	}
 }

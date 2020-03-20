@@ -12,7 +12,7 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @DisplayName("проверяет сервис проведения экзамена")
-class ExamServiceImplIT {
+class ExamServiceImplTest {
 	@Autowired
 	private ExamRepository examRepository;
 	@MockBean
