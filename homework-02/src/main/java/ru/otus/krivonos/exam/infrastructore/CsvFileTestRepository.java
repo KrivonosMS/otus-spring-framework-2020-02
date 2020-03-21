@@ -1,4 +1,4 @@
-package ru.otus.krivonos.exam.infrastructore;
+package ru.otus.krivonos.exam.infrastructure;
 
 import au.com.bytecode.opencsv.CSVReader;
 import org.slf4j.Logger;

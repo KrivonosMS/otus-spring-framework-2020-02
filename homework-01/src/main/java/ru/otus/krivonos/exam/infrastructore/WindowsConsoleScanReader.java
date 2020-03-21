@@ -1,4 +1,4 @@
-package ru.otus.krivonos.exam.infrastructore;
+package ru.otus.krivonos.exam.infrastructure;
 
 import java.util.Scanner;
 

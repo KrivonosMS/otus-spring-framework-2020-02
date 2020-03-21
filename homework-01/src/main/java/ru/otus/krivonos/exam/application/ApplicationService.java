@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.otus.krivonos.exam.domain.TestRepository;
 import ru.otus.krivonos.exam.domain.TestRepositoryException;
 import ru.otus.krivonos.exam.domain.model.*;
-import ru.otus.krivonos.exam.infrastructore.ScanReader;
+import ru.otus.krivonos.exam.infrastructure.ScanReader;
 
 import java.util.HashMap;
 import java.util.Map;

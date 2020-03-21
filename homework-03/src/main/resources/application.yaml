@@ -1,0 +1,19 @@
+spring:
+  messages:
+    basename: messages, i18n.locale
+logging:
+  file: log/app-info.log
+  pattern:
+    file: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+    console: ""
+  level:
+    root: INFO
+    ru.otus.krivonos: TRACE
+    org.springframework.web: INFO
+    guru.springframework.controllers: INFO
+    org.hibernate: WARN
+
+application:
+  success-percent-result: 50
+  localization: en_EN
+  question-file-path: /csv/en/questions.csv
