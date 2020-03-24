@@ -2,14 +2,18 @@ package ru.otus.krivonos.exam.application;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import ru.otus.krivonos.exam.config.ApplicationProperties;
-import ru.otus.krivonos.exam.domain.MessageRepository;
-import ru.otus.krivonos.exam.domain.model.ExamRepository;
+import ru.otus.krivonos.exam.domain.ExamService;
+import ru.otus.krivonos.exam.domain.ExamServiceImpl;
 import ru.otus.krivonos.exam.domain.IOService;
+import ru.otus.krivonos.exam.domain.MessageRepository;
 import ru.otus.krivonos.exam.domain.model.CheckList;
+import ru.otus.krivonos.exam.domain.model.ExamRepository;
 import ru.otus.krivonos.exam.domain.model.Result;
 
 import java.util.ArrayList;
@@ -24,10 +28,8 @@ class ApplicationServiceTest {
 	private MessageRepository messageRepository;
 	@Mock
 	private IOService scanReader;
-	@Mock
-	private ApplicationProperties applicationProperties;
 	@InjectMocks
-	private ApplicationService applicationService;
+	private ExamServiceImpl examService;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -41,14 +43,13 @@ class ApplicationServiceTest {
 		rows.add(new String[]{"question2", "answer2"});
 		rows.add(new String[]{"question3", "answer3"});
 		CheckList checkList = CheckList.createInstanceFrom(rows);
-		when(applicationProperties.getSuccessPercentResult()).thenReturn(Double.valueOf(50));
 		when(repository.obtainTest()).thenReturn(checkList);
 		when(scanReader.readMessage())
 			.thenReturn("answer1")
 			.thenReturn("ans")
 			.thenReturn("answer3");
 
-		applicationService.startTest("test_user");
+		examService.startExam("test_user", 50.0);
 
 		Result result = Result.createInstanceFrom("test_user", 50, (double) 2 / 3);
 		verify(messageRepository, times(1)).successResultMessage(result);
@@ -61,14 +62,13 @@ class ApplicationServiceTest {
 		rows.add(new String[]{"question2", "answer2"});
 		rows.add(new String[]{"question3", "answer3"});
 		CheckList checkList = CheckList.createInstanceFrom(rows);
-		when(applicationProperties.getSuccessPercentResult()).thenReturn(Double.valueOf(50));
 		when(repository.obtainTest()).thenReturn(checkList);
 		when(scanReader.readMessage())
 			.thenReturn("answer1")
 			.thenReturn("ans")
 			.thenReturn("ans");
 
-		applicationService.startTest("test_user");
+		examService.startExam("test_user", 50.0);
 
 		Result result = Result.createInstanceFrom("test_user", 50, (double) 1 / 3);
 		verify(messageRepository, times(1)).badResultMessage(result);

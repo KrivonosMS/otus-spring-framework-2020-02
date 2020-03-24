@@ -7,21 +7,21 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
 	private String questionFilePath;
-	private double successPercentResult;
+	private double successThresholdPercent;
 
 	public String getQuestionFilePath() {
 		return questionFilePath;
 	}
 
 	public double getSuccessPercentResult() {
-		return successPercentResult;
+		return successThresholdPercent;
 	}
 
 	public void setQuestionFilePath(String questionFilePath) {
 		this.questionFilePath = questionFilePath;
 	}
 
-	public void setSuccessPercentResult(double successPercentResult) {
-		this.successPercentResult = successPercentResult;
+	public void setSuccessThresholdPercent(double successThresholdPercent) {
+		this.successThresholdPercent = successThresholdPercent;
 	}
 }

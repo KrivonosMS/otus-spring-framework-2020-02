@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import ru.otus.krivonos.exam.domain.model.CheckList;
-import ru.otus.krivonos.exam.domain.model.CheckListCreationException;
 import ru.otus.krivonos.exam.domain.model.ExamRepository;
 import ru.otus.krivonos.exam.domain.model.Result;
 
@@ -24,6 +22,9 @@ class ExamServiceImplTest {
 	@MockBean
 	private MessageRepository messageRepository;
 
+	@Autowired
+	private ExamService examService;
+
 	@Test
 	@DisplayName("тест должен быть пройден успешно пройден с результатом 60%")
 	void shouldGetSuccessfulMessageAfterTesting() throws Exception {
@@ -33,20 +34,17 @@ class ExamServiceImplTest {
 			.thenReturn("Гагарин")
 			.thenReturn("ф")
 			.thenReturn("е");
-		ExamServiceImpl examService = new ExamServiceImpl(examRepository, messageRepository,scanReader,50);
 
-		examService.startExam("Миша");
+		examService.startExam("Миша", 50.0);
 
-		verify(messageRepository, times(1)).successResultMessage(Result.createInstanceFrom("Миша", 50, (double) 3/5));
+		verify(messageRepository, times(1)).successResultMessage(Result.createInstanceFrom("Миша", 50, (double) 3 / 5));
 	}
 
 	@Test
 	@DisplayName("должно бросаться доменное исключение, если имя пользователя null")
 	void shouldThrowExamServiceExceptionWhenUsernameIsNull() throws Exception {
-		ExamServiceImpl examService = new ExamServiceImpl(examRepository, messageRepository,scanReader,50);
-
 		ExamServiceException exception = Assertions.assertThrows(ExamServiceException.class, () -> {
-			examService.startExam(null);
+			examService.startExam(null, 10);
 		});
 
 		assertEquals("Не задано имя экзаминуемого", exception.getMessage());
@@ -55,10 +53,8 @@ class ExamServiceImplTest {
 	@Test
 	@DisplayName("должно бросаться доменное исключение, если имя пользователя пусто")
 	void shouldThrowExamServiceExceptionWhenUsernameIsEmpty() throws Exception {
-		ExamServiceImpl examService = new ExamServiceImpl(examRepository, messageRepository,scanReader,50);
-
 		ExamServiceException exception = Assertions.assertThrows(ExamServiceException.class, () -> {
-			examService.startExam("");
+			examService.startExam("", 10);
 		});
 
 		assertEquals("Не задано имя экзаминуемого", exception.getMessage());

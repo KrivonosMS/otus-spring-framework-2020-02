@@ -13,17 +13,15 @@ public class ExamServiceImpl implements ExamService {
 	private final ExamRepository examRepository;
 	private final MessageRepository messageRepository;
 	private final IOService ioService;
-	private final double successThresholdPercent;
 
-	public ExamServiceImpl(ExamRepository examRepository, MessageRepository messageRepository, IOService ioService, double successThresholdPercent) {
+	public ExamServiceImpl(ExamRepository examRepository, MessageRepository messageRepository, IOService ioService) {
 		this.examRepository = examRepository;
 		this.messageRepository = messageRepository;
 		this.ioService = ioService;
-		this.successThresholdPercent = successThresholdPercent;
 	}
 
 	@Override
-	public void startExam(String username) throws ExamServiceException {
+	public void startExam(String username, double successThresholdPercent) throws ExamServiceException {
 		if (username == null || "".equals(username)) {
 			throw new ExamServiceException("Не задано имя экзаминуемого");
 		}
