@@ -3,6 +3,7 @@ package ru.otus.krivonos.exam.infrastructure;
 import au.com.bytecode.opencsv.CSVReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.otus.krivonos.exam.config.ApplicationProperties;
 import ru.otus.krivonos.exam.domain.model.ExamRepository;
@@ -16,7 +17,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-@Repository
+@Component
 public class CsvFileExamRepository implements ExamRepository {
 	public static final Logger LOG = LoggerFactory.getLogger(CsvFileExamRepository.class);
 
