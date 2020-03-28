@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import ru.otus.krivonos.library.domain.Author;
 import ru.otus.krivonos.library.domain.Book;
@@ -94,15 +95,43 @@ public class DbLibraryDao implements LibraryDao {
 	}
 
 	private MapSqlParameterSource getMapSqlParameters(Book book) {
-		String queryAuthorId = "select id from author where name = :name";
-		String queryGenreId = "select id from genre where type = :type";
-		long authorId = namedParameterJdbcOperations.queryForRowSet(queryAuthorId, Map.of("name", book.author().name())).findColumn("id");
-		long genreId = namedParameterJdbcOperations.queryForRowSet(queryGenreId, Map.of("type", book.genre().type())).findColumn("id");
+		long authorId = getAuthorId(book.author());
+		long genreId = getGenreId(book.genre());
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("authorId", authorId);
 		parameters.addValue("genreId", genreId);
 		parameters.addValue("title", book.title().value());
 		return parameters;
+	}
+
+	private long getAuthorId(Author author) {
+		String queryAuthorId = "select id from author where name = :name";
+		SqlRowSet rsAuthor = namedParameterJdbcOperations.queryForRowSet(queryAuthorId, Map.of("name", author.name()));
+		long authorId;
+		if (rsAuthor.next()) {
+			authorId = rsAuthor.getLong("id");
+		} else {
+			authorId = saveAuthor(author);
+		}
+		return authorId;
+	}
+
+	private long saveAuthor(Author author) {
+		long authorId;
+		String querySaveAuthor = "insert into author(name) values(:name)";
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("name", author.name());
+		namedParameterJdbcOperations.update(querySaveAuthor, parameters, keyHolder);
+		authorId = keyHolder.getKey().longValue();
+		return authorId;
+	}
+
+	private long getGenreId(Genre genre) {
+		String queryGenreId = "select id from genre where type = :type";
+		SqlRowSet rsGenre = namedParameterJdbcOperations.queryForRowSet(queryGenreId, Map.of("type",genre.type()));
+		rsGenre.next();
+		return rsGenre.getLong("id");
 	}
 
 	@Override

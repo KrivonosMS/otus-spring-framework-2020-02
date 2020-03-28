@@ -73,7 +73,7 @@ class DbLibraryDaoTest {
 	}
 
 	@Test
-	void shouldSaveBook() throws Exception {
+	void shouldSaveBookWhenAuthorExist() throws Exception {
 		Author author = new Author("Александр Пушкин");
 		Genre genre = new Genre("Классическая проза");
 		BookTitle bookTitle = new BookTitle("Евгений Онегин");
@@ -84,6 +84,22 @@ class DbLibraryDaoTest {
 		Optional<Book> optionalBook = libraryDao.findBookBy(id);
 		assertTrue(optionalBook.isPresent());
 		Book actualBook = optionalBook.get();
+		assertThat(expectedBook).isEqualToIgnoringGivenFields(actualBook, "id");
+	}
+
+	@Test
+	void shouldSaveBookWhenAuthorNotExist() throws Exception {
+		Author author = new Author("Михаил Лермонтов");
+		Genre genre = new Genre("Классическая проза");
+		BookTitle bookTitle = new BookTitle("Смерть поэта");
+		Book expectedBook = new Book(bookTitle, author, genre);
+
+		long id = libraryDao.save(expectedBook);
+
+		Optional<Book> optionalBook = libraryDao.findBookBy(id);
+		assertTrue(optionalBook.isPresent());
+		Book actualBook = optionalBook.get();
+		System.out.println(actualBook.author().name());
 		assertThat(expectedBook).isEqualToIgnoringGivenFields(actualBook, "id");
 	}
 
