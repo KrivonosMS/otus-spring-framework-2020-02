@@ -30,9 +30,9 @@ public class DbLibraryDao implements LibraryDao {
 			String query =
 					"select " +
 					" book.id id, " +
-					" book.title title, " +
-					" author.name name, " +
-					" genre.type type " +
+					" book.title as title, " +
+					" author.name as name, " +
+					" genre.type as type " +
 					"from " +
 					" book " +
 					"inner join author " +
@@ -61,8 +61,8 @@ public class DbLibraryDao implements LibraryDao {
 					"select " +
 					" book.id, " +
 					" book.title title, " +
-					" author.name name, " +
-					" genre.type type " +
+					" author.name as name, " +
+					" genre.type as type " +
 					"from " +
 					" book " +
 					"inner join author " +
@@ -79,13 +79,18 @@ public class DbLibraryDao implements LibraryDao {
 	}
 
 	@Override
-	public long save(Book book) throws LibraryDaoException {
+	public long saveBook(Book book) throws LibraryDaoException {
 		if (book == null) {
 			throw new LibraryDaoException("Не задана книга для сохранения");
 		}
 		try {
+			long authorId = saveAuthorIfNotExist(book.author());
+			long genreId = saveGenreIfNotExist(book.genre());
+			MapSqlParameterSource parameters = new MapSqlParameterSource();
+			parameters.addValue("authorId", authorId);
+			parameters.addValue("genreId", genreId);
+			parameters.addValue("title", book.title().value());
 			String queryDeleteBook = "insert into book(title, author_id, genre_id, is_deleted) values(:title, :authorId, :genreId, 0)";
-			MapSqlParameterSource parameters = getMapSqlParameters(book);
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			namedParameterJdbcOperations.update(queryDeleteBook, parameters, keyHolder, new String[] {"id"});
 			return keyHolder.getKey().longValue();
@@ -94,17 +99,27 @@ public class DbLibraryDao implements LibraryDao {
 		}
 	}
 
-	private MapSqlParameterSource getMapSqlParameters(Book book) {
-		long authorId = getAuthorId(book.author());
-		long genreId = getGenreId(book.genre());
-		MapSqlParameterSource parameters = new MapSqlParameterSource();
-		parameters.addValue("authorId", authorId);
-		parameters.addValue("genreId", genreId);
-		parameters.addValue("title", book.title().value());
-		return parameters;
+	@Override
+	public void updateBook(Book book) throws LibraryDaoException {
+		if (book == null) {
+			throw new LibraryDaoException("Не задана книга для обновления");
+		}
+		try {
+			long authorId = saveAuthorIfNotExist(book.author());
+			long genreId = saveGenreIfNotExist(book.genre());
+			MapSqlParameterSource parameters = new MapSqlParameterSource();
+			parameters.addValue("authorId", authorId);
+			parameters.addValue("genreId", genreId);
+			parameters.addValue("title", book.title().value());
+			parameters.addValue("id", book.id());
+			String queryDeleteBook = "update book set title = :title, author_id = :authorId, genre_id = :genreId where id = :id";
+			namedParameterJdbcOperations.update(queryDeleteBook, parameters);
+		} catch (Exception e) {
+			throw new LibraryDaoException("Возникла непредвиденная ошибка при получении списка всех книг", e);
+		}
 	}
 
-	private long getAuthorId(Author author) {
+	private long saveAuthorIfNotExist(Author author) {
 		String queryAuthorId = "select id from author where name = :name";
 		SqlRowSet rsAuthor = namedParameterJdbcOperations.queryForRowSet(queryAuthorId, Map.of("name", author.name()));
 		long authorId;
@@ -122,12 +137,12 @@ public class DbLibraryDao implements LibraryDao {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("name", author.name());
-		namedParameterJdbcOperations.update(querySaveAuthor, parameters, keyHolder);
+		namedParameterJdbcOperations.update(querySaveAuthor, parameters, keyHolder, new String[] { "id"});
 		authorId = keyHolder.getKey().longValue();
 		return authorId;
 	}
 
-	private long getGenreId(Genre genre) {
+	private long saveGenreIfNotExist(Genre genre) {
 		String queryGenreId = "select id from genre where type = :type";
 		SqlRowSet rsGenre = namedParameterJdbcOperations.queryForRowSet(queryGenreId, Map.of("type",genre.type()));
 		rsGenre.next();
@@ -135,7 +150,7 @@ public class DbLibraryDao implements LibraryDao {
 	}
 
 	@Override
-	public void deleteBy(long id) throws LibraryDaoException {
+	public void deleteBookBy(long id) throws LibraryDaoException {
 		String query = "update book set is_deleted = 1 where book.id = :id";
 		try {
 			namedParameterJdbcOperations.update(query, Map.of("id", id));
@@ -165,7 +180,29 @@ public class DbLibraryDao implements LibraryDao {
 			Integer count = namedParameterJdbcOperations.queryForObject(query, Map.of("type", genre.type()), Integer.class);
 			return count != null && count > 0;
 		} catch (Exception e) {
-			throw new LibraryDaoException("Возникла непредвиденная ошибка во вермя проверки наличия литературного жанра " + genre.type() , e);
+			throw new LibraryDaoException("Возникла непредвиденная ошибка во вермя проверки наличия литературного жанра '" + genre.type() + "'" , e);
+		}
+	}
+
+	@Override
+	public long saveGenre(Genre genre) throws LibraryDaoException {
+		if (genre == null) {
+			throw new LibraryDaoException("Не задан литературный жанр");
+		}
+		try {
+			if (isExist(genre)) {
+				throw new LibraryDaoException("Литературный жанр '" + genre.type() + "' уже существует");
+			}
+			String querySaveAuthor = "insert into genre(type) values(:type)";
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			MapSqlParameterSource parameters = new MapSqlParameterSource();
+			parameters.addValue("type", genre.type());
+			namedParameterJdbcOperations.update(querySaveAuthor, parameters, keyHolder, new String[] { "id"});
+			return keyHolder.getKey().longValue();
+		} catch (LibraryDaoException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new LibraryDaoException("Возникла непредвиденная ошибка при добавлении нового литературного жанра " + genre.type() + "'" , e);
 		}
 	}
 

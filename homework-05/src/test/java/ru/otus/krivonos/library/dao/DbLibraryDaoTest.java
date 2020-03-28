@@ -59,7 +59,7 @@ class DbLibraryDaoTest {
 		Optional<Book> optionalBookBeforeDelete = libraryDao.findBookBy(2l);
 		optionalBookBeforeDelete.get();
 
-		libraryDao.deleteBy(2l);
+		libraryDao.deleteBookBy(2l);
 
 		Optional<Book> optionalBookAfterDelete = libraryDao.findBookBy(2l);
 		assertFalse(optionalBookAfterDelete.isPresent());
@@ -79,7 +79,7 @@ class DbLibraryDaoTest {
 		BookTitle bookTitle = new BookTitle("Евгений Онегин");
 		Book expectedBook = new Book(bookTitle, author, genre);
 
-		long id = libraryDao.save(expectedBook);
+		long id = libraryDao.saveBook(expectedBook);
 
 		Optional<Book> optionalBook = libraryDao.findBookBy(id);
 		assertTrue(optionalBook.isPresent());
@@ -94,7 +94,7 @@ class DbLibraryDaoTest {
 		BookTitle bookTitle = new BookTitle("Смерть поэта");
 		Book expectedBook = new Book(bookTitle, author, genre);
 
-		long id = libraryDao.save(expectedBook);
+		long id = libraryDao.saveBook(expectedBook);
 
 		Optional<Book> optionalBook = libraryDao.findBookBy(id);
 		assertTrue(optionalBook.isPresent());
@@ -107,7 +107,7 @@ class DbLibraryDaoTest {
 	void shouldNotDeleteBookWhenBookIsNotExist() throws Exception {
 		int count = libraryDao.findAllBooks().size();
 
-		libraryDao.deleteBy(-2l);
+		libraryDao.deleteBookBy(-2l);
 
 		assertEquals(count, libraryDao.findAllBooks().size());
 	}
@@ -133,7 +133,7 @@ class DbLibraryDaoTest {
 	@Test
 	void shouldThrowLibraryDaoExceptionWhenBookIsNull() {
 		LibraryDaoException exception = Assertions.assertThrows(LibraryDaoException.class, () -> {
-			libraryDao.save(null);
+			libraryDao.saveBook(null);
 		});
 
 		assertEquals("Не задана книга для сохранения", exception.getMessage());
@@ -146,5 +146,59 @@ class DbLibraryDaoTest {
 		});
 
 		assertEquals("Не задан литературный жанр", exception.getMessage());
+	}
+
+	@Test
+	void shouldThrowLibraryDaoExceptionWhenSaveGenreWhichIsNull() throws Exception {
+		LibraryDaoException exception = Assertions.assertThrows(LibraryDaoException.class, () -> {
+			libraryDao.saveGenre(null);
+		});
+
+		assertEquals("Не задан литературный жанр", exception.getMessage());
+	}
+
+	@Test
+	void shouldThrowLibraryDaoExceptionWhenSaveGenreWhichIsExist() {
+		Genre genre = new Genre("Русская классика");
+
+		LibraryDaoException exception = Assertions.assertThrows(LibraryDaoException.class, () -> {
+			libraryDao.saveGenre(genre);
+		});
+
+		assertEquals("Литературный жанр 'Русская классика' уже существует", exception.getMessage());
+	}
+
+	@Test
+	void shouldSaveGenre() throws Exception {
+		Genre genre = new Genre("Техническа литература");
+
+		long id = libraryDao.saveGenre(genre);
+
+		assertEquals(5, id);
+		assertTrue(libraryDao.isExist(genre));
+	}
+
+	@Test
+	void shouldThrowLibraryDaoExceptionWhenUpdateBookWhichIsNull() {
+		LibraryDaoException exception = Assertions.assertThrows(LibraryDaoException.class, () -> {
+			libraryDao.updateBook(null);
+		});
+
+		assertEquals("Не задана книга для обновления", exception.getMessage());
+	}
+
+	@Test
+	void shouldUpdateBook() throws Exception {
+		Author author = new Author("Михаил Лермонтов");
+		Genre genre = new Genre("Классическая проза");
+		BookTitle bookTitle = new BookTitle("Смерть поэта");
+		Book expectedBook = new Book(1, bookTitle, author, genre);
+
+		libraryDao.updateBook(expectedBook);
+
+		Optional<Book> optionalBook = libraryDao.findBookBy(1l);
+		assertTrue(optionalBook.isPresent());
+		Book actulaBook = optionalBook.get();
+		assertThat(expectedBook).isEqualToComparingFieldByField(actulaBook);
 	}
 }

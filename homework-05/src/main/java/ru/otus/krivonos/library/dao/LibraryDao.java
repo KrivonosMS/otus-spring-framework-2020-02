@@ -11,11 +11,15 @@ public interface LibraryDao {
 
 	List<Book> findAllBooks() throws LibraryDaoException;
 
-	long save(Book book) throws LibraryDaoException;
+	long saveBook(Book book) throws LibraryDaoException;
 
-	void deleteBy(long id) throws LibraryDaoException;
+	void updateBook(Book book) throws LibraryDaoException;
+
+	void deleteBookBy(long id) throws LibraryDaoException;
 
 	List<Genre> findAllGenres() throws LibraryDaoException;
 
 	boolean isExist(Genre genre) throws LibraryDaoException;
+
+	long saveGenre(Genre genre) throws LibraryDaoException;
 }

@@ -26,4 +26,14 @@ public class Book {
 	public Genre genre() {
 		return genre;
 	}
+
+	@Override
+	public String toString() {
+		return "Книга{" +
+			"id=" + id +
+			", название='" + title.value() + "'" +
+			", автор='" + author.name() + "'" +
+			", жанр='" + genre.type() + "'" +
+			'}';
+	}
 }

@@ -24,4 +24,9 @@ public class Genre {
 	public int hashCode() {
 		return Objects.hash(type);
 	}
+
+	@Override
+	public String toString() {
+		return "'" + type + "'";
+	}
 }
