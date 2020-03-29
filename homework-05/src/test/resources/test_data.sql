@@ -1,18 +1,18 @@
-insert into author (name) values ('РђР»РµРєСЃР°РЅРґСЂ РџСѓС€РєРёРЅ');
-insert into author (name) values ('РќРёРєРѕР»Р°Р№ Р“РѕРіРѕР»СЊ');
-insert into author (name) values ('Р¤С‘РґРѕСЂ РўСЋС‚С‡РµРІ');
+insert into author (name) values ('Александр Пушкин');
+insert into author (name) values ('Николай Гоголь');
+insert into author (name) values ('Фёдор Тютчев');
 
-insert into genre (type) values ('РљР»Р°СЃСЃРёС‡РµСЃРєР°СЏ РїСЂРѕР·Р°');
-insert into genre (type) values ('Р›РёС‚РµСЂР°С‚СѓСЂР° 19 РІРµРєР°');
-insert into genre (type) values ('Р СѓСЃСЃРєР°СЏ РєР»Р°СЃСЃРёРєР°');
-insert into genre (type) values ('Р”СЂРµРІРЅРµСЂСѓСЃСЃРєР°СЏ Р»РёС‚РµСЂР°С‚СѓСЂР°');
+insert into genre (type) values ('Классическая проза');
+insert into genre (type) values ('Литература 19 века');
+insert into genre (type) values ('Русская классика');
+insert into genre (type) values ('Древнерусская литература');
 
-insert into book (title, author_id, genre_id, is_deleted) values ('РџРѕРІРµСЃС‚Рё Р‘РµР»РєРёРЅР° (СЃР±РѕСЂРЅРёРє)', 1, 2, 0);
-insert into book (title, author_id, genre_id, is_deleted) values ('Р•РІРіРµРЅРёР№ РћРЅРµРіРёРЅ', 1, 1, 0);
-insert into book (title, author_id, genre_id, is_deleted) values ('РЎРєР°Р·РєР° Рѕ С†Р°СЂРµ РЎР°Р»С‚Р°РЅРµ', 1, 4, 0);
+insert into book (title, author_id, genre_id, is_deleted) values ('Повести Белкина (сборник)', 1, 2, 0);
+insert into book (title, author_id, genre_id, is_deleted) values ('Евгений Онегин', 1, 1, 0);
+insert into book (title, author_id, genre_id, is_deleted) values ('Сказка о царе Салтане', 1, 4, 0);
 
-insert into book (title, author_id, genre_id, is_deleted) values ('Р’РµС‡РµСЂР° РЅР° С…СѓС‚РѕСЂРµ Р±Р»РёР· Р”РёРєР°РЅСЊРєРё', 2, 1, 0);
-insert into book (title, author_id, genre_id, is_deleted) values ('РџРµС‚РµСЂР±СѓСЂРіСЃРєРёРµ РїРѕРІРµСЃС‚Рё', 2, 3, 0);
+insert into book (title, author_id, genre_id, is_deleted) values ('Вечера на хуторе близ Диканьки', 2, 1, 0);
+insert into book (title, author_id, genre_id, is_deleted) values ('Петербургские повести', 2, 3, 0);
 
-insert into book (title, author_id, genre_id, is_deleted) values ('Р¤РµРґРѕСЂ РўСЋС‚С‡РµРІ: РЎС‚РёС…Рё', 3, 1, 0);
-insert into book (title, author_id, genre_id, is_deleted) values ('Р¤РµРґРѕСЂ РўСЋС‚С‡РµРІ: РЎС‚РёС…Рё РґРµС‚СЏРј', 3, 1, 0);
+insert into book (title, author_id, genre_id, is_deleted) values ('Федор Тютчев: Стихи', 3, 1, 0);
+insert into book (title, author_id, genre_id, is_deleted) values ('Федор Тютчев: Стихи детям', 3, 1, 0);

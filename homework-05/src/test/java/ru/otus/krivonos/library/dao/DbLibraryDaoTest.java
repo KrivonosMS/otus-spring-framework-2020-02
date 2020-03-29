@@ -99,7 +99,6 @@ class DbLibraryDaoTest {
 		Optional<Book> optionalBook = libraryDao.findBookBy(id);
 		assertTrue(optionalBook.isPresent());
 		Book actualBook = optionalBook.get();
-		System.out.println(actualBook.author().name());
 		assertThat(expectedBook).isEqualToIgnoringGivenFields(actualBook, "id");
 	}
 

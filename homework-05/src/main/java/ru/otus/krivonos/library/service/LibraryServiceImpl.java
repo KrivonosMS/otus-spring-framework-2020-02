@@ -53,13 +53,13 @@ public class LibraryServiceImpl implements LibraryService {
 	private List<String> validateOnNullAndEmpty(String bookTitle, String authorName, String genreType) {
 		List<String> errors = new ArrayList<>();
 		if (bookTitle == null || "".equals(bookTitle.trim())) {
-			errors.add("Не задано название книги.");
+			errors.add("Не задано название книги");
 		}
 		if (authorName == null || "".equals(authorName.trim())) {
-			errors.add("Не задан автор книги.");
+			errors.add("Не задан автор книги");
 		}
 		if (genreType == null || "".equals(genreType.trim())) {
-			errors.add("Не задан литературный жанр.");
+			errors.add("Не задан литературный жанр");
 		}
 		return errors;
 	}
