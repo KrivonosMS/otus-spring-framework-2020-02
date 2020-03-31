@@ -1,4 +1,7 @@
 spring:
+  shell:
+    interactive:
+      enabled: false
   datasource:
 #    url: jdbc:mysql://localhost/test
 #    username: dbuser
