@@ -7,6 +7,9 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.krivonos.library.domain.Book;
 import ru.otus.krivonos.library.domain.Genre;
+import ru.otus.krivonos.library.exception.LibraryServiceException;
+import ru.otus.krivonos.library.exception.NotValidParameterDataException;
+import ru.otus.krivonos.library.exception.OutputServiceException;
 import ru.otus.krivonos.library.service.*;
 
 import java.util.List;

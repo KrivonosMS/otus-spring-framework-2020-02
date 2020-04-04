@@ -6,10 +6,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.otus.krivonos.library.dao.LibraryDao;
+import ru.otus.krivonos.library.dao.BookDao;
+import ru.otus.krivonos.library.dao.GenreDao;
 import ru.otus.krivonos.library.domain.Author;
 import ru.otus.krivonos.library.domain.Book;
 import ru.otus.krivonos.library.domain.Genre;
+import ru.otus.krivonos.library.exception.NotValidParameterDataException;
 
 import java.util.Optional;
 
@@ -21,7 +23,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 class LibraryServiceImplTest {
 	@Mock
-	private LibraryDao libraryDao;
+	private BookDao bookDao;
+	@Mock
+	private GenreDao genreDao;
 	@InjectMocks
 	private LibraryServiceImpl libraryService;
 
@@ -45,7 +49,7 @@ class LibraryServiceImplTest {
 
 	@Test
 	void shouldThrowNotValidParameterDataExceptionWhenSaveBookAndGenreIsNotExist() throws Exception {
-		when(libraryDao.isExist(any())).thenReturn(false);
+		when(genreDao.isExist(any())).thenReturn(false);
 		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
 			libraryService.saveBook("test_title", "test_author", "test_genre");
 		});
@@ -55,15 +59,15 @@ class LibraryServiceImplTest {
 
 	@Test
 	void shouldСallDaoMethodToSaveBook() throws Exception {
-		when(libraryDao.isExist(any())).thenReturn(true);
+		when(genreDao.isExist(any())).thenReturn(true);
 		libraryService.saveBook("test_title", "test_author", "test_genre");
 
-		verify(libraryDao, times(1)).saveBook(any());
+		verify(bookDao, times(1)).saveBook(any());
 	}
 
 	@Test
 	void shouldThrowNotValidParameterDataExceptionWhenFindBookByIdWhichIsNotExist() throws Exception {
-		when(libraryDao.findBookBy(1l)).thenReturn(Optional.empty());
+		when(bookDao.findBookBy(1l)).thenReturn(Optional.empty());
 		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
 			libraryService.findBookBy(1l);
 		});
@@ -75,7 +79,7 @@ class LibraryServiceImplTest {
 	void shouldReturnBookById() throws Exception {
 		Book expectedBook = new Book("title", new Author("author"), new Genre("genre"));
 		Optional<Book> optionalBook = Optional.of(expectedBook);
-		when(libraryDao.findBookBy(1l)).thenReturn(optionalBook);
+		when(bookDao.findBookBy(1l)).thenReturn(optionalBook);
 
 		Book actualBook = libraryService.findBookBy(1l);
 
@@ -86,7 +90,7 @@ class LibraryServiceImplTest {
 	void shouldCallFindAllBooksDaoMethod() throws Exception {
 		libraryService.findAllBooks();
 
-		verify(libraryDao, times(1)).findAllBooks();
+		verify(bookDao, times(1)).findAllBooks();
 	}
 
 
@@ -110,8 +114,8 @@ class LibraryServiceImplTest {
 
 	@Test
 	void shouldThrowNotValidParameterDataExceptionWhenUpdateBookAndGenreIsNotExist() throws Exception {
-		when(libraryDao.isExist(any())).thenReturn(false);
-		when(libraryDao.findBookBy(1l)).thenReturn(Optional.of(mock(Book.class)));
+		when(genreDao.isExist(any())).thenReturn(false);
+		when(bookDao.findBookBy(1l)).thenReturn(Optional.of(mock(Book.class)));
 		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
 			libraryService.updateBook(1l, "test_title", "test_author", "test_genre");
 		});
@@ -121,8 +125,8 @@ class LibraryServiceImplTest {
 
 	@Test
 	void shouldThrowNotValidParameterDataExceptionWhenUpdateBookWhichIsNotExist() throws Exception {
-		when(libraryDao.isExist(any())).thenReturn(true);
-		when(libraryDao.findBookBy(1l)).thenReturn(Optional.empty());
+		when(genreDao.isExist(any())).thenReturn(true);
+		when(bookDao.findBookBy(1l)).thenReturn(Optional.empty());
 		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
 			libraryService.updateBook(1l, "test_title", "test_author", "test_genre");
 		});
@@ -132,16 +136,16 @@ class LibraryServiceImplTest {
 
 	@Test
 	void shouldСallDaoMethodToUpdateBook() throws Exception {
-		when(libraryDao.isExist(any())).thenReturn(true);
-		when(libraryDao.findBookBy(1l)).thenReturn(Optional.of(mock(Book.class)));
+		when(genreDao.isExist(any())).thenReturn(true);
+		when(bookDao.findBookBy(1l)).thenReturn(Optional.of(mock(Book.class)));
 		libraryService.updateBook(1l, "test_title", "test_author", "test_genre");
 
-		verify(libraryDao, times(1)).saveBook(any());
+		verify(bookDao, times(1)).saveBook(any());
 	}
 
 	@Test
 	void shouldThrowNotValidParameterDataExceptionWhenDeleteBookWhichIsNotExist() throws Exception {
-		when(libraryDao.findBookBy(1l)).thenReturn(Optional.empty());
+		when(bookDao.findBookBy(1l)).thenReturn(Optional.empty());
 		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
 			libraryService.deleteBookBy(1l);
 		});
@@ -151,17 +155,17 @@ class LibraryServiceImplTest {
 
 	@Test
 	void shouldСallDeleteBookByDaoMethod() throws Exception {
-		when(libraryDao.findBookBy(1l)).thenReturn(Optional.of(mock(Book.class)));
+		when(bookDao.findBookBy(1l)).thenReturn(Optional.of(mock(Book.class)));
 		libraryService.deleteBookBy(1l);
 
-		verify(libraryDao, times(1)).deleteBookBy(1l);
+		verify(bookDao, times(1)).deleteBookBy(1l);
 	}
 
 	@Test
 	void shouldCallFindAllGenres() throws Exception {
 		libraryService.findAllGenres();
 
-		verify(libraryDao, times(1)).findAllGenres();
+		verify(genreDao, times(1)).findAllGenres();
 	}
 
 	@Test
@@ -186,6 +190,6 @@ class LibraryServiceImplTest {
 	void shouldCallSaveGenreDaoMethod() throws Exception {
 		libraryService.saveGenre("genre");
 
-		verify(libraryDao, times(1)).saveGenre(any());
+		verify(genreDao, times(1)).saveGenre(any());
 	}
 }

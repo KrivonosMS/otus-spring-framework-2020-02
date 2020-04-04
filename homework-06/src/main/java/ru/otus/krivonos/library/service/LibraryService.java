@@ -2,6 +2,8 @@ package ru.otus.krivonos.library.service;
 
 import ru.otus.krivonos.library.domain.Book;
 import ru.otus.krivonos.library.domain.Genre;
+import ru.otus.krivonos.library.exception.LibraryServiceException;
+import ru.otus.krivonos.library.exception.NotValidParameterDataException;
 
 import java.util.List;
 

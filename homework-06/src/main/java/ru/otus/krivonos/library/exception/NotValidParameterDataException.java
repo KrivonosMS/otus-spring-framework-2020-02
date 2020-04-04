@@ -1,11 +1,11 @@
-package ru.otus.krivonos.library.service;
+package ru.otus.krivonos.library.exception;
 
 import java.util.List;
 
-public class NotValidParameterDataException extends Exception {
+public class NotValidParameterDataException extends MainException {
 	private final List<String> errors;
 
-	NotValidParameterDataException(List<String> errors) {
+	public NotValidParameterDataException(List<String> errors) {
 		super();
 		this.errors = errors;
 	}

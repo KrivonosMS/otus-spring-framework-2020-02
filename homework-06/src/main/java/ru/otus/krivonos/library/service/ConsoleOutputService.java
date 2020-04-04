@@ -2,6 +2,7 @@ package ru.otus.krivonos.library.service;
 
 import org.springframework.stereotype.Service;
 import ru.otus.krivonos.library.configuration.ConsoleContext;
+import ru.otus.krivonos.library.exception.OutputServiceException;
 
 import java.io.PrintStream;
 
