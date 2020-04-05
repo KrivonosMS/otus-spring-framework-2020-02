@@ -86,6 +86,8 @@ class ShellControllerTest {
 
 		assertThat(res).isEqualTo("");
 		verify(outputService, times(1)).printText("Книга{id=1, название='Повести Белкина (сборник)', автор='Александр Пушкин', жанр='Литература 19 века'}");
+		verify(outputService, times(1)).printText("комментарий 1");
+		verify(outputService, times(1)).printText("комментарий 2");
 	}
 
 	@Test
@@ -175,5 +177,48 @@ class ShellControllerTest {
 		});
 
 		assertThat(res).isEqualTo("литературный жанр 'новый_литературный_жанр' успешно сохранен");
+	}
+
+	@Test
+	void saveReturnSuccessSaveCommentMessage() {
+		String res = (String) shell.evaluate(new Input() {
+			@Override
+			public String rawText() {
+				return "add comment 1 новый комментарий";
+			}
+
+			@Override
+			public List<String> words() {
+				List<String> l = new ArrayList<>();
+				l.add("add");
+				l.add("comment");
+				l.add("1");
+				l.add("новый комментарий");
+				return l;
+			}
+		});
+
+		assertThat(res).isEqualTo("комментарий успешно добавлен");
+	}
+
+	@Test
+	void saveReturnSuccessDeleteCommentMessage() {
+		String res = (String) shell.evaluate(new Input() {
+			@Override
+			public String rawText() {
+				return "delete comment 1";
+			}
+
+			@Override
+			public List<String> words() {
+				List<String> l = new ArrayList<>();
+				l.add("delete");
+				l.add("comment");
+				l.add("1");
+				return l;
+			}
+		});
+
+		assertThat(res).isEqualTo("комментарий успешнр удален");
 	}
 }

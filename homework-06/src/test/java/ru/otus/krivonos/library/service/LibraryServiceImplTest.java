@@ -7,11 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.krivonos.library.dao.BookDao;
+import ru.otus.krivonos.library.dao.CommentDao;
 import ru.otus.krivonos.library.dao.GenreDao;
 import ru.otus.krivonos.library.domain.Author;
 import ru.otus.krivonos.library.domain.Book;
 import ru.otus.krivonos.library.domain.Genre;
-import ru.otus.krivonos.library.exception.NotValidParameterDataException;
+import ru.otus.krivonos.library.exception.LibraryServiceException;
 
 import java.util.Optional;
 
@@ -26,12 +27,14 @@ class LibraryServiceImplTest {
 	private BookDao bookDao;
 	@Mock
 	private GenreDao genreDao;
+	@Mock
+	private CommentDao commentDao;
 	@InjectMocks
 	private LibraryServiceImpl libraryService;
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenSaveBookWithArgsAreNull() {
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+	void shouldThrowLibraryServiceExceptionWhenSaveBookWithArgsAreNull() {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.saveBook(null, null, null);
 		});
 
@@ -39,8 +42,8 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenSaveBookWithArgsAreEmpty() {
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+	void shouldThrowLibraryServiceExceptionWhenSaveBookWithArgsAreEmpty() {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.saveBook("  ", "  ", "  ");
 		});
 
@@ -48,9 +51,9 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenSaveBookAndGenreIsNotExist() throws Exception {
+	void shouldThrowLibraryServiceExceptionWhenSaveBookAndGenreIsNotExist() throws Exception {
 		when(genreDao.isExist(any())).thenReturn(false);
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.saveBook("test_title", "test_author", "test_genre");
 		});
 
@@ -66,9 +69,9 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenFindBookByIdWhichIsNotExist() throws Exception {
+	void shouldThrowLibraryServiceExceptionWhenFindBookByIdWhichIsNotExist() throws Exception {
 		when(bookDao.findBookBy(1l)).thenReturn(Optional.empty());
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.findBookBy(1l);
 		});
 
@@ -95,8 +98,8 @@ class LibraryServiceImplTest {
 
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenUpdateBookWithArgsAreNull() {
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+	void shouldThrowLibraryServiceExceptionWhenUpdateBookWithArgsAreNull() {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.updateBook(1l, null, null, null);
 		});
 
@@ -104,8 +107,8 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenUpdateBookWithArgsAreEmpty() {
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+	void shouldThrowLibraryServiceExceptionWhenUpdateBookWithArgsAreEmpty() {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.updateBook(1l, "  ", "  ", "  ");
 		});
 
@@ -113,10 +116,10 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenUpdateBookAndGenreIsNotExist() throws Exception {
+	void shouldThrowLibraryServiceExceptionWhenUpdateBookAndGenreIsNotExist() throws Exception {
 		when(genreDao.isExist(any())).thenReturn(false);
 		when(bookDao.findBookBy(1l)).thenReturn(Optional.of(mock(Book.class)));
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.updateBook(1l, "test_title", "test_author", "test_genre");
 		});
 
@@ -124,10 +127,10 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenUpdateBookWhichIsNotExist() throws Exception {
+	void shouldThrowLibraryServiceExceptionWhenUpdateBookWhichIsNotExist() throws Exception {
 		when(genreDao.isExist(any())).thenReturn(true);
 		when(bookDao.findBookBy(1l)).thenReturn(Optional.empty());
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.updateBook(1l, "test_title", "test_author", "test_genre");
 		});
 
@@ -144,9 +147,9 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenDeleteBookWhichIsNotExist() throws Exception {
+	void shouldThrowLibraryServiceExceptionWhenDeleteBookWhichIsNotExist() throws Exception {
 		when(bookDao.findBookBy(1l)).thenReturn(Optional.empty());
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.deleteBookBy(1l);
 		});
 
@@ -169,8 +172,8 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenSaveGenreWhichIsNull() {
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+	void shouldThrowLibraryServiceExceptionWhenSaveGenreWhichIsNull() {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.saveGenre(null);
 		});
 
@@ -178,8 +181,8 @@ class LibraryServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowNotValidParameterDataExceptionWhenSaveGenreWhichIsEmpty() {
-		NotValidParameterDataException exception = Assertions.assertThrows(NotValidParameterDataException.class, () -> {
+	void shouldThrowLibraryServiceExceptionWhenSaveGenreWhichIsEmpty() {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
 			libraryService.saveGenre(null);
 		});
 
@@ -191,5 +194,61 @@ class LibraryServiceImplTest {
 		libraryService.saveGenre("genre");
 
 		verify(genreDao, times(1)).saveGenre(any());
+	}
+
+	@Test
+	void shouldThrowLibraryServiceExceptionWhenCommentIsNull() {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
+			libraryService.addBookComment(1, null);
+		});
+
+		assertEquals("Не задан комментарий для сохранения", exception.getInfo());
+	}
+
+	@Test
+	void shouldThrowLibraryServiceExceptionWhenCommentIsEmpty() {
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
+			libraryService.addBookComment(1, "");
+		});
+
+		assertEquals("Не задан комментарий для сохранения", exception.getInfo());
+	}
+
+	@Test
+	void shouldThrowLibraryServiceExceptionWhenSaveCommentAndBookIsNotExist() throws Exception {
+		when(bookDao.findBookBy(1l)).thenReturn(Optional.empty());
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
+			libraryService.addBookComment(1, "тестовый комментарий");
+		});
+
+		assertThat(exception).hasMessage("Не найдена книга для добавления комментария");
+		verify(commentDao, never()).addBookComment(any());
+	}
+
+	@Test
+	void shouldSaveComment() throws Exception {
+		when(bookDao.findBookBy(1l)).thenReturn(Optional.of(mock(Book.class)));
+		libraryService.addBookComment(1, "тестовый комментарий");
+
+		verify(commentDao, times(1)).addBookComment(any());
+	}
+
+	@Test
+	void shouldThrowLibraryServiceExceptionWhenDeleteCommentWhichIsNotExist() throws Exception {
+		when(commentDao.isExist(1l)).thenReturn(false);
+		LibraryServiceException exception = Assertions.assertThrows(LibraryServiceException.class, () -> {
+			libraryService.deleteCommentById(1l);
+		});
+
+		assertThat(exception).hasMessage("Отсутствует комментарий для удаления");
+		verify(commentDao, never()).deleteCommentById(1l);
+	}
+
+	@Test
+	void shouldDeleteComment() throws Exception {
+		when(commentDao.isExist(1l)).thenReturn(true);
+		libraryService.deleteCommentById(1l);
+
+		verify(commentDao, times(1)).deleteCommentById(1l);
 	}
 }

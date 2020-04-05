@@ -14,13 +14,13 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
 @Repository
 public class DbBookDao implements BookDao {
 	@PersistenceContext
 	private EntityManager em;
 
 	@Override
+	@Transactional(readOnly = true)
 	public Optional<Book> findBookBy(long id) throws BookDaoException {
 		try {
 			return Optional.ofNullable(em.find(Book.class, id));
@@ -30,9 +30,10 @@ public class DbBookDao implements BookDao {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Book> findAllBooks() throws BookDaoException {
 		try {
-			TypedQuery<Book> query = em.createQuery("select b from Book b join fetch b.author join fetch b.genre", Book.class);
+			TypedQuery<Book> query = em.createQuery("select distinct(b) from Book b join fetch b.author inner join fetch b.genre left join fetch b.comments", Book.class);
 			return query.getResultList();
 		} catch (Exception e) {
 			throw new BookDaoException("Возникла непредвиденная ошибка при получении списка всех книг", e);
@@ -40,6 +41,7 @@ public class DbBookDao implements BookDao {
 	}
 
 	@Override
+	@Transactional
 	public long saveBook(Book book) throws BookDaoException {
 		if (book == null) {
 			throw new BookDaoException("Не задана книга для сохранения");
@@ -70,7 +72,7 @@ public class DbBookDao implements BookDao {
 		} catch (BookDaoException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new BookDaoException("Возникла непредвиденная ошибка при получении списка всех книг", e);
+			throw new BookDaoException("Возникла непредвиденная ошибка при сохранении книги", e);
 		}
 	}
 
@@ -89,13 +91,14 @@ public class DbBookDao implements BookDao {
 	}
 
 	@Override
+	@Transactional
 	public void deleteBookBy(long id) throws BookDaoException {
 		try {
 			Query query = em.createQuery("delete from Book b where b.id = :id");
 			query.setParameter("id", id);
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new BookDaoException("Возникла непредвиденная ошибка при удалении книги", e);
+			throw new BookDaoException("Возникла непредвиденная ошибка при удалении книги с id=" + id, e);
 		}
 	}
 }

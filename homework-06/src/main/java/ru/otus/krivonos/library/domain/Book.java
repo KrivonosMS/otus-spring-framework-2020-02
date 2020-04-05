@@ -5,10 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor
 @Entity
 @Table(name = "BOOK")
 public class Book {
@@ -23,6 +23,9 @@ public class Book {
 	@OneToOne(targetEntity = Genre.class, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name = "GENRE_ID" )
 	private Genre genre;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "BOOK_ID")
+	private List<Comment> comments;
 
 	public Book(String title, Author author, Genre genre) {
 		this.title = title;

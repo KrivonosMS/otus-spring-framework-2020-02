@@ -6,11 +6,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.krivonos.library.domain.Book;
+import ru.otus.krivonos.library.domain.Comment;
 import ru.otus.krivonos.library.domain.Genre;
-import ru.otus.krivonos.library.exception.LibraryServiceException;
-import ru.otus.krivonos.library.exception.NotValidParameterDataException;
-import ru.otus.krivonos.library.exception.OutputServiceException;
-import ru.otus.krivonos.library.service.*;
+import ru.otus.krivonos.library.exception.MainException;
+import ru.otus.krivonos.library.service.LibraryService;
+import ru.otus.krivonos.library.service.OutputService;
 
 import java.util.List;
 
@@ -28,14 +28,14 @@ public class ShellController {
 		try {
 			List<Book> books = libraryService.findAllBooks();
 			for (Book book : books) {
-				outputService.printText(String.format( "Книга{id=%s, название='%s', автор='%s', жанр='%s'}", book.getId(), book.getTitle(), book.getAuthor().getName(), book.getGenre().getType()));
+				outputService.printText(String.format("Книга{id=%s, название='%s', автор='%s', жанр='%s'}", book.getId(), book.getTitle(), book.getAuthor().getName(), book.getGenre().getType()));
 			}
-		} catch (LibraryServiceException e) {
-			LOG.error("Ошибка при получении списка всех книг", e);
-			msg = "Возникла непредвиденная ошика";
-		} catch (OutputServiceException e) {
-			LOG.error("Ошибка при выводе информации о книгах", e);
-			msg = "Возникла непредвиденная ошика";
+		} catch (MainException e) {
+			LOG.error("Ошибка при обработке запроса на получение вссех книг " + e.getInfo(), e);
+			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная ошибка при обработке запроса на получение вссех книг", e);
+			msg = "Непредвиденная ошибка";
 		}
 		return msg;
 	}
@@ -48,12 +48,12 @@ public class ShellController {
 			for (Genre genre : genres) {
 				outputService.printText("'" + genre.getType() + "'");
 			}
-		} catch (LibraryServiceException e) {
-			LOG.error("Ошибка при получении списка всех литературных жанров", e);
-			msg = "Возникла непредвиденная ошика";
-		} catch (OutputServiceException e) {
-			LOG.error("Ошибка при выводе информации о литературных жанрах", e);
-			msg = "Возникла непредвиденная ошика";
+		} catch (MainException e) {
+			LOG.error("Ошибка при обработке запроса на получение списка всех литературных жанров " + e.getInfo(), e);
+			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная ошибка при обработке запроса на получение всех книг", e);
+			msg = "Непредвиденная ошибка";
 		}
 		return msg;
 	}
@@ -63,16 +63,16 @@ public class ShellController {
 		String msg = "";
 		try {
 			Book book = libraryService.findBookBy(id);
-			outputService.printText(String.format( "Книга{id=%s, название='%s', автор='%s', жанр='%s'}", book.getId(), book.getTitle(), book.getAuthor().getName(), book.getGenre().getType()));
-		} catch (OutputServiceException e) {
-			LOG.error("Ошибка при выводе информации о книге с di=" + id, e);
-			msg = "Возникла непредвиденная ошика";
-		} catch (LibraryServiceException e) {
-			LOG.error("Ошибка при получении книги с id=" + id, e);
-			msg = "Возникла непредвиденная ошика";
-		} catch (NotValidParameterDataException e) {
-			LOG.error("Ошибка при получении книги с id=" + id + " " + e.getInfo(), e);
+			outputService.printText(String.format("Книга{id=%s, название='%s', автор='%s', жанр='%s'}", book.getId(), book.getTitle(), book.getAuthor().getName(), book.getGenre().getType()));
+			for (Comment comment : book.getComments()) {
+				outputService.printText(comment.getText());
+			}
+		} catch (MainException e) {
+			LOG.error("Ошибка при обработке запроса на получении книги с id=" + id + " " + e.getInfo(), e);
 			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная ошибка при обработке запроса на получении книги с id=" + id, e);
+			msg = "Непредвиденная ошибка";
 		}
 		return msg;
 	}
@@ -82,12 +82,12 @@ public class ShellController {
 		String msg = "книга успешно обновлена";
 		try {
 			libraryService.updateBook(id, bookTitle, authorName, genreType);
-		} catch (LibraryServiceException e) {
-			LOG.error("Ошибка при обновлении книги с id=" + id, e);
-			msg = "Возникла непредвиденная ошика";
-		} catch (NotValidParameterDataException e) {
+		} catch (MainException e) {
 			LOG.error("Ошибка при обновлении книги с id=" + id + " " + e.getInfo(), e);
 			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная при обновлении книги с id=" + id, e);
+			msg = "Непредвиденная ошибка";
 		}
 		return msg;
 	}
@@ -97,12 +97,12 @@ public class ShellController {
 		String msg = "книга успешно сохранена";
 		try {
 			libraryService.saveBook(bookTitle, authorName, genreType);
-		} catch (LibraryServiceException e) {
-			LOG.error("Ошибка при сохранении книги", e);
-			msg = "Возникла непредвиденная ошика";
-		} catch (NotValidParameterDataException e) {
-			LOG.error("Ошибка при сохранении книги" + " " + e.getInfo(), e);
+		} catch (MainException e) {
+			LOG.error("Ошибка при сохранении книги " + e.getInfo(), e);
 			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная ошибка при сохранении книги", e);
+			msg = "Непредвиденная ошибка";
 		}
 		return msg;
 	}
@@ -112,12 +112,12 @@ public class ShellController {
 		String msg = "книга успешно удалена";
 		try {
 			libraryService.deleteBookBy(id);
-		} catch (LibraryServiceException e) {
-			LOG.error("Ошибка при удалении книги с id=" + id, e);
-			msg = "Возникла непредвиденная ошика";
-		} catch (NotValidParameterDataException e) {
+		} catch (MainException e) {
 			LOG.error("Ошибка при удалении книги с id=" + id + " " + e.getInfo(), e);
 			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная ошибка при удалении книги с id=" + id, e);
+			msg = "Непредвиденная ошибка";
 		}
 		return msg;
 	}
@@ -127,12 +127,42 @@ public class ShellController {
 		String msg = "литературный жанр '" + type + "' успешно сохранен";
 		try {
 			libraryService.saveGenre(type);
-		} catch (LibraryServiceException e) {
-			LOG.error("Ошибка при добавление литературного жанра '" + type +"'", e);
-			msg = "Возникла непредвиденная ошика";
-		} catch (NotValidParameterDataException e) {
+		} catch (MainException e) {
 			LOG.error("Ошибка при добавление литературного жанра '" + type + "'" + " " + e.getInfo(), e);
 			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная ошибка при добавление литературного жанра '" + type + "'", e);
+			msg = "Непредвиденная ошибка";
+		}
+		return msg;
+	}
+
+	@ShellMethod(value = "Add comment to book", key = {"add comment"})
+	public String addComment(long bookId, String text) {
+		String msg = "комментарий успешно добавлен";
+		try {
+			libraryService.addBookComment(bookId, text);
+		} catch (MainException e) {
+			LOG.error("Ошибка при добавление комментария к книге с id=" + bookId + " " + e.getInfo(), e);
+			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная ошибка при добавление комментария к книге с id=" + bookId, e);
+			msg = "Непредвиденная ошибка";
+		}
+		return msg;
+	}
+
+	@ShellMethod(value = "delete comment", key = {"delete comment"})
+	public String deleteComment(long id) {
+		String msg = "комментарий успешнр удален";
+		try {
+			libraryService.deleteCommentById(id);
+		} catch (MainException e) {
+			LOG.error("Ошибка при удалении комментария с id=" + id + " " + e.getInfo(), e);
+			msg = e.getInfo();
+		} catch (Exception e) {
+			LOG.error("Непредвиденная ошибкапри удалении комментария с id=" + id, e);
+			msg = "Непредвиденная ошибка";
 		}
 		return msg;
 	}

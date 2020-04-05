@@ -47,7 +47,8 @@ class DbBookDaoTest {
 		assertThat(optionalBook).isPresent().get()
 			.matches(book -> book.getTitle().equals("Евгений Онегин"))
 			.matches(book -> book.getAuthor().getName().equals("Александр Пушкин"))
-			.matches(book -> book.getGenre().getType().equals("Классическая проза"));
+			.matches(book -> book.getGenre().getType().equals("Классическая проза"))
+			.matches(book -> book.getComments() != null && book.getComments().size() == 3);
 	}
 
 	@Test

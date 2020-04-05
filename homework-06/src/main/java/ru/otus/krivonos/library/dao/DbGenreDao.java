@@ -11,13 +11,13 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
 @Repository
 public class DbGenreDao implements GenreDao {
 	@PersistenceContext
 	private EntityManager em;
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Genre> findAllGenres() throws GenreDaoException {
 		try {
 			TypedQuery<Genre> query = em.createQuery("select g from Genre g", Genre.class);
@@ -28,6 +28,7 @@ public class DbGenreDao implements GenreDao {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public boolean isExist(Genre genre) throws GenreDaoException {
 		if (genre == null) {
 			throw new GenreDaoException("Не задан литературный жанр");
@@ -46,6 +47,7 @@ public class DbGenreDao implements GenreDao {
 	}
 
 	@Override
+	@Transactional
 	public long saveGenre(Genre genre) throws GenreDaoException {
 		if (genre == null) {
 			throw new GenreDaoException("Не задан литературный жанр");
