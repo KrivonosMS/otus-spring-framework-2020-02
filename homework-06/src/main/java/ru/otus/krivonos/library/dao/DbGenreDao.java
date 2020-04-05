@@ -39,6 +39,7 @@ public class DbGenreDao implements GenreDao {
 			throw new GenreDaoException("Возникла непредвиденная ошибка во вермя проверки наличия литературного жанра '" + genre.getType() + "'", e);
 		}
 	}
+
 	private Optional<Genre> getGenreByType(String type) {
 		TypedQuery<Genre> query = em.createQuery("select g from Genre g where g.type = :type", Genre.class);
 		query.setParameter("type", type);
@@ -47,7 +48,7 @@ public class DbGenreDao implements GenreDao {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = GenreDaoException.class)
 	public long saveGenre(Genre genre) throws GenreDaoException {
 		if (genre == null) {
 			throw new GenreDaoException("Не задан литературный жанр");

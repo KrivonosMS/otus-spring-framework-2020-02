@@ -41,7 +41,7 @@ public class DbBookDao implements BookDao {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = BookDaoException.class)
 	public long saveBook(Book book) throws BookDaoException {
 		if (book == null) {
 			throw new BookDaoException("Не задана книга для сохранения");
@@ -91,7 +91,7 @@ public class DbBookDao implements BookDao {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = BookDaoException.class)
 	public void deleteBookBy(long id) throws BookDaoException {
 		try {
 			Query query = em.createQuery("delete from Book b where b.id = :id");
