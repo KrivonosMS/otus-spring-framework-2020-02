@@ -1,23 +1,17 @@
 package ru.otus.krivonos.library.dao;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.krivonos.library.domain.Comment;
-import ru.otus.krivonos.library.exception.CommentDaoException;
+import ru.otus.krivonos.library.model.Comment;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @Transactional
 @Import(DbCommentDao.class)
@@ -26,15 +20,6 @@ class DbCommentDaoTest {
 	private CommentDao commentDao;
 	@Autowired
 	private TestEntityManager em;
-
-	@Test
-	void shouldThrow() {
-		CommentDaoException exception = Assertions.assertThrows(CommentDaoException.class, () -> {
-			commentDao.addBookComment(null);
-		});
-
-		assertEquals("Не задан комментарий для сохранения", exception.getMessage());
-	}
 
 	@Test
 	void shouldSaveComment() throws Exception {

@@ -1,6 +1,5 @@
-package ru.otus.krivonos.library.domain;
+package ru.otus.krivonos.library.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,11 +16,11 @@ public class Book {
 	private long id;
 	@Column(name = "TITLE", nullable = false)
 	private String title;
-	@OneToOne(targetEntity = Author.class, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
+	@OneToOne(targetEntity = Author.class, cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "AUTHOR_ID")
 	private Author author;
 	@OneToOne(targetEntity = Genre.class, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name = "GENRE_ID" )
+	@JoinColumn(name = "GENRE_ID")
 	private Genre genre;
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "BOOK_ID")

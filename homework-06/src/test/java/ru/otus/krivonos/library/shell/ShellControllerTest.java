@@ -91,11 +91,11 @@ class ShellControllerTest {
 	}
 
 	@Test
-	void shouldReturnSuccessUpdateBookMessage() {
+	void shouldReturnSuccessMessageWhenUpdateBookAndAuthorIsNotExist() {
 		String res = (String) shell.evaluate(new Input() {
 			@Override
 			public String rawText() {
-				return "update book 1 новое_название_книги новый_автор Русская классика";
+				return "update book 1 новое_название_книги 0 новый_автор 1";
 			}
 
 			@Override
@@ -105,8 +105,9 @@ class ShellControllerTest {
 				l.add("book");
 				l.add("1");
 				l.add("новое_название_книги");
+				l.add("0");
 				l.add("новый_автор");
-				l.add("Русская классика");
+				l.add("1");
 				return l;
 			}
 		});
@@ -115,11 +116,36 @@ class ShellControllerTest {
 	}
 
 	@Test
-	void shouldReturnSuccessSaveBookMessage() {
+	void shouldReturnSuccessMessageWhenUpdateBookAndAuthorIsExist() {
 		String res = (String) shell.evaluate(new Input() {
 			@Override
 			public String rawText() {
-				return "save book название_книги автор_книги Русская классика";
+				return "update book 1 новое_название_книги 0 новый_автор 1";
+			}
+
+			@Override
+			public List<String> words() {
+				List<String> l = new ArrayList<>();
+				l.add("update");
+				l.add("book");
+				l.add("1");
+				l.add("новое_название_книги");
+				l.add("1");
+				l.add("Александр Пушкин");
+				l.add("1");
+				return l;
+			}
+		});
+
+		assertThat(res).isEqualTo("книга успешно обновлена");
+	}
+
+	@Test
+	void shouldReturnSuccessMessageWhenSaveNewBookAndAuthorExist() {
+		String res = (String) shell.evaluate(new Input() {
+			@Override
+			public String rawText() {
+				return "save book название_книги 1 автор_книги 1";
 			}
 
 			@Override
@@ -128,8 +154,33 @@ class ShellControllerTest {
 				l.add("save");
 				l.add("book");
 				l.add("название_книги");
+				l.add("1");
 				l.add("автор_книги");
-				l.add("Русская классика");
+				l.add("1");
+				return l;
+			}
+		});
+
+		assertThat(res).isEqualTo("книга успешно сохранена");
+	}
+
+	@Test
+	void shouldReturnSuccessMessageWhenSaveNewBookAndAuthorNotExist() {
+		String res = (String) shell.evaluate(new Input() {
+			@Override
+			public String rawText() {
+				return "save book название_книги 1 автор_книги 1";
+			}
+
+			@Override
+			public List<String> words() {
+				List<String> l = new ArrayList<>();
+				l.add("save");
+				l.add("book");
+				l.add("название_книги");
+				l.add("0");
+				l.add("автор_книги");
+				l.add("1");
 				return l;
 			}
 		});

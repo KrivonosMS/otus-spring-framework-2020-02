@@ -1,23 +1,20 @@
 package ru.otus.krivonos.library.dao;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.krivonos.library.domain.Genre;
-import ru.otus.krivonos.library.exception.GenreDaoException;
+import ru.otus.krivonos.library.model.Genre;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @Transactional
 @Import(DbGenreDao.class)
@@ -29,7 +26,7 @@ class DbGenreDaoTest {
 
 	@Test
 	void shouldReturnAllGenres() throws Exception {
-		List<Genre> genres = bookDao.findAllGenres();
+		List<Genre> genres = bookDao.findAll();
 
 		assertThat(genres)
 			.hasSize(4)
@@ -38,36 +35,23 @@ class DbGenreDaoTest {
 
 	@Test
 	void shouldReturnTrueIfGenreExist() throws Exception {
-		Genre genre = new Genre("Русская классика");
-
-		boolean isExist = bookDao.isExist(genre);
+		boolean isExist = bookDao.isExist("Русская классика");
 
 		assertTrue(isExist);
 	}
 
 	@Test
 	void shouldReturnFalseIfGenreIsNotExist() throws Exception {
-		Genre genre = new Genre("Несуществующий жанр");
-
-		boolean isExist = bookDao.isExist(genre);
+		boolean isExist = bookDao.isExist("Несуществующий жанр");
 
 		assertFalse(isExist);
-	}
-
-	@Test
-	void shouldThrowLibraryDaoExceptionWhenSaveGenreWhichIsNull() throws Exception {
-		GenreDaoException exception = Assertions.assertThrows(GenreDaoException.class, () -> {
-			bookDao.saveGenre(null);
-		});
-
-		assertEquals("Не задан литературный жанр", exception.getMessage());
 	}
 
 	@Test
 	void shouldSaveGenre() throws Exception {
 		Genre genre = new Genre("Техническа литература");
 
-		bookDao.saveGenre(genre);
+		bookDao.save(genre);
 
 		assertThat(genre.getId()).isGreaterThan(0);
 		Genre expectedGenre = em.find(Genre.class, genre.getId());
@@ -78,18 +62,27 @@ class DbGenreDaoTest {
 	void shouldUpdateGenre() throws Exception {
 		Genre genre = new Genre(1l, "Техническа литература");
 
-		bookDao.saveGenre(genre);
+		bookDao.save(genre);
 
 		Genre expectedGenre = em.find(Genre.class, 1l);
 		assertThat(expectedGenre).isEqualToComparingFieldByField(expectedGenre);
 	}
 
 	@Test
-	void shouldThrowLibraryDaoExceptionWhenGenreIsNull() {
-		GenreDaoException exception = Assertions.assertThrows(GenreDaoException.class, () -> {
-			bookDao.isExist(null);
-		});
+	void shouldReturnNotEmptyOptionalGenreById() throws Exception {
+		Optional<Genre> optionalGenre = bookDao.findBy(1l);
 
-		assertEquals("Не задан литературный жанр", exception.getMessage());
+		assertThat(optionalGenre)
+			.isPresent()
+			.get()
+			.isEqualToComparingFieldByField(new Genre(1l, "Классическая проза"));
+	}
+
+	@Test
+	void shouldReturnEmptyOptionalGenreById() throws Exception {
+		Optional<Genre> optionalGenre = bookDao.findBy(-11l);
+
+		assertThat(optionalGenre)
+			.isNotPresent();
 	}
 }

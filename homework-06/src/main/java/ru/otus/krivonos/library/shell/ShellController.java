@@ -5,11 +5,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.otus.krivonos.library.domain.Book;
-import ru.otus.krivonos.library.domain.Comment;
-import ru.otus.krivonos.library.domain.Genre;
+import ru.otus.krivonos.library.dao.CommentDao;
+import ru.otus.krivonos.library.model.Book;
+import ru.otus.krivonos.library.model.Comment;
+import ru.otus.krivonos.library.model.Genre;
 import ru.otus.krivonos.library.exception.MainException;
-import ru.otus.krivonos.library.service.LibraryService;
+import ru.otus.krivonos.library.service.BookService;
+import ru.otus.krivonos.library.service.CommentService;
+import ru.otus.krivonos.library.service.GenreService;
 import ru.otus.krivonos.library.service.OutputService;
 
 import java.util.List;
@@ -19,14 +22,16 @@ import java.util.List;
 public class ShellController {
 	public static final Logger LOG = LoggerFactory.getLogger(ShellController.class);
 
-	private final LibraryService libraryService;
+	private final BookService bookService;
+	private final GenreService genreService;
+	private final CommentService commentService;
 	private final OutputService outputService;
 
 	@ShellMethod(value = "Print all books", key = {"all books", "books"})
 	public String allBooks() {
 		String msg = "";
 		try {
-			List<Book> books = libraryService.findAllBooks();
+			List<Book> books = bookService.findAllBooks();
 			for (Book book : books) {
 				outputService.printText(String.format("Книга{id=%s, название='%s', автор='%s', жанр='%s'}", book.getId(), book.getTitle(), book.getAuthor().getName(), book.getGenre().getType()));
 			}
@@ -44,7 +49,7 @@ public class ShellController {
 	public String allGenres() {
 		String msg = "";
 		try {
-			List<Genre> genres = libraryService.findAllGenres();
+			List<Genre> genres = genreService.findAllGenres();
 			for (Genre genre : genres) {
 				outputService.printText("'" + genre.getType() + "'");
 			}
@@ -62,7 +67,7 @@ public class ShellController {
 	public String book(long id) {
 		String msg = "";
 		try {
-			Book book = libraryService.findBookBy(id);
+			Book book = bookService.findBookBy(id);
 			outputService.printText(String.format("Книга{id=%s, название='%s', автор='%s', жанр='%s'}", book.getId(), book.getTitle(), book.getAuthor().getName(), book.getGenre().getType()));
 			for (Comment comment : book.getComments()) {
 				outputService.printText(comment.getText());
@@ -78,10 +83,10 @@ public class ShellController {
 	}
 
 	@ShellMethod(value = "Update book", key = {"update book", "update"})
-	public String updateBook(long id, String bookTitle, String authorName, String genreType) {
+	public String updateBook(long id, String bookTitle, long authorId, String authorName, long genreId) {
 		String msg = "книга успешно обновлена";
 		try {
-			libraryService.updateBook(id, bookTitle, authorName, genreType);
+			bookService.saveBook(id, bookTitle, authorId, authorName, genreId);
 		} catch (MainException e) {
 			LOG.error("Ошибка при обновлении книги с id=" + id + " " + e.getInfo(), e);
 			msg = e.getInfo();
@@ -93,10 +98,10 @@ public class ShellController {
 	}
 
 	@ShellMethod(value = "Save book", key = {"save book"})
-	public String saveBook(String bookTitle, String authorName, String genreType) {
+	public String saveBook(String bookTitle, long authorId, String authorName, long genreId) {
 		String msg = "книга успешно сохранена";
 		try {
-			libraryService.saveBook(bookTitle, authorName, genreType);
+			bookService.saveBook(bookTitle, authorId, authorName, genreId);
 		} catch (MainException e) {
 			LOG.error("Ошибка при сохранении книги " + e.getInfo(), e);
 			msg = e.getInfo();
@@ -111,7 +116,7 @@ public class ShellController {
 	public String deleteBookBy(long id) {
 		String msg = "книга успешно удалена";
 		try {
-			libraryService.deleteBookBy(id);
+			bookService.deleteBookBy(id);
 		} catch (MainException e) {
 			LOG.error("Ошибка при удалении книги с id=" + id + " " + e.getInfo(), e);
 			msg = e.getInfo();
@@ -126,7 +131,7 @@ public class ShellController {
 	public String saveGenre(String type) {
 		String msg = "литературный жанр '" + type + "' успешно сохранен";
 		try {
-			libraryService.saveGenre(type);
+			genreService.saveGenre(type);
 		} catch (MainException e) {
 			LOG.error("Ошибка при добавление литературного жанра '" + type + "'" + " " + e.getInfo(), e);
 			msg = e.getInfo();
@@ -141,7 +146,7 @@ public class ShellController {
 	public String addComment(long bookId, String text) {
 		String msg = "комментарий успешно добавлен";
 		try {
-			libraryService.addBookComment(bookId, text);
+			commentService.addBookComment(bookId, text);
 		} catch (MainException e) {
 			LOG.error("Ошибка при добавление комментария к книге с id=" + bookId + " " + e.getInfo(), e);
 			msg = e.getInfo();
@@ -156,7 +161,7 @@ public class ShellController {
 	public String deleteComment(long id) {
 		String msg = "комментарий успешнр удален";
 		try {
-			libraryService.deleteCommentById(id);
+			commentService.deleteCommentById(id);
 		} catch (MainException e) {
 			LOG.error("Ошибка при удалении комментария с id=" + id + " " + e.getInfo(), e);
 			msg = e.getInfo();

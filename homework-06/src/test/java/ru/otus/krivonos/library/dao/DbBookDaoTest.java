@@ -1,18 +1,14 @@
 package ru.otus.krivonos.library.dao;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.krivonos.library.domain.Author;
-import ru.otus.krivonos.library.domain.Book;
-import ru.otus.krivonos.library.domain.Genre;
-import ru.otus.krivonos.library.exception.BookDaoException;
+import ru.otus.krivonos.library.model.Author;
+import ru.otus.krivonos.library.model.Book;
+import ru.otus.krivonos.library.model.Genre;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +16,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @Transactional
 @Import(DbBookDao.class)
@@ -32,7 +27,7 @@ class DbBookDaoTest {
 
 	@Test
 	void shouldReturnAllBooks() throws Exception {
-		List<Book> books = bookDao.findAllBooks();
+		List<Book> books = bookDao.findAll();
 
 		assertThat(books)
 			.hasSize(7)
@@ -41,7 +36,7 @@ class DbBookDaoTest {
 
 	@Test
 	void shouldReturnBookById() throws Exception {
-		Optional<Book> optionalBook = bookDao.findBookBy(2l);
+		Optional<Book> optionalBook = bookDao.findBy(2l);
 
 		assertThat(optionalBook).isNotEmpty();
 		assertThat(optionalBook).isPresent().get()
@@ -57,7 +52,7 @@ class DbBookDaoTest {
 		assertThat(expectedBook).isNotNull();
 		em.detach(expectedBook);
 
-		bookDao.deleteBookBy(2l);
+		bookDao.deleteBy(2l);
 
 		Book actualBook = em.find(Book.class, 2l);
 		assertThat(actualBook).isNull();
@@ -65,19 +60,19 @@ class DbBookDaoTest {
 
 	@Test
 	void shouldReturnEmptyOptionalBookWhenNotExist() throws Exception {
-		Optional<Book> optionalBook = bookDao.findBookBy(-2l);
+		Optional<Book> optionalBook = bookDao.findBy(-2l);
 
 		assertThat(optionalBook).isNotPresent();
 	}
 
 	@Test
-	void shouldSaveBookWhenAuthorExist() throws Exception {
-		Author author = new Author("Александр Пушкин");
-		Genre genre = new Genre("Классическая проза");
+	void shouldPersistBookWhenAuthorExist() throws Exception {
+		Author author = em.find(Author.class, 1l);
+		Genre genre = em.find(Genre.class, 1l);
 		String bookTitle = "Евгений Онегин";
 		Book expectedBook = new Book(bookTitle, author, genre);
 
-		bookDao.saveBook(expectedBook);
+		bookDao.save(expectedBook);
 
 		assertThat(expectedBook.getId()).isGreaterThan(0);
 		em.detach(expectedBook);
@@ -90,13 +85,13 @@ class DbBookDaoTest {
 	}
 
 	@Test
-	void shouldSaveBookWhenAuthorNotExist() throws Exception {
+	void shouldPersistBookWhenAuthorNotExist() throws Exception {
 		Author author = new Author("Михаил Лермонтов");
-		Genre genre = new Genre("Классическая проза");
+		Genre genre = em.find(Genre.class, 1l);
 		String bookTitle = "Смерть поэта";
 		Book expectedBook = new Book(bookTitle, author, genre);
 
-		bookDao.saveBook(expectedBook);
+		bookDao.save(expectedBook);
 
 		assertThat(expectedBook.getId()).isGreaterThan(0);
 		em.detach(expectedBook);
@@ -109,45 +104,22 @@ class DbBookDaoTest {
 	}
 
 	@Test
-	void shouldThrowLibraryDaoExceptionSaveBookWhenGenreIsNotExist() throws Exception {
-		Author author = new Author("Михаил Лермонтов");
-		Genre genre = new Genre("Техническая литература");
-		String bookTitle = "Смерть поэта";
-		Book book = new Book(bookTitle, author, genre);
-
-		BookDaoException exception = Assertions.assertThrows(BookDaoException.class, () -> {
-			bookDao.saveBook(book);
-		});
-
-		assertEquals("Литературный жанр 'Техническая литература' отсутствует", exception.getMessage());
-	}
-
-	@Test
 	void shouldNotDeleteBookWhenBookIsNotExist() throws Exception {
-		int count = bookDao.findAllBooks().size();
+		int count = bookDao.findAll().size();
 
-		bookDao.deleteBookBy(-2l);
+		bookDao.deleteBy(-2l);
 
-		assertEquals(count, bookDao.findAllBooks().size());
+		assertEquals(count, bookDao.findAll().size());
 	}
 
 	@Test
-	void shouldThrowLibraryDaoExceptionWhenBookIsNull() {
-		BookDaoException exception = Assertions.assertThrows(BookDaoException.class, () -> {
-			bookDao.saveBook(null);
-		});
-
-		assertEquals("Не задана книга для сохранения", exception.getMessage());
-	}
-
-	@Test
-	void shouldUpdateBook() throws Exception {
+	void shouldUpdateBookWhenAuthorNotExist() throws Exception {
 		Author author = new Author("Михаил Лермонтов");
-		Genre genre = new Genre("Классическая проза");
+		Genre genre = em.find(Genre.class, 1l);
 		String bookTitle = "Смерть поэта";
 		Book expectedBook = new Book(1, bookTitle, author, genre);
 
-		bookDao.saveBook(expectedBook);
+		bookDao.save(expectedBook);
 
 		em.detach(expectedBook);
 		Book actualBook = em.find(Book.class, expectedBook.getId());
@@ -155,6 +127,24 @@ class DbBookDaoTest {
 			.isNotNull()
 			.matches(book -> book.getTitle().equals("Смерть поэта"))
 			.matches(book -> book.getAuthor() != null && "Михаил Лермонтов".equals(book.getAuthor().getName()))
+			.matches(book -> book.getGenre() != null && "Классическая проза".equals(book.getGenre().getType()));
+	}
+
+	@Test
+	void shouldUpdateBookWhenAuthorExist() throws Exception {
+		Author author = em.find(Author.class, 1l);
+		Genre genre = em.find(Genre.class, 1l);
+		String bookTitle = "Смерть поэта";
+		Book expectedBook = new Book(1, bookTitle, author, genre);
+
+		bookDao.save(expectedBook);
+
+		em.detach(expectedBook);
+		Book actualBook = em.find(Book.class, expectedBook.getId());
+		assertThat(actualBook)
+			.isNotNull()
+			.matches(book -> book.getTitle().equals("Смерть поэта"))
+			.matches(book -> book.getAuthor() != null && "Александр Пушкин".equals(book.getAuthor().getName()))
 			.matches(book -> book.getGenre() != null && "Классическая проза".equals(book.getGenre().getType()));
 	}
 }

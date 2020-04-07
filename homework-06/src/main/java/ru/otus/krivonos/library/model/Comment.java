@@ -1,4 +1,4 @@
-package ru.otus.krivonos.library.domain;
+package ru.otus.krivonos.library.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

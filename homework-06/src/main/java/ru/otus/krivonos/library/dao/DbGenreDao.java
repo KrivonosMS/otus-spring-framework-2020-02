@@ -2,7 +2,7 @@ package ru.otus.krivonos.library.dao;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.krivonos.library.domain.Genre;
+import ru.otus.krivonos.library.model.Genre;
 import ru.otus.krivonos.library.exception.GenreDaoException;
 
 import javax.persistence.EntityManager;
@@ -17,8 +17,7 @@ public class DbGenreDao implements GenreDao {
 	private EntityManager em;
 
 	@Override
-	@Transactional(readOnly = true)
-	public List<Genre> findAllGenres() throws GenreDaoException {
+	public List<Genre> findAll() throws GenreDaoException {
 		try {
 			TypedQuery<Genre> query = em.createQuery("select g from Genre g", Genre.class);
 			return query.getResultList();
@@ -28,31 +27,28 @@ public class DbGenreDao implements GenreDao {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public boolean isExist(Genre genre) throws GenreDaoException {
-		if (genre == null) {
-			throw new GenreDaoException("Не задан литературный жанр");
-		}
+	public Optional<Genre> findBy(long id) throws GenreDaoException {
 		try {
-			return getGenreByType(genre.getType()).isPresent();
+			return Optional.ofNullable(em.find(Genre.class, id));
 		} catch (Exception e) {
-			throw new GenreDaoException("Возникла непредвиденная ошибка во вермя проверки наличия литературного жанра '" + genre.getType() + "'", e);
+			throw new GenreDaoException("Возникла непредвиденная ошибка во вермя поиска литературного жанра с id=" + id, e);
 		}
-	}
-
-	private Optional<Genre> getGenreByType(String type) {
-		TypedQuery<Genre> query = em.createQuery("select g from Genre g where g.type = :type", Genre.class);
-		query.setParameter("type", type);
-		List<Genre> result = query.getResultList();
-		return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
 	}
 
 	@Override
-	@Transactional(rollbackFor = GenreDaoException.class)
-	public long saveGenre(Genre genre) throws GenreDaoException {
-		if (genre == null) {
-			throw new GenreDaoException("Не задан литературный жанр");
+	public boolean isExist(String genreType) throws GenreDaoException {
+		try {
+			TypedQuery<Genre> query = em.createQuery("select g from Genre g where g.type = :type", Genre.class);
+			query.setParameter("type", genreType);
+			List<Genre> result = query.getResultList();
+			return !result.isEmpty();
+		} catch (Exception e) {
+			throw new GenreDaoException("Возникла непредвиденная ошибка во вермя проверки наличия литературного жанра '" + genreType + "'", e);
 		}
+	}
+
+	@Override
+	public long save(Genre genre) throws GenreDaoException {
 		try {
 			if (genre.getId() == 0) {
 				em.persist(genre);
