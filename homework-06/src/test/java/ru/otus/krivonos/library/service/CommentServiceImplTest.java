@@ -28,7 +28,7 @@ class CommentServiceImplTest {
 	private CommentServiceImpl libraryService;
 
 	@Test
-	void shouldThrowServiceExceptionWhenCommentIsNull() {
+	void shouldThrowServiceExceptionWhenSaveCommentWhichIsNull() {
 		CommentServiceException exception = Assertions.assertThrows(CommentServiceException.class, () -> {
 			libraryService.addBookComment(1, null);
 		});
@@ -37,7 +37,7 @@ class CommentServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowServiceExceptionWhenCommentIsEmpty() {
+	void shouldThrowServiceExceptionWhenSaveCommentWhichIsEmpty() {
 		CommentServiceException exception = Assertions.assertThrows(CommentServiceException.class, () -> {
 			libraryService.addBookComment(1, "");
 		});

@@ -27,17 +27,6 @@ public class DbCommentDao implements CommentDao {
 	}
 
 	@Override
-	public List<Comment> findAllCommentsBy(long bookId) throws CommentDaoException {
-		try {
-			TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.bookId = :bookId", Comment.class);
-			query.setParameter("bookId", bookId);
-			return query.getResultList();
-		} catch (Exception e) {
-			throw new CommentDaoException("Возникла непредвиденная ошибка при получении списка комментариев для книги с id=" + bookId, e);
-		}
-	}
-
-	@Override
 	public void deleteCommentById(long id) throws CommentDaoException {
 		try {
 			Query query = em.createQuery("delete from Comment c where c.id = :id");

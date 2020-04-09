@@ -50,13 +50,6 @@ class DbCommentDaoTest {
 	}
 
 	@Test
-	void shouldReturnEmptyCommentList() throws Exception {
-		List<Comment> comments = commentDao.findAllCommentsBy(-2l);
-
-		assertThat(comments).isEmpty();
-	}
-
-	@Test
 	void shouldDeleteComment() throws Exception {
 		Comment comment = em.find(Comment.class, 3l);
 

@@ -18,7 +18,6 @@ import ru.otus.krivonos.library.model.Genre;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -108,15 +107,11 @@ public class BookServiceImpl implements BookService {
 			long startTime = System.currentTimeMillis();
 			LOG.debug("method=deleteBookBy action=\"удаление книги\" bookId={}", id);
 
-			Optional<Book> optionalBook = bookDao.findBy(id);
-			if (optionalBook.isPresent()) {
-				bookDao.deleteBy(id);
+			Book book = bookDao.findBy(id).orElseThrow(() -> new BookServiceException("Книга с id='" + id + "' в библиотеке не найдена"));
+			bookDao.delete(book);
 
-				long endTime = System.currentTimeMillis();
-				LOG.debug("method=deleteBookBy action=\"удалена книга\" optionalBook={} time={}ms", optionalBook, endTime - startTime);
-			} else {
-				throw new BookServiceException("Книга с id='" + id + "' в библиотеке не найдена");
-			}
+			long endTime = System.currentTimeMillis();
+			LOG.debug("method=deleteBookBy action=\"удалена книга\" optional={} time={}ms", book, endTime - startTime);
 		} catch (BookDaoException e) {
 			throw new BookServiceException("Возникла непредвиденная ошибка при удалении книги", e);
 		}

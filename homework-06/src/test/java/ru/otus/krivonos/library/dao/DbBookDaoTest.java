@@ -1,20 +1,23 @@
 package ru.otus.krivonos.library.dao;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.krivonos.library.exception.BookDaoException;
+import ru.otus.krivonos.library.exception.BookServiceException;
 import ru.otus.krivonos.library.model.Author;
 import ru.otus.krivonos.library.model.Book;
+import ru.otus.krivonos.library.model.Comment;
 import ru.otus.krivonos.library.model.Genre;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @Transactional
@@ -47,13 +50,14 @@ class DbBookDaoTest {
 	}
 
 	@Test
-	void shouldDeleteBookById() throws Exception {
+	void shouldDeleteBook() throws Exception {
 		Book expectedBook = em.find(Book.class, 2l);
 		assertThat(expectedBook).isNotNull();
+
+		bookDao.delete(expectedBook);
+
+		em.flush();
 		em.detach(expectedBook);
-
-		bookDao.deleteBy(2l);
-
 		Book actualBook = em.find(Book.class, 2l);
 		assertThat(actualBook).isNull();
 	}
@@ -104,15 +108,6 @@ class DbBookDaoTest {
 	}
 
 	@Test
-	void shouldNotDeleteBookWhenBookIsNotExist() throws Exception {
-		int count = bookDao.findAll().size();
-
-		bookDao.deleteBy(-2l);
-
-		assertEquals(count, bookDao.findAll().size());
-	}
-
-	@Test
 	void shouldUpdateBookWhenAuthorNotExist() throws Exception {
 		Author author = new Author("Михаил Лермонтов");
 		Genre genre = em.find(Genre.class, 1l);
@@ -146,5 +141,23 @@ class DbBookDaoTest {
 			.matches(book -> book.getTitle().equals("Смерть поэта"))
 			.matches(book -> book.getAuthor() != null && "Александр Пушкин".equals(book.getAuthor().getName()))
 			.matches(book -> book.getGenre() != null && "Классическая проза".equals(book.getGenre().getType()));
+	}
+
+	@Test
+	void shouldReturnExceptionWhenFindCommentBooksWhichIsNotExist() {
+		BookDaoException exception = Assertions.assertThrows(BookDaoException.class, () -> {
+			bookDao.findAllCommentsBy(-2l);
+		});
+
+		assertThat(exception).hasMessage("Не найдена книга с id=-2");
+	}
+
+	@Test
+	void shouldReturnAllBookComments() throws BookDaoException {
+		List<Comment> comments = bookDao.findAllCommentsBy(2);
+
+		assertThat(comments)
+			.isNotEmpty()
+			.hasSize(3);
 	}
 }

@@ -3,13 +3,13 @@ package ru.otus.krivonos.library.dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.krivonos.library.exception.BookDaoException;
+import ru.otus.krivonos.library.exception.CommentDaoException;
 import ru.otus.krivonos.library.model.Book;
+import ru.otus.krivonos.library.model.Comment;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
@@ -61,13 +61,21 @@ public class DbBookDao implements BookDao {
 	}
 
 	@Override
-	public void deleteBy(long id) throws BookDaoException {
+	public void delete(Book book) throws BookDaoException {
 		try {
-			Query query = em.createQuery("delete from Book b where b.id = :id");
-			query.setParameter("id", id);
-			query.executeUpdate();
+			em.remove(book);
 		} catch (Exception e) {
-			throw new BookDaoException("Возникла непредвиденная ошибка при удалении книги с id=" + id, e);
+			throw new BookDaoException("Возникла непредвиденная ошибка при удалении книги с id=" + book.getId(), e);
+		}
+	}
+
+	@Override
+	public List<Comment> findAllCommentsBy(long bookId) throws BookDaoException {
+		Book book = findBy(bookId).orElseThrow(()-> new BookDaoException("Не найдена книга с id=" + bookId));
+		try {
+			return book.getComments();
+		} catch (Exception e) {
+			throw new BookDaoException("Возникла непредвиденная при получении комментариев к книге с id=" + bookId, e);
 		}
 	}
 }

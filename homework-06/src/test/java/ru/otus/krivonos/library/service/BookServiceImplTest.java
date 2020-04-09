@@ -181,9 +181,10 @@ class BookServiceImplTest {
 
 	@Test
 	void shouldСallDeleteBookByDaoMethod() throws Exception {
-		when(bookDao.findBy(1l)).thenReturn(Optional.of(mock(Book.class)));
+		Book bookMock = mock(Book.class);
+		when(bookDao.findBy(1l)).thenReturn(Optional.of(bookMock));
 		libraryService.deleteBookBy(1l);
 
-		verify(bookDao, times(1)).deleteBy(1l);
+		verify(bookDao, times(1)).delete(bookMock);
 	}
 }
