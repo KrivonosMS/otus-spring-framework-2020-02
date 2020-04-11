@@ -22,7 +22,7 @@ public class Book {
 	@OneToOne(targetEntity = Genre.class, cascade = {CascadeType.DETACH, CascadeType.REFRESH})
 	@JoinColumn(name = "GENRE_ID")
 	private Genre genre;
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "BOOK_ID")
 	private List<Comment> comments;
 
