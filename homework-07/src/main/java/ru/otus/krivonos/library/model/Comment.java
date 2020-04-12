@@ -20,11 +20,12 @@ public class Comment {
 	private String text;
 	@Column(name = "CREATION_DATE", nullable = false)
 	private LocalDateTime creationDate;
-	@Column(name = "BOOK_ID", nullable = false)
-	private long bookId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "BOOK_ID",  nullable = false)
+	private Book book;
 
-	public Comment(long bookId, String text) {
-		this.bookId = bookId;
+	public Comment(Book book, String text) {
+		this.book = book;
 		this.text = text;
 		this.creationDate = LocalDateTime.now();
 	}

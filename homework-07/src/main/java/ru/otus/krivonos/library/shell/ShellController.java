@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.krivonos.library.model.Book;
 import ru.otus.krivonos.library.model.Comment;
 import ru.otus.krivonos.library.model.Genre;
@@ -62,6 +63,7 @@ public class ShellController {
 		return msg;
 	}
 
+	@Transactional
 	@ShellMethod(value = "Print book", key = {"book"})
 	public String book(long id) {
 		String msg = "";

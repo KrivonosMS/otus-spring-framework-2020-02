@@ -11,8 +11,6 @@ import ru.otus.krivonos.library.exception.CommentServiceException;
 import ru.otus.krivonos.library.model.Book;
 import ru.otus.krivonos.library.model.Comment;
 
-import java.util.Optional;
-
 @AllArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -32,13 +30,9 @@ public class CommentServiceImpl implements CommentService {
 			LOG.debug("method=addBookComment action=\"сохранение комментария к книге\" bookId={}", bookId);
 			LOG.trace("method=addBookComment action=\"сохранение комментария к книге\" bookId={} text={}", bookId, text);
 
-			Optional<Book> optionalBook = bookRepository.findById(bookId);
-			if (optionalBook.isPresent()) {
-				Comment comment = new Comment(bookId, text);
-				commentRepository.save(comment);
-			} else {
-				throw new CommentServiceException("Не найдена книга для добавления комментария");
-			}
+			Book book = bookRepository.findById(bookId).orElseThrow(() -> new CommentServiceException("Не найдена книга для добавления комментария"));
+			Comment comment = new Comment(book, text);
+			commentRepository.save(comment);
 
 			long endTime = System.currentTimeMillis();
 			LOG.debug("method=addBookComment action=\"комментарий сохранен\" bookId={} time={}ms", bookId, endTime - startTime);

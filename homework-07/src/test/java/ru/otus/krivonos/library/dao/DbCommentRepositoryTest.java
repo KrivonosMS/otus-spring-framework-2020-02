@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.krivonos.library.model.Book;
 import ru.otus.krivonos.library.model.Comment;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,11 +20,11 @@ class DbCommentRepositoryTest {
 
 	@Test
 	void shouldSaveComment() {
-		Comment expectedComment = new Comment(1, "новый комментарий");
+		Book book = em.find(Book.class, 1l);
+		Comment expectedComment = new Comment(book, "новый комментарий");
 
 		commentRepository.save(expectedComment);
 
-		em.detach(expectedComment);
 		assertThat(expectedComment.getId()).isGreaterThan(0);
 		Comment actual = em.find(Comment.class, expectedComment.getId());
 		assertThat(actual)
