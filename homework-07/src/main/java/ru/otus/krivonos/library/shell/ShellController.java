@@ -65,7 +65,6 @@ public class ShellController {
 
 	@Transactional
 	@ShellMethod(value = "Print book", key = {"book"})
-	@Transactional(rollbackFor = Exception.class)
 	public String book(long id) {
 		String msg = "";
 		try {
