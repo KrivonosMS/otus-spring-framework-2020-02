@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateBook(String bookTitle, String authorName, long genreId) throws BookServiceException {
+    public void createBook(String bookTitle, String authorName, long genreId) throws BookServiceException {
         long startTime = System.currentTimeMillis();
         LOG.debug("method=createBook action=\"сохранеие книги в библиотеку\" bookTitle={} authorName={} genreId={}", bookTitle, authorName, genreId);
 

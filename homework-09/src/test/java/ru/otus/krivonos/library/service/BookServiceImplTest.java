@@ -35,7 +35,7 @@ class BookServiceImplTest {
 	@Test
 	void shouldThrowServiceExceptionWhenSaveBookAndBookTitleIsNull() {
 		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
-			() -> bookService.updateBook(null, "test_author_name'", 1)
+			() -> bookService.createBook(null, "test_author_name'", 1)
 		);
 
 		assertEquals("Не задано название книги", exception.getInfo());
@@ -44,7 +44,7 @@ class BookServiceImplTest {
 	@Test
 	void shouldThrowServiceExceptionWhenSaveBookAndBookTitleIsEmpty() {
 		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
-			() -> bookService.updateBook("", "test_author_name'", 1)
+			() -> bookService.createBook("", "test_author_name'", 1)
 		);
 
 		assertEquals("Не задано название книги", exception.getInfo());
@@ -53,7 +53,7 @@ class BookServiceImplTest {
 	@Test
 	void shouldThrowServiceExceptionWhenSaveBookAndAuthorIsEmpty() {
 		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
-			() -> bookService.updateBook("test_title", "", 1)
+			() -> bookService.createBook("test_title", "", 1)
 		);
 
 		assertEquals("Не задан автор книги", exception.getInfo());
@@ -63,7 +63,7 @@ class BookServiceImplTest {
 	void shouldThrowServiceExceptionWhenSaveBookAndGenreIsNotExist() {
 		when(genreRepository.findById(1L)).thenReturn(Optional.empty());
 		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
-			() -> bookService.updateBook("test_title", "test_author", 1));
+			() -> bookService.createBook("test_title", "test_author", 1));
 
 		assertEquals("Отсутствует литературный жанр c Id=1", exception.getInfo());
 	}
@@ -71,7 +71,7 @@ class BookServiceImplTest {
 	@Test
 	void shouldСallDaoMethodToSaveBook() {
 		when(genreRepository.findById(1L)).thenReturn(Optional.of(new Genre("test_genre")));
-		bookService.updateBook("test_title", "test_author", 1);
+		bookService.createBook("test_title", "test_author", 1);
 
 		verify(bookRepository, times(1)).save(any());
 	}

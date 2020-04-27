@@ -6,7 +6,7 @@ import ru.otus.krivonos.library.model.Book;
 import java.util.List;
 
 public interface BookService {
-	void updateBook(String bookTitle, String authorName, long genreId) throws BookServiceException;
+	void createBook(String bookTitle, String authorName, long genreId) throws BookServiceException;
 
 	Book findBookBy(long id) throws BookServiceException;
 

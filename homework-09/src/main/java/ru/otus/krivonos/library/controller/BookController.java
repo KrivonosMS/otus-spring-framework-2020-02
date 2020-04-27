@@ -79,7 +79,7 @@ public class BookController {
 	) {
 		LOG.debug("method=createBook \"добавление новой книги\" bookTitle={} authorName={} genreId={}", bookTitle, authorName, genreId);
 
-		bookService.updateBook(bookTitle, authorName, genreId);
+		bookService.createBook(bookTitle, authorName, genreId);
 
 		LOG.debug("method=createBook \"добавлена новая книга\"");
 
