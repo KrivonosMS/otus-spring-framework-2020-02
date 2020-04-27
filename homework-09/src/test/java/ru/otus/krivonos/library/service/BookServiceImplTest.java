@@ -34,81 +34,71 @@ class BookServiceImplTest {
 
 	@Test
 	void shouldThrowServiceExceptionWhenSaveBookAndBookTitleIsNull() {
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook(null, "test_author_name'", "test_genre");
-		});
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook(null, "test_author_name'", 1)
+		);
 
 		assertEquals("Не задано название книги", exception.getInfo());
 	}
 
 	@Test
 	void shouldThrowServiceExceptionWhenSaveBookAndBookTitleIsEmpty() {
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook("", "test_author_name'", "test_genre");
-		});
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook("", "test_author_name'", 1)
+		);
 
 		assertEquals("Не задано название книги", exception.getInfo());
 	}
 
 	@Test
 	void shouldThrowServiceExceptionWhenSaveBookAndAuthorIsEmpty() {
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook("test_title", "", "test_genre");
-		});
-
-		assertEquals("Не задан автор книги", exception.getInfo());
-	}
-
-	@Test
-	void shouldThrowServiceExceptionWhenSaveBookAndAuthorIsNull() {
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook("test_title", "", "test_genre");
-		});
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook("test_title", "", 1)
+		);
 
 		assertEquals("Не задан автор книги", exception.getInfo());
 	}
 
 	@Test
 	void shouldThrowServiceExceptionWhenSaveBookAndGenreIsNotExist() {
-		when(genreRepository.findByType("test_genre")).thenReturn(Optional.empty());
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook("test_title", "test_author", "test_genre");
-		});
+		when(genreRepository.findById(1L)).thenReturn(Optional.empty());
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook("test_title", "test_author", 1));
 
-		assertEquals("Отсутствует литературный жанр 'test_genre'", exception.getInfo());
+		assertEquals("Отсутствует литературный жанр c Id=1", exception.getInfo());
 	}
 
 	@Test
 	void shouldСallDaoMethodToSaveBook() {
-		when(genreRepository.findByType("test_genre")).thenReturn(Optional.of(new Genre("test_genre")));
-		bookService.createBook("test_title", "test_author", "test_genre");
+		when(genreRepository.findById(1L)).thenReturn(Optional.of(new Genre("test_genre")));
+		bookService.updateBook("test_title", "test_author", 1);
 
 		verify(bookRepository, times(1)).save(any());
 	}
 
 	@Test
 	void shouldThrowServiceExceptionWhenFindBookByIdWhichIsNotExist() {
-		when(bookRepository.findById(1l)).thenReturn(Optional.empty());
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.findBookBy(1l);
-		});
+		when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.findBookBy(1L)
+		);
 
 		assertEquals("Книга с id='1' в библиотеке не найдена", exception.getMessage());
 	}
 
 	@Test
-	void shouldReturnBookById() throws Exception {
+	void shouldReturnBookById() {
 		Book expectedBook = new Book("title", new Author("author"), new Genre("genre"));
 		Optional<Book> optionalBook = Optional.of(expectedBook);
-		when(bookRepository.findById(1l)).thenReturn(optionalBook);
+		when(bookRepository.findById(1L)).thenReturn(optionalBook);
 
-		Book actualBook = bookService.findBookBy(1l);
+		Book actualBook = bookService.findBookBy(1L);
 
 		assertThat(expectedBook).isEqualToComparingFieldByField(actualBook);
 	}
 
 	@Test
-	void shouldCallFindAllBooksDaoMethod() throws Exception {
+	void shouldCallFindAllBooksDaoMethod() {
 		bookService.findAllBooks();
 
 		verify(bookRepository, times(1)).findAll();
@@ -116,74 +106,87 @@ class BookServiceImplTest {
 
 	@Test
 	void shouldThrowServiceExceptionWhenUpdateBookAndBookTitleIsEmpty() {
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook(1l, "", 1l, "", 1l);
-		});
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook(1, "", "", 1)
+		);
 
 		assertEquals("Не задано название книги", exception.getInfo());
 	}
 
 	@Test
 	void shouldThrowServiceExceptionWhenUpdateBookAndBookTitleIsNull() {
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook(1l, null, 1l, "", 1l);
-		});
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook(1, null, "", 1)
+		);
 
 		assertEquals("Не задано название книги", exception.getInfo());
 	}
 
 	@Test
 	void shouldThrowServiceExceptionWhenUpdateBookAndAuthorNameIsEmpty() {
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook(1l, "book_title", 0, "", 1l);
-		});
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook(1, "book_title", "", 1)
+		);
 
 		assertEquals("Не задан автор книги", exception.getInfo());
 	}
 
 	@Test
 	void shouldThrowServiceExceptionWhenUpdateBookAndAuthorNameIsNull() {
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook(1l, "book_title", 0, null, 1l);
-		});
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook(1, "book_title", null, 1)
+		);
 
 		assertEquals("Не задан автор книги", exception.getInfo());
 	}
 
 	@Test
-	void shouldThrowServiceExceptionWhenUpdateBookAndGenreIsNotExist() throws Exception {
-		when(genreRepository.findById(1l)).thenReturn(Optional.empty());
-		when(authorRepository.findById(1l)).thenReturn(Optional.of(new Author("test_author")));
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.createBook(1l, "test_title", 1l, "test_author", 1l);
-		});
+	void shouldThrowServiceExceptionWhenUpdateBookAndGenreIsNotExist() {
+		when(genreRepository.findById(1L)).thenReturn(Optional.empty());
+		when(authorRepository.findById(1L)).thenReturn(Optional.of(new Author("test_author")));
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook(1, "test_title", "test_author", 1)
+		);
 
-		assertEquals("Отсутствует литературный жанр с id=1", exception.getInfo());
+		assertEquals("Отсутствует литературный жанр c Id=1", exception.getInfo());
 	}
 
 	@Test
-	void shouldСallDaoMethodToUpdateBook() throws Exception {
-		when(genreRepository.findById(1l)).thenReturn(Optional.of(new Genre("test_genre_type")));
-		bookService.createBook(1l, "test_title", 0, "test_author", 1l);
+	void shouldThrowServiceExceptionWhenUpdateBookAndBookIsNotExist() {
+		when(genreRepository.findById(1L)).thenReturn(Optional.of(new Genre("test_genre_type")));
+		when(bookRepository.findById(2L)).thenReturn(Optional.empty());
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.updateBook(1, "test_title", "test_author", 1)
+		);
+
+		assertEquals("Отсутствует книга c Id=1", exception.getInfo());
+	}
+
+	@Test
+	void shouldСallDaoMethodToUpdateBook() {
+		Book book = mock(Book.class);
+		when(genreRepository.findById(1L)).thenReturn(Optional.of(new Genre("test_genre_type")));
+		when(bookRepository.findById(2L)).thenReturn(Optional.of(book));
+		bookService.updateBook(2, "test_title", "test_author", 1);
 
 		verify(bookRepository, times(1)).save(any());
 	}
 
 	@Test
 	void shouldThrowServiceExceptionWhenDeleteBookWhichIsNotExist() {
-		when(bookRepository.findById(1l)).thenReturn(Optional.empty());
-		BookServiceException exception = Assertions.assertThrows(BookServiceException.class, () -> {
-			bookService.deleteBookBy(1l);
-		});
+		when(bookRepository.findById(1L)).thenReturn(Optional.empty());
+		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
+			() -> bookService.deleteBookBy(1L)
+		);
 
 		assertEquals("Книга с id='1' в библиотеке не найдена", exception.getInfo());
 	}
 
 	@Test
-	void shouldСallDeleteBookByDaoMethod() throws Exception {
+	void shouldСallDeleteBookByDaoMethod() {
 		Book bookMock = mock(Book.class);
-		when(bookRepository.findById(1l)).thenReturn(Optional.of(bookMock));
-		bookService.deleteBookBy(1l);
+		when(bookRepository.findById(1L)).thenReturn(Optional.of(bookMock));
+		bookService.deleteBookBy(1L);
 
 		verify(bookRepository, times(1)).delete(bookMock);
 	}

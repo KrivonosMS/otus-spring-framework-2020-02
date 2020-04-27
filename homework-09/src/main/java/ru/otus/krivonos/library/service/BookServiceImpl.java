@@ -26,10 +26,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createBook(String bookTitle, String authorName,  String genreType) throws BookServiceException {
+    public void updateBook(String bookTitle, String authorName, long genreId) throws BookServiceException {
         long startTime = System.currentTimeMillis();
-        LOG.debug("method=createBook action=\"сохранеие книги в библиотеку\" bookTitle={} authorName={} genreType={}", bookTitle, authorName, genreType);
+        LOG.debug("method=createBook action=\"сохранеие книги в библиотеку\" bookTitle={} authorName={} genreId={}", bookTitle, authorName, genreId);
 
+        Book book = saveBook(0, bookTitle, authorName, genreId);
+
+        long endTime = System.currentTimeMillis();
+        LOG.debug("method=createBook action=\"книга сохранена в библиотеку\" book={} time={}ms", book, endTime - startTime);
+    }
+
+    private Book saveBook(long bookId, String bookTitle, String authorName, long genreId) {
         bookTitle = bookTitle == null ? "" : bookTitle.trim();
         authorName = authorName == null ? "" : authorName.trim();
         if ("".equals(bookTitle)) {
@@ -39,12 +46,18 @@ public class BookServiceImpl implements BookService {
             throw new BookServiceException("Не задан автор книги");
         }
         Author author = authorRepository.findByName(authorName).orElse(new Author(authorName));
-        Genre genre = genreRepository.findByType(genreType).orElseThrow(() -> new BookServiceException("Отсутствует литературный жанр '" + genreType + "'"));
-        Book book = new Book(0, bookTitle, author, genre);
+        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new BookServiceException("Отсутствует литературный жанр c Id=" + genreId ));
+        Book book;
+        if (bookId == 0) {
+            book = new Book(0, bookTitle, author, genre);
+        } else {
+            book = bookRepository.findById(bookId).orElseThrow(() -> new BookServiceException("Отсутствует книга c Id=" + bookId));
+            book.setTitle(bookTitle);
+            book.setAuthor(author);
+            book.setGenre(genre);
+        }
         book = bookRepository.save(book);
-
-        long endTime = System.currentTimeMillis();
-        LOG.debug("method=createBook action=\"книга сохранена в библиотеку\" book={} time={}ms", book, endTime - startTime);
+        return book;
     }
 
     @Override
@@ -75,30 +88,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createBook(long bookId, String bookTitle, long authorId, String authorName, long genreId) throws BookServiceException {
+    public void updateBook(long bookId, String bookTitle, String authorName, long genreId) throws BookServiceException {
         long startTime = System.currentTimeMillis();
-        LOG.debug("method=save action=\"сохранеие книги в библиотеку\" bookId={} bookTitle={} authorId={} authorName={} genreId={}", bookId, bookTitle, authorId, authorName, genreId);
+        LOG.debug("method=save action=\"обновление книги с id={}\" bookTitle={} authorName={} genreId={}", bookId, bookTitle, authorName, genreId);
 
-        bookTitle = bookTitle == null ? "" : bookTitle.trim();
-        authorName = authorName == null ? "" : authorName.trim();
-        if ("".equals(bookTitle)) {
-            throw new BookServiceException("Не задано название книги");
-        }
-        if (authorId == 0 && "".equals(authorName)) {
-            throw new BookServiceException("Не задан автор книги");
-        }
-        Author author;
-        if (authorId == 0) {
-            author = new Author(authorName);
-        } else {
-            author = authorRepository.findById(authorId).orElseThrow(() -> new BookServiceException("Отсутствует автор с id=" + authorId));
-        }
-        Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new BookServiceException("Отсутствует литературный жанр с id=" + genreId));
-        Book book = new Book(bookId, bookTitle, author, genre);
-        book = bookRepository.save(book);
+        Book book = saveBook(bookId, bookTitle, authorName, genreId);
 
         long endTime = System.currentTimeMillis();
-        LOG.debug("method=save action=\"книга сохранена в библиотеку\" bookId={} book={} time={}ms", bookId, book, endTime - startTime);
+        LOG.debug("method=save action=\"книга обновлена\" book={} time={}ms", book, endTime - startTime);
     }
 
     @Override

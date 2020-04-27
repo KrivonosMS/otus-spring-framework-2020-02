@@ -32,11 +32,12 @@
     </thead>
     <tbody>
     <tr th:each="book : ${books}">
+        <td th:text="${book.id}">ID</td>
         <td th:text="${book.title}">Название книги</td>
         <td th:text="${book.author.name}">Автор</td>
         <td th:text="${book.genre.type}">Жанр</td>
         <td>
-            <a th:href="@{/edit(id=${book.id})}" href="editBook.html">Редактировать</a>
+            <a th:href="@{/library/book/edit(id=${book.id})}" href="editBook.html">Редактировать</a>
         </td>
         <td>
             <a th:href="@{/library/book/__${book.id}__/delete}" href="deleteBook.html">Удалить</a>

@@ -20,15 +20,19 @@
 </head>
 <body>
 <a th:href="@{/library/book/all}" href="books.html">Назад</a>
-<h2>Добавление новой книги</h2>
-<form th:action="@{/library/book/add}" method="post" action="list.html">
+<h2>Редактирование книги</h2>
+<form th:action="@{/library/book/edit}" method="post" action="list.html">
+    <div class="row">
+        <label for="id">ID:</label>
+        <input id="id" type="text"  th:value="${book.id}" value="3" required readonly name="id" size=50/>
+    </div>
     <div class="row">
         <label for="book-title">Название книги:</label>
-        <input id="book-title" type="text" required name="title" size=100/>
+        <input id="book-title" type="text" th:value="${book.title}" value="Сказка о царе Салтане" required name="title" size=100/>
     </div>
     <div class="row">
         <label for="author-name">Имя автора:</label>
-        <input id="author-name" type="text" required name="author" size=100/>
+        <input id="author-name" type="text" th:value="${book.author.name}" value="Александр Пушкин" required name="author" size=100/>
     </div>
     <div class="row">
         <label for="book-genre">Жар:</label>
@@ -36,7 +40,7 @@
             <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.type}">Классическая проза</option>
         </select>
     </div>
-    <button type="submit">Добавить</button>
+    <button type="submit">Обновить</button>
 </form>
 </body>
 </html>

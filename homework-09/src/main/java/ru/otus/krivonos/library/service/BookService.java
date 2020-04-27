@@ -6,13 +6,13 @@ import ru.otus.krivonos.library.model.Book;
 import java.util.List;
 
 public interface BookService {
-    void createBook(String bookTitle, String authorName, String  genreType) throws BookServiceException;
+	void updateBook(String bookTitle, String authorName, long genreId) throws BookServiceException;
 
-    Book findBookBy(long id) throws BookServiceException;
+	Book findBookBy(long id) throws BookServiceException;
 
-    List<Book> findAllBooks() throws BookServiceException;
+	List<Book> findAllBooks() throws BookServiceException;
 
-    void createBook(long id, String bookTitle, long authorId, String authorName, long genreId) throws BookServiceException;
+	void updateBook(long id, String bookTitle, String authorName, long genreId) throws BookServiceException;
 
-    void deleteBookBy(long id) throws BookServiceException;
+	void deleteBookBy(long id) throws BookServiceException;
 }

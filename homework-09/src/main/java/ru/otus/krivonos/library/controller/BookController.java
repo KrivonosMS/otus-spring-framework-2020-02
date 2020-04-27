@@ -75,13 +75,43 @@ public class BookController {
 	public String createBook(
 		@RequestParam("title") String bookTitle,
 		@RequestParam("author") String authorName,
-		@RequestParam("genre") String genreType
+		@RequestParam("genreId") @NotNull Long genreId
 	) {
-		LOG.debug("method=createBook \"добавление новой книги\"");
+		LOG.debug("method=createBook \"добавление новой книги\" bookTitle={} authorName={} genreId={}", bookTitle, authorName, genreId);
 
-		bookService.createBook(bookTitle, authorName, genreType);
+		bookService.updateBook(bookTitle, authorName, genreId);
 
 		LOG.debug("method=createBook \"добавлена новая книга\"");
+
+		return "redirect:/library/book/all";
+	}
+
+	@GetMapping("/edit")
+	public String editBookPage(Model model, @RequestParam("id") @NotNull Long bookId) {
+		LOG.debug("method=editBookPage \"запрос на получение страницы редактирования книги с id={}\"", bookId);
+
+		List<Genre> genres = genreService.findAllGenres();
+		model.addAttribute("genres", genres);
+		Book book = bookService.findBookBy(bookId);
+		model.addAttribute("book", book);
+
+		LOG.debug("method=editBookPage \"получена страница редактирования книгис id={}\" genreSize={}", bookId, genres.size());
+
+		return "editBook";
+	}
+
+	@PostMapping("/edit")
+	public String editBook(
+		@RequestParam("id") @NotNull Long bookId,
+		@RequestParam("title") String bookTitle,
+		@RequestParam("author") String authorName,
+		@RequestParam("genreId") @NotNull Long genreId
+	) {
+		LOG.debug("method=editBook \"обновление книги с id={}\" bookTitle={} authorName={} genreId={}", bookId, bookTitle, authorName, genreId);
+
+		bookService.updateBook(bookId, bookTitle, authorName, genreId);
+
+		LOG.debug("method=editBook \"добавлена новая книга с bookId={}\"", bookId);
 
 		return "redirect:/library/book/all";
 	}
@@ -101,50 +131,4 @@ public class BookController {
 		model.addAttribute("message", "Возникла непредвиденная ошибка");
 		return "error";
 	}
-
-
-//	@ShellMethod(value = "Update book", key = {"update book", "update"})
-//	public String updateBook(long id, String bookTitle, long authorId, String authorName, long genreId) {
-//		String msg = "книга успешно обновлена";
-//		try {
-//			bookService.saveBook(id, bookTitle, authorId, authorName, genreId);
-//		} catch (MainException e) {
-//			LOG.error("Ошибка при обновлении книги с id=" + id + " " + e.getInfo(), e);
-//			msg = e.getInfo();
-//		} catch (Exception e) {
-//			LOG.error("Непредвиденная при обновлении книги с id=" + id, e);
-//			msg = "Непредвиденная ошибка";
-//		}
-//		return msg;
-//	}
-//
-//	@ShellMethod(value = "Save book", key = {"save book"})
-//	public String saveBook(String bookTitle, long authorId, String authorName, long genreId) {
-//		String msg = "книга успешно сохранена";
-//		try {
-//			bookService.saveBook(bookTitle, authorId, authorName, genreId);
-//		} catch (MainException e) {
-//			LOG.error("Ошибка при сохранении книги " + e.getInfo(), e);
-//			msg = e.getInfo();
-//		} catch (Exception e) {
-//			LOG.error("Непредвиденная ошибка при сохранении книги", e);
-//			msg = "Непредвиденная ошибка";
-//		}
-//		return msg;
-//	}
-//
-//	@ShellMethod(value = "Delete book ", key = {"delete book"})
-//	public String deleteBookBy(long id) {
-//		String msg = "книга успешно удалена";
-//		try {
-//			bookService.deleteBookBy(id);
-//		} catch (MainException e) {
-//			LOG.error("Ошибка при удалении книги с id=" + id + " " + e.getInfo(), e);
-//			msg = e.getInfo();
-//		} catch (Exception e) {
-//			LOG.error("Непредвиденная ошибка при удалении книги с id=" + id, e);
-//			msg = "Непредвиденная ошибка";
-//		}
-//		return msg;
-//	}
 }

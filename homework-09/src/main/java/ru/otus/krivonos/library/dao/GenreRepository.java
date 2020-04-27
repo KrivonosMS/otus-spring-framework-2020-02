@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface GenreRepository extends JpaRepository<Genre, Long> {
 	boolean existsByType(String type);
-
-	Optional<Genre> findByType(String type);
 }
