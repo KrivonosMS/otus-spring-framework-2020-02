@@ -1,0 +1,26 @@
+[INFO ] 2020-04-26 12:42:58.664 [main] r.o.k.l.Application - Starting Application on DESKTOP-FLJFUP6 with PID 8684 (E:\WorldOfProgramming\Java\JavaProjects\Spring-OTUS\otus-spring-framework-2020-02\homework-09\target\classes started by Admin in E:\WorldOfProgramming\Java\JavaProjects\Spring-OTUS\otus-spring-framework-2020-02\homework-09\src\main\java\ru\otus\krivonos\library)
+[DEBUG] 2020-04-26 12:42:58.670 [main] r.o.k.l.Application - Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+[INFO ] 2020-04-26 12:42:58.673 [main] r.o.k.l.Application - No active profile set, falling back to default profiles: default
+[INFO ] 2020-04-26 12:43:00.605 [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[INFO ] 2020-04-26 12:43:01.133 [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 509ms. Found 4 JPA repository interfaces.
+[INFO ] 2020-04-26 12:43:02.863 [main] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-04-26 12:43:02.877 [main] o.a.c.c.StandardService - Starting service [Tomcat]
+[INFO ] 2020-04-26 12:43:02.878 [main] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.31]
+[INFO ] 2020-04-26 12:43:03.019 [main] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-04-26 12:43:03.019 [main] o.s.w.c.ContextLoader - Root WebApplicationContext: initialization completed in 4252 ms
+[INFO ] 2020-04-26 12:43:03.135 [main] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+[INFO ] 2020-04-26 12:43:03.389 [main] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+[INFO ] 2020-04-26 12:43:05.252 [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[WARN ] 2020-04-26 12:43:06.044 [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[INFO ] 2020-04-26 12:43:06.226 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-04-26 12:43:06.530 [main] o.s.b.w.e.t.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+[INFO ] 2020-04-26 12:43:06.534 [main] r.o.k.l.Application - Started Application in 8.968 seconds (JVM running for 9.84)
+[INFO ] 2020-04-26 12:43:14.627 [http-nio-8080-exec-1] o.a.c.c.C.[.[.[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO ] 2020-04-26 12:43:14.628 [http-nio-8080-exec-1] o.s.w.s.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[INFO ] 2020-04-26 12:43:14.645 [http-nio-8080-exec-1] o.s.w.s.DispatcherServlet - Completed initialization in 16 ms
+[DEBUG] 2020-04-26 12:43:14.716 [http-nio-8080-exec-1] r.o.k.l.s.BookServiceImpl - method=findAllBooks action="получени всех книг"
+[DEBUG] 2020-04-26 12:43:15.008 [http-nio-8080-exec-1] r.o.k.l.s.BookServiceImpl - method=findAllBooks action="получены все книги" count=7 time=292ms
+[DEBUG] 2020-04-26 12:45:51.700 [http-nio-8080-exec-5] r.o.k.l.s.BookServiceImpl - method=findAllBooks action="получени всех книг"
+[DEBUG] 2020-04-26 12:45:51.712 [http-nio-8080-exec-5] r.o.k.l.s.BookServiceImpl - method=findAllBooks action="получены все книги" count=7 time=12ms
+[DEBUG] 2020-04-26 12:46:09.115 [http-nio-8080-exec-7] r.o.k.l.s.BookServiceImpl - method=findAllBooks action="получени всех книг"
+[DEBUG] 2020-04-26 12:46:09.126 [http-nio-8080-exec-7] r.o.k.l.s.BookServiceImpl - method=findAllBooks action="получены все книги" count=7 time=11ms

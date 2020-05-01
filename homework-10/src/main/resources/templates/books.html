@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список книг</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .books td {
+            border: 1px solid lightgray;
+            padding: 5px;
+        }
+
+        .books {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<h2>Библиотека</h2>
+
+<table class="books">
+    <thead>
+    <tr>
+        <th>Книга</th>
+        <th>Автор</th>
+        <th>Жанр</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<div>
+    <a href="/library/book/add">Добавить книгу</a>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+        const tableBody = document.querySelector('tbody');
+        fetch('/library/book/all')
+       .then(response => response.json())
+       .then(result => result.forEach(el => {
+                let trElement = document.createElement("tr");
+                let titleTdElement = document.createElement("td");
+                let authorTdElement = document.createElement("td");
+                let genreTdElement = document.createElement("td");
+                let editTdElement = document.createElement("td");
+                let deleteTdElement = document.createElement("td");
+                let titleElement = document.createTextNode(el.title);
+                let authorElement = document.createTextNode(el.author.name);
+                let genreElement = document.createTextNode(el.genre.type);
+                let editLinkElement = document.createElement("a");
+                editLinkElement.href = `/library/book/${el.id}/edit`;
+                let editTextElement = document.createTextNode("Редактировать");
+                editLinkElement.appendChild(editTextElement);
+                let deleteLinkElement = document.createElement("a");
+                deleteLinkElement.href= `/library/book/${el.id}/delete`;
+                let deleteTextElement = document.createTextNode("Удалить");
+                deleteLinkElement.appendChild(deleteTextElement);
+
+                titleTdElement.appendChild(titleElement);
+                authorTdElement.appendChild(authorElement);
+                genreTdElement.appendChild(genreElement);
+                editTdElement.appendChild(editLinkElement);
+                deleteTdElement.appendChild(deleteLinkElement);
+                trElement.appendChild(titleTdElement);
+                trElement.appendChild(authorTdElement);
+                trElement.appendChild(genreTdElement);
+                trElement.appendChild(genreTdElement);
+                trElement.appendChild(editTdElement);
+                trElement.appendChild(deleteTdElement);
+                tableBody.appendChild(trElement);
+            })
+       );
+</script>
