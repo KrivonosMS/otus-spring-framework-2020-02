@@ -7,10 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.krivonos.library.controller.rest.dto.BookDTO;
 import ru.otus.krivonos.library.controller.rest.dto.ErrorDTO;
-import ru.otus.krivonos.library.controller.rest.dto.GenreDTO;
 import ru.otus.krivonos.library.exception.MainException;
 import ru.otus.krivonos.library.model.Book;
-import ru.otus.krivonos.library.model.Genre;
 import ru.otus.krivonos.library.service.BookService;
 import ru.otus.krivonos.library.service.GenreService;
 
@@ -27,7 +25,6 @@ public class BookController {
 	public static final Logger LOG = LoggerFactory.getLogger(BookController.class);
 
 	private final BookService bookService;
-	private final GenreService genreService;
 
 	@GetMapping("/book/all")
 	public List<BookDTO> allBooks(Model model) {
@@ -42,21 +39,6 @@ public class BookController {
 		LOG.debug("method=allBooks \"получен список со всеми книгами библиотеки\" bookDTOListSize={}", bookDTOList.size());
 
 		return bookDTOList;
-	}
-
-	@GetMapping("/genre/all")
-	public List<GenreDTO> allGenres(Model model) {
-		LOG.debug("method=allGenres \"запрос на получение списка вссх литературных жанров\"");
-
-		List<Genre> genres = genreService.findAllGenres();
-		List<GenreDTO> genreDTOList = genres
-			.stream()
-			.map(GenreDTO::toDto)
-			.collect(Collectors.toList());
-
-		LOG.debug("method=allGenres \"получен список со всеми литературными жанрами\" genreDTOListSize={}", genreDTOList.size());
-
-		return genreDTOList;
 	}
 
 	@PostMapping("/book/{id}/delete")

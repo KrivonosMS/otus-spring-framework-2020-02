@@ -38,10 +38,10 @@
 </body>
 </html>
 <script type="text/javascript">
-        const tableBody = document.querySelector('tbody');
-        fetch('/library/book/all')
-       .then(response => response.json())
-       .then(result => result.forEach(el => {
+    const tableBody = document.querySelector('tbody');
+    fetch('/library/book/all')
+        .then(response => response.json())
+        .then(result => result.forEach(el => {
                 let trElement = document.createElement("tr");
                 let titleTdElement = document.createElement("td");
                 let authorTdElement = document.createElement("td");
@@ -56,7 +56,7 @@
                 let editTextElement = document.createTextNode("Редактировать");
                 editLinkElement.appendChild(editTextElement);
                 let deleteLinkElement = document.createElement("a");
-                deleteLinkElement.href= `/library/book/${el.id}/delete`;
+                deleteLinkElement.href = `/library/book/${el.id}/delete`;
                 let deleteTextElement = document.createTextNode("Удалить");
                 deleteLinkElement.appendChild(deleteTextElement);
 
@@ -73,5 +73,5 @@
                 trElement.appendChild(deleteTdElement);
                 tableBody.appendChild(trElement);
             })
-       );
+        );
 </script>
