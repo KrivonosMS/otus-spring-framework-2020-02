@@ -6,11 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.krivonos.library.controller.rest.dto.BookDTO;
-import ru.otus.krivonos.library.controller.rest.dto.ErrorDTO;
+import ru.otus.krivonos.library.controller.rest.dto.ResultDTO;
 import ru.otus.krivonos.library.exception.MainException;
 import ru.otus.krivonos.library.model.Book;
 import ru.otus.krivonos.library.service.BookService;
-import ru.otus.krivonos.library.service.GenreService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
@@ -42,7 +41,7 @@ public class BookController {
 	}
 
 	@PostMapping("/book/{id}/delete")
-	public void deleteBook(
+	public ResultDTO deleteBook(
 		HttpServletResponse response,
 		Model model,
 		@PathVariable("id") @NotNull Long id
@@ -53,11 +52,11 @@ public class BookController {
 
 		LOG.debug("method=deleteBook \"удалена книга с id={}\"", id);
 
-		response.sendRedirect("/library/");
+		return ResultDTO.ok();
 	}
 
 	@PostMapping("/book/add")
-	public void createBook(
+	public ResultDTO createBook(
 		HttpServletResponse response,
 		@RequestParam("title") String bookTitle,
 		@RequestParam("author") String authorName,
@@ -69,11 +68,11 @@ public class BookController {
 
 		LOG.debug("method=createBook \"добавлена новая книга\"");
 
-		response.sendRedirect("/library/");
+		return ResultDTO.ok();
 	}
 
 	@PostMapping("/book/{id}/edit")
-	public void editBook(
+	public ResultDTO editBook(
 		HttpServletResponse response,
 		@PathVariable("id") @NotNull Long bookId,
 		@RequestParam("title") String bookTitle,
@@ -86,20 +85,20 @@ public class BookController {
 
 		LOG.debug("method=editBook \"обновлеа книга с bookId={}\"", bookId);
 
-		response.sendRedirect("/library/");
+		return ResultDTO.ok();
 	}
 
 	@ExceptionHandler(MainException.class)
-	public ErrorDTO handleMainException(Model model, MainException ex) {
+	public ResultDTO handleMainException(Model model, MainException ex) {
 		LOG.debug("method=handleMainException", ex);
 
-		return new ErrorDTO(ex.getInfo());
+		return ResultDTO.error(ex.getInfo());
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ErrorDTO handleException(Model model, Exception ex) {
+	public ResultDTO handleException(Model model, Exception ex) {
 		LOG.debug("method=handleException", ex);
 
-		return new ErrorDTO("Возникла непредвиденная ошибка");
+		return ResultDTO.error("Возникла непредвиденная ошибка");
 	}
 }

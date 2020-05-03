@@ -16,7 +16,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookController.class)
 class BookControllerTest {
@@ -40,8 +41,8 @@ class BookControllerTest {
 	@Test
 	void shouldDeleteBook() throws Exception {
 		mockMvc.perform(post("/library/book/1/delete"))
-			.andExpect(status().is(302))
-			.andExpect(redirectedUrl("/library/"));
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("\"success\":true")));
 
 		verify(bookService, times(1)).deleteBookBy(1L);
 	}
@@ -52,8 +53,8 @@ class BookControllerTest {
 			.param("title", "TestTitle")
 			.param("author", "AuthorName")
 			.param("genreId", "1"))
-			.andExpect(status().is(302))
-			.andExpect(redirectedUrl("/library/"));
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("\"success\":true")));
 
 		verify(bookService, times(1)).createBook("TestTitle", "AuthorName", 1L);
 	}
@@ -64,8 +65,8 @@ class BookControllerTest {
 			.param("title", "TestTitle")
 			.param("author", "AuthorName")
 			.param("genreId", "1"))
-			.andExpect(status().is(302))
-			.andExpect(redirectedUrl("/library/"));
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("\"success\":true")));
 
 		verify(bookService, times(1)).updateBook(2, "TestTitle", "AuthorName", 1L);
 	}
