@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import '../css/LibraryModal.css'
+import '../css/BookModalWindow.css';
 import Modal from "react-modal";
 
 class BookModalWindow extends Component {
@@ -7,6 +7,7 @@ class BookModalWindow extends Component {
         super(props);
         this.state = {
             closeModal: this.props.closeModal,
+            updateGrid: this.props.updateGrid,
             genres: []
         }
 
@@ -22,7 +23,6 @@ class BookModalWindow extends Component {
     }
 
     saveBook(evt, bookId) {
-        console.log(bookId);
         const url = bookId ? '/library/book/' + bookId + '/edit' : '/library/book/add';
         const data = new FormData(document.querySelector("form"));
         evt.preventDefault();
@@ -31,12 +31,16 @@ class BookModalWindow extends Component {
             body: data
         })
             .then(response => response.json())
-            .then(result => result.success === true ?
-                this.setState({result: 'Книга успешно сохранена'}) :
-                result.message ?
-                    this.setState({result: result.message}) :
-                    this.setState({result: "Непредвиденная ошибка"})
-            );
+            .then(result => {
+                if (result.success === true) {
+                    this.setState({result: 'Книга успешно сохранена'})
+                    this.state.updateGrid();
+                } else {
+                    result.message ?
+                        this.setState({result: result.message}) :
+                        this.setState({result: "Непредвиденная ошибка"})
+                }
+            });
     }
 
     flushResult() {

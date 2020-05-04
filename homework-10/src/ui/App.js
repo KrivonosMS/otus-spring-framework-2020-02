@@ -1,5 +1,5 @@
 import React from 'react'
-import Library from "../pages/Library";
+import Library from "./pages/Library";
 
 const Header = (props) => (
     <h1>{props.title}</h1>

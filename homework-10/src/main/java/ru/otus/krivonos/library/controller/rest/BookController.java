@@ -3,7 +3,6 @@ package ru.otus.krivonos.library.controller.rest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.krivonos.library.controller.rest.dto.BookDTO;
 import ru.otus.krivonos.library.controller.rest.dto.ResultDTO;
@@ -11,7 +10,6 @@ import ru.otus.krivonos.library.exception.MainException;
 import ru.otus.krivonos.library.model.Book;
 import ru.otus.krivonos.library.service.BookService;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.List;
@@ -26,7 +24,7 @@ public class BookController {
 	private final BookService bookService;
 
 	@GetMapping("/book/all")
-	public List<BookDTO> allBooks(Model model) {
+	public List<BookDTO> allBooks() {
 		LOG.debug("method=allBooks \"запрос на получение всех книг\"");
 
 		List<Book> books = bookService.findAllBooks();
@@ -42,10 +40,8 @@ public class BookController {
 
 	@PostMapping("/book/{id}/delete")
 	public ResultDTO deleteBook(
-		HttpServletResponse response,
-		Model model,
 		@PathVariable("id") @NotNull Long id
-	) throws IOException {
+	) {
 		LOG.debug("method=deleteBook \"запрос на удаление книги с id={}\"", id);
 
 		bookService.deleteBookBy(id);
@@ -57,7 +53,6 @@ public class BookController {
 
 	@PostMapping("/book/add")
 	public ResultDTO createBook(
-		HttpServletResponse response,
 		@RequestParam("title") String bookTitle,
 		@RequestParam("author") String authorName,
 		@RequestParam("genreId") @NotNull Long genreId
@@ -73,12 +68,11 @@ public class BookController {
 
 	@PostMapping("/book/{id}/edit")
 	public ResultDTO editBook(
-		HttpServletResponse response,
 		@PathVariable("id") @NotNull Long bookId,
 		@RequestParam("title") String bookTitle,
 		@RequestParam("author") String authorName,
 		@RequestParam("genreId") @NotNull Long genreId
-	) throws IOException {
+	) {
 		LOG.debug("method=editBook \"обновление книги с id={}\" bookTitle={} authorName={} genreId={}", bookId, bookTitle, authorName, genreId);
 
 		bookService.updateBook(bookId, bookTitle, authorName, genreId);
@@ -89,14 +83,14 @@ public class BookController {
 	}
 
 	@ExceptionHandler(MainException.class)
-	public ResultDTO handleMainException(Model model, MainException ex) {
+	public ResultDTO handleMainException(MainException ex) {
 		LOG.debug("method=handleMainException", ex);
 
 		return ResultDTO.error(ex.getInfo());
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResultDTO handleException(Model model, Exception ex) {
+	public ResultDTO handleException(Exception ex) {
 		LOG.debug("method=handleException", ex);
 
 		return ResultDTO.error("Возникла непредвиденная ошибка");

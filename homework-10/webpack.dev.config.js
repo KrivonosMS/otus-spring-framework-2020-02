@@ -73,6 +73,17 @@ module.exports = {
                     "message": "Непредвиденная ошибка при сохранении книги. Обратитесь к администратору"
                 }
             ));
+            app.post('/library/book/1/delete', (req, res) => res.send(
+                {
+                    "success": true
+                }
+            ));
+            app.post('/library/book/2/delete', (req, res) => res.send(
+                {
+                    "success": false,
+                    "message": "Непредвиденная ошибка при удалении книги. Обратитесь к администратору"
+                }
+            ));
         }
     },
 
