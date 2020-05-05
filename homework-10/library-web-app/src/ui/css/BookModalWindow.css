@@ -6,6 +6,11 @@ button {
     margin-right: 5px;
 }
 
+.buttons-horiz-right {
+    display: flex;
+    justify-content: right;
+}
+
 label {
     display: inline-block;
     width: 150px;

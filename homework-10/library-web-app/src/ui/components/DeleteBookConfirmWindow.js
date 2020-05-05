@@ -67,7 +67,7 @@ class DeleteBookConfirmWindow extends Component {
                     <div className="row">
                         <span>автор: {this.props.author}</span>
                     </div>
-                    <div className="buttons-horiz">
+                    <div className="buttons-horiz-centre">
                         <button onClick={(evt) => this.deleteBook(evt, this.props.bookId)} type="submit">Удалить</button>
                         <button onClick={this.state.closeModal}>Закрыть</button>
                     </div>

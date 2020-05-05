@@ -2,7 +2,7 @@ body {
     padding: 50px;
 }
 
-.buttons-horiz {
+.buttons-horiz-centre {
     display: flex;
     justify-content: center;
 }

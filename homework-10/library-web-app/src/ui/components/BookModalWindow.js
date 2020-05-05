@@ -93,9 +93,10 @@ class BookModalWindow extends Component {
                                 }
                             </select>
                         </div>
-                        <button onClick={(evt) => this.saveBook(evt, this.props.bookId)} type="submit">Сохранить
-                        </button>
-                        <button onClick={this.state.closeModal}>Закрыть</button>
+                        <div className="buttons-horiz-right">
+                            <button onClick={(evt) => this.saveBook(evt, this.props.bookId)} type="submit">Сохранить</button>
+                            <button onClick={this.state.closeModal}>Закрыть</button>
+                        </div>
                     </form>
                 </div>
             </Modal>
