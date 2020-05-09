@@ -31,6 +31,7 @@ class BookModalWindow extends Component {
     saveBook(evt, bookId) {
         const url = bookId ? '/library/book/' + bookId + '/edit' : '/library/book/add';
         const data = new FormData(document.querySelector("form"));
+
         evt.preventDefault();
         fetch(url, {
             method: 'POST',
@@ -80,11 +81,11 @@ class BookModalWindow extends Component {
                     <form action="/library/book/add" method="post">
                         <Box mb={2}>
                             <InputLabel>название книги</InputLabel>
-                            <TextField id="book-title" required fullWidth name="title" defaultValue={this.props.title}/>
+                            <TextField id="book-title" required={true} fullWidth name="title" defaultValue={this.props.title}/>
                         </Box>
                         <Box mb={2}>
                             <InputLabel>имя автора</InputLabel>
-                            <TextField id="author-name" required fullWidth name="author" defaultValue={this.props.author}/>
+                            <TextField id="author-name" required={true} fullWidth name="author" defaultValue={this.props.author}/>
                         </Box>
                         <Box mb={2}>
                             <InputLabel>жанр</InputLabel>
@@ -93,7 +94,7 @@ class BookModalWindow extends Component {
                                 fullWidth
                                 defaultValue={this.props.genreId}
                                 size="1"
-                                required
+                                required={true}
                                 name="genreId">
                                 {
                                     this.state.genres.map((genre, i) => (
