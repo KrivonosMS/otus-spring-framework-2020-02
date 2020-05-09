@@ -100,17 +100,14 @@ class Library extends Component {
     render() {
         const styles = {
             root: {
-                width: '100%',
-            },
-            container: {
-                maxHeight: 440,
-            },
+                width: '100%'
+            }
         };
 
         return (
             <Box>
                 <Paper style={styles.root}>
-                    <TableContainer style={styles.container}>
+                    <TableContainer >
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
