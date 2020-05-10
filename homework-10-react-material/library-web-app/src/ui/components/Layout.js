@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Box from "@material-ui/core/Box";
-import withStyles from "@material-ui/core/styles/withStyles";
-import {compose} from "@material-ui/system";
+import {makeStyles, useTheme} from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -15,10 +14,11 @@ import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import {Link, useLocation} from "react-router-dom";
 
 const drawerWidth = 240;
 
-const styles = theme => ({
+const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
@@ -73,93 +73,78 @@ const styles = theme => ({
         }),
         marginLeft: 0,
     },
-})
+}))
 
-class Layout extends Component {
-    constructor() {
-        super();
-        this.state = {
-            open: false
-        }
+export default function Layout(props) {
+    const classes = useStyles();
+    const theme = useTheme();
+    const location = useLocation();
+    const [open, setOpen] = React.useState(false);
 
-        this.handleDrawerOpen = this.handleDrawerOpen.bind(this);
-        this.handleDrawerClose = this.handleDrawerClose.bind(this);
-    }
-
-    handleDrawerOpen() {
-        this.setState({
-                open: true
-            }
-        )
+    const handleDrawerOpen = () => {
+        setOpen(true);
     };
 
-    handleDrawerClose() {
-        this.setState({
-            open: false
-            }
-        )
+    const handleDrawerClose = () => {
+        setOpen(false);
     };
 
-    render() {
-        const {classes, children} = this.props;
-        return <Box className={classes.root}>
-            <CssBaseline/>
-            <AppBar
-                position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: this.state.open,
-                })}
-            >
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={this.handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, this.state.open && classes.hide)}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Библиотека
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                className={classes.drawer}
-                variant="persistent"
-                anchor="left"
-                open={this.state.open}
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <div className={classes.drawerHeader}>
-                    <IconButton onClick={this.handleDrawerClose}>
-                        <ChevronLeftIcon/>
-                    </IconButton>
-                </div>
-                <Divider/>
-                <List>
-                    {['Книги', 'Литературные жанры'].map((text) => (
-                        <ListItem button key={text}>
-                            <ListItemText primary={text}/>
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
-            <main
-                className={clsx(classes.content, {
-                    [classes.contentShift]: this.state.open,
-                })}
-            >
-                <div className={classes.drawerHeader}/>
-                {children}
-            </main>
-        </Box>
-    }
+    const {children} = props;
+    return <Box className={classes.root}>
+        <CssBaseline/>
+        <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+                [classes.appBarShift]: open,
+            })}
+        >
+            <Toolbar>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    edge="start"
+                    className={clsx(classes.menuButton, open && classes.hide)}
+                >
+                    <MenuIcon/>
+                </IconButton>
+                <Typography variant="h6" noWrap>
+                    Библиотека
+                </Typography>
+            </Toolbar>
+        </AppBar>
+        <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="left"
+            open={open}
+            classes={{
+                paper: classes.drawerPaper,
+            }}
+        >
+            <div className={classes.drawerHeader}>
+                <IconButton onClick={handleDrawerClose}>
+                    <ChevronLeftIcon/>
+                </IconButton>
+            </div>
+            <Divider/>
+            <List>
+
+                <ListItem button component={Link} to="/" selected={"/" === location.pathname} key="book">
+                    <ListItemText primary="Книги"/>
+                </ListItem>
+                <ListItem button component={Link} to="/genre" selected={"/genre" === location.pathname} key="genre">
+                    <ListItemText primary="Литературные жанры"/>
+                </ListItem>
+            </List>
+        </Drawer>
+        <main
+            className={clsx(classes.content, {
+                [classes.contentShift]: open,
+            })}
+        >
+            <div className={classes.drawerHeader}/>
+            {children}
+        </main>
+    </Box>
 }
-
-export default compose(
-    withStyles(styles)
-)(Layout)
