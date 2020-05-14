@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/library")
+@RequestMapping("/library/book")
 @RequiredArgsConstructor
 public class BookController {
 	public static final Logger LOG = LoggerFactory.getLogger(BookController.class);
 
 	private final BookService bookService;
 
-	@GetMapping("/book/all")
+	@GetMapping("/all")
 	public List<BookDTO> allBooks() {
 		LOG.debug("method=allBooks \"запрос на получение всех книг\"");
 
@@ -38,7 +38,7 @@ public class BookController {
 		return bookDTOList;
 	}
 
-	@PostMapping("/book/{id}/delete")
+	@PostMapping("/{id}/delete")
 	public ResultDTO deleteBook(
 		@PathVariable("id") @NotNull Long id
 	) {
@@ -51,7 +51,7 @@ public class BookController {
 		return ResultDTO.ok();
 	}
 
-	@PostMapping("/book/add")
+	@PostMapping("/add")
 	public ResultDTO createBook(
 		@RequestParam("title") String bookTitle,
 		@RequestParam("author") String authorName,
@@ -66,7 +66,7 @@ public class BookController {
 		return ResultDTO.ok();
 	}
 
-	@PostMapping("/book/{id}/edit")
+	@PostMapping("/{id}/edit")
 	public ResultDTO editBook(
 		@PathVariable("id") @NotNull Long bookId,
 		@RequestParam("title") String bookTitle,

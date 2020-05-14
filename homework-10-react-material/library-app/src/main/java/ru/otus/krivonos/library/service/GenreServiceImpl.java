@@ -33,20 +33,46 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveGenre(String type) throws GenreServiceException {
+    public void createGenre(String type) throws GenreServiceException {
+        long startTime = System.currentTimeMillis();
+        LOG.debug("method=createGenre action=\"сохранение нового литературного жанра\" type={}", type);
+
+        Genre genre = saveGenre(0, type);
+
+        long endTime = System.currentTimeMillis();
+        LOG.debug("method=createGenre action=\"сохранен литературный жанр\" genre={} time={}ms", genre, endTime - startTime);
+    }
+
+    private Genre saveGenre(long id, String type) {
         if (type == null || "".equals(type.trim())) {
             throw new GenreServiceException("Не задан литературный жанр");
         }
-        long startTime = System.currentTimeMillis();
-        LOG.debug("method=saveGenre action=\"сохранение литературного жанра\" type={}", type);
 
         if (genreRepository.existsByType(type)) {
             throw new GenreServiceException("Указанный литературный жанр '" + type + "' уже существует");
         }
-        Genre genre = new Genre(type);
+
+        Genre genre;
+        if (id == 0) {
+            genre = new Genre(type);
+        } else {
+            genre = genreRepository.findById(id).orElseThrow(() -> new GenreServiceException("Отсутствует литературный жанр c Id=" + id));
+            genre.setType(type);
+        }
         genreRepository.save(genre);
 
+        return genre;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateGenre(long id, String type) throws GenreServiceException {
+        long startTime = System.currentTimeMillis();
+        LOG.debug("method=updateGenre action=\"сохранение литературного жанра\" id={} type={}", id, type);
+
+        Genre genre = saveGenre(id, type);
+
         long endTime = System.currentTimeMillis();
-        LOG.debug("method=saveGenre action=\"сохранен литературный жанр\" genre={} time={}ms", genre, endTime - startTime);
+        LOG.debug("method=updateGenre action=\"литературный жанр сохранен\" genre={} time={}ms", genre, endTime - startTime);
     }
 }

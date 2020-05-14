@@ -11,8 +11,9 @@ import ru.otus.krivonos.library.service.GenreService;
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,5 +32,25 @@ public class GenreControllerTest {
 		mockMvc.perform(get("/library/genre/all"))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("GenreType")));
+	}
+
+	@Test
+	void shouldCreateBook() throws Exception {
+		mockMvc.perform(post("/library/genre/add")
+			.param("genreType", "genre"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("\"success\":true")));
+
+		verify(genreService, times(1)).createGenre("genre");
+	}
+
+	@Test
+	void shouldEditBook() throws Exception {
+		mockMvc.perform(post("/library/genre/2/edit")
+			.param("genreType", "genre"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("\"success\":true")));
+
+		verify(genreService, times(1)).updateGenre(2, "genre");
 	}
 }

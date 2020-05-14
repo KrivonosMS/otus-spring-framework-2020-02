@@ -84,6 +84,22 @@ module.exports = {
                     "message": "Непредвиденная ошибка при удалении книги. Обратитесь к администратору"
                 }
             ));
+            app.post('/library/genre/add', (req, res) => res.send(
+                {
+                    "success": true
+                }
+            ));
+            app.post('/library/genre/1/edit', (req, res) => res.send(
+                {
+                    "success": true
+                }
+            ));
+            app.post('/library/genre/2/edit', (req, res) => res.send(
+                {
+                    "success": false,
+                    "message": "Непредвиденная ошибка при сохранении литературного жанра. Обратитесь к администратору"
+                }
+            ));
         }
     },
 
