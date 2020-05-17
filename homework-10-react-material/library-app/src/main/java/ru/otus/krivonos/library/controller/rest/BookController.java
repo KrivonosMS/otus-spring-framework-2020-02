@@ -3,12 +3,17 @@ package ru.otus.krivonos.library.controller.rest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.otus.krivonos.library.controller.rest.dto.BookAndCommentsDTO;
 import ru.otus.krivonos.library.controller.rest.dto.BookDTO;
+import ru.otus.krivonos.library.controller.rest.dto.CommentDTO;
 import ru.otus.krivonos.library.controller.rest.dto.ResultDTO;
 import ru.otus.krivonos.library.exception.MainException;
 import ru.otus.krivonos.library.model.Book;
+import ru.otus.krivonos.library.model.Comment;
 import ru.otus.krivonos.library.service.BookService;
+import ru.otus.krivonos.library.service.CommentService;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -22,6 +27,7 @@ public class BookController {
 	public static final Logger LOG = LoggerFactory.getLogger(BookController.class);
 
 	private final BookService bookService;
+	private final CommentService commentService;
 
 	@GetMapping("/all")
 	public List<BookDTO> allBooks() {
@@ -78,6 +84,48 @@ public class BookController {
 		bookService.updateBook(bookId, bookTitle, authorName, genreId);
 
 		LOG.debug("method=editBook \"обновлеа книга с bookId={}\"", bookId);
+
+		return ResultDTO.ok();
+	}
+
+	@GetMapping("/{id}")
+	public BookAndCommentsDTO getBook(
+		@PathVariable("id") @NotNull Long bookId
+	) {
+		LOG.debug("method=getBook \"получение книги по id={}\"", bookId);
+
+		Book book = bookService.findBookBy(bookId);
+
+		LOG.debug("method=getBook \"получена книги по id={}\"", bookId);
+
+		return BookAndCommentsDTO.toDto(book);
+	}
+
+
+	@PostMapping("/{id}/add/comment")
+	public CommentDTO addComment(
+		@PathVariable("id") @NotNull Long bookId,
+		@RequestParam("text") String commentText
+	) {
+		LOG.debug("method=addComment \"добавить комментарий для книги с id={}\" comment={}", bookId, commentText);
+
+		Comment comment = commentService.addBookComment(bookId, commentText);
+		CommentDTO commentDTO = CommentDTO.toDto(comment);
+
+		LOG.debug("method=addComment \"добавлен комментарий для книги с id={}\"", bookId);
+
+		return commentDTO;
+	}
+
+	@PostMapping("/delete/comment/{id}")
+	public ResultDTO deleteComment(
+		@PathVariable("id") @NotNull Long commentId
+	) {
+		LOG.debug("method=addComment \"удаление комментария с id={}\"", commentId);
+
+		commentService.deleteCommentById(commentId);
+
+		LOG.debug("method=addComment \"удален комментарий с id={}\"", commentId);
 
 		return ResultDTO.ok();
 	}

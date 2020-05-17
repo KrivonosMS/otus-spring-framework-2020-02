@@ -21,7 +21,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addBookComment(long bookId, String text) throws CommentServiceException {
+    public Comment addBookComment(long bookId, String text) {
         if (text == null || "".equals(text.trim())) {
             throw new CommentServiceException("Не задан комментарий для сохранения");
         }
@@ -35,11 +35,13 @@ public class CommentServiceImpl implements CommentService {
 
         long endTime = System.currentTimeMillis();
         LOG.debug("method=addBookComment action=\"комментарий сохранен\" bookId={} time={}ms", bookId, endTime - startTime);
+
+        return comment;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteCommentById(long id) throws CommentServiceException {
+    public void deleteCommentById(long id) {
         long startTime = System.currentTimeMillis();
         LOG.debug("method=deleteCommentById action=\"удаление комментария\" id={}", id);
 

@@ -5,29 +5,32 @@ import lombok.NoArgsConstructor;
 import ru.otus.krivonos.library.model.Book;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
-public class BookDTO {
+public class BookAndCommentsDTO {
 	private long id;
 	private String title;
 	private AuthorDTO author;
 	private GenreDTO genre;
 	private List<CommentDTO> comments;
 
-	public BookDTO(long id, String title, AuthorDTO author, GenreDTO genre) {
+	public BookAndCommentsDTO(long id, String title, AuthorDTO author, GenreDTO genre, List<CommentDTO> comments) {
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.genre = genre;
+		this.comments = comments;
 	}
 
-	public static BookDTO toDto(Book book) {
-		return new BookDTO(
+	public static BookAndCommentsDTO toDto(Book book) {
+		return new BookAndCommentsDTO(
 			book.getId(),
 			book.getTitle(),
 			AuthorDTO.toDto(book.getAuthor()),
-			GenreDTO.toDto(book.getGenre())
+			GenreDTO.toDto(book.getGenre()),
+			book.getComments().stream().map(CommentDTO::toDto).collect(Collectors.toList())
 		);
 	}
 }

@@ -45,6 +45,42 @@ module.exports = {
                     }
                 ]
             ));
+            app.get('/library/book/1', (req, res) => res.send(
+                {
+                    "id": 1,
+                    "title": "Повести Белкина (сборник)",
+                    "author": {
+                        "id": 1,
+                        "name": "Александр Пушкин"
+                    },
+                    "genre": {
+                        "id": 2,
+                        "type": "Литература 19 века"
+                    },
+                    "comments": [
+                        {
+                            "id": 1,
+                            "text": "комментарий 1",
+                            "creationDate": "25.04.2019 20:30"
+                        },
+                        {
+                            "id": 2,
+                            "text": "комментарий 2",
+                            "creationDate": "25.04.2019 20:30"
+                        },
+                        {
+                            "id": 3,
+                            "text": "комментарий 3",
+                            "creationDate": "25.04.2019 20:30"
+                        },
+                        {
+                            "id": 4,
+                            "text": "комментарий 4",
+                            "creationDate": "25.04.2019 20:30"
+                        }
+                    ]
+                }
+            ));
             app.get('/library/genre/all', (req, res) => res.send(
                 [
                     {
@@ -100,6 +136,19 @@ module.exports = {
                     "message": "Непредвиденная ошибка при сохранении литературного жанра. Обратитесь к администратору"
                 }
             ));
+            app.post('/library/book/delete/comment/1', (req, res) => res.send(
+                {
+                    "success": true
+                }
+            ));
+            app.post('/library/book/1/add/comment', (req, res) => res.send(
+                {
+                    "id": 5,
+                    "text": "комментарий 5",
+                    "creationDate": "25.04.2019 20:30"
+                }
+            ))
+            ;
         }
     },
 

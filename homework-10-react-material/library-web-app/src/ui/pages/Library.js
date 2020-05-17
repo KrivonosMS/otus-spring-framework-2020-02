@@ -5,11 +5,13 @@ import {Table, TableBody, TableCell, TableContainer, TableHead, TablePagination,
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
+import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
 import BookModalWindow from "../components/BookModalWindow";
 import DeleteBookConfirmWindow from "../components/DeleteBookConfirmWindow";
 import IconButton from "@material-ui/core/IconButton";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 class Library extends Component {
     constructor() {
@@ -29,7 +31,8 @@ class Library extends Component {
                 {id: 'author', label: 'Автор', minWidth: 170},
                 {id: 'genre', label: 'Жанр', minWidth: 170},
                 {id: 'edit', label: '', width: 10, minWidth: 10},
-                {id: 'delete', label: '', width: 10, minWidth: 10}
+                {id: 'delete', label: '', width: 10, minWidth: 10},
+                {id: 'link', label: '', width: 10, minWidth: 10}
             ],
 
             rows: []
@@ -136,6 +139,11 @@ class Library extends Component {
                                             <TableCell key='delete'>
                                                 <IconButton variant="contained" onClick={() => this.openDeleteBookConfirmWindow(row.id, row.title, row.author.name)}>
                                                     <DeleteIcon/>
+                                                </IconButton>
+                                            </TableCell>
+                                            <TableCell key='link'>
+                                                <IconButton variant="contained" component={Link} to={'/book/' + row.id}>
+                                                    <SettingsEthernetIcon/>
                                                 </IconButton>
                                             </TableCell>
                                         </TableRow>
