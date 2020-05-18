@@ -3,37 +3,33 @@ import '../css/DeleteBookConfirmWindow.css'
 import Modal from "react-modal";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
-import TextField from "@material-ui/core/TextField";
 
-class DeleteBookConfirmWindow extends Component {
+class DeleteCommentConfirmWindow extends Component {
     constructor(props) {
         super(props);
         this.state = {
             closeModal: props.closeModal,
-            updateGrid: props.updateGrid
+            updateComments: props.updateComments,
+            result: ''
         }
 
-        this.deleteBook = this.deleteBook.bind(this);
+        this.deleteComment = this.deleteComment.bind(this);
         this.flushResult = this.flushResult.bind(this);
     }
 
-    deleteBook(evt, bookId) {
-        const url = '/library/book/' + bookId + '/delete';
-        fetch(url, {
-            method: 'POST',
-            body: {"id": bookId}
+    deleteComment(evt, commentId) {
+        fetch('/library/book/delete/comment/' + commentId, {
+            method: 'POST'
         })
             .then(response => response.json())
             .then(result => {
                 if (result.success === true) {
-                    this.state.updateGrid();
+                    this.state.updateComments(commentId);
                     this.state.closeModal();
-
                 } else {
                     result.message ?
-                            this.setState({result: result.message}) :
-                            this.setState({result: "Непредвиденная ошибка"})
+                        this.setState({result: result.message}) :
+                        this.setState({result: "Непредвиденная ошибка"})
                 }
             });
     }
@@ -64,31 +60,11 @@ class DeleteBookConfirmWindow extends Component {
             >
                 <Box>
                     <span>{this.state.result}</span>
-                    <h3>Вы, действительно, хотите удалить книгу?</h3>
-                    <Box mb={2} >
-                        <InputLabel>название книги</InputLabel>
-                        <TextField
-                            fullWidth
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            defaultValue={this.props.title}
-                        />
-                    </Box>
-                    <Box mb={2} >
-                        <InputLabel>автор</InputLabel>
-                        <TextField
-                            fullWidth
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            defaultValue={this.props.author}
-                        />
-                    </Box>
+                    <h3>Вы, действительно, хотите удалить комментарий?</h3>
                     <Box className="buttons-horiz-centre">
                         <Box mr={1}>
                             <Button
-                                onClick={(evt) => this.deleteBook(evt, this.props.bookId)}
+                                onClick={(evt) => this.deleteComment(evt, this.props.commentId)}
                                 variant="contained"
                                 color="primary"
                                 type="submit">Удалить
@@ -108,4 +84,4 @@ class DeleteBookConfirmWindow extends Component {
     }
 }
 
-export default DeleteBookConfirmWindow;
+export default DeleteCommentConfirmWindow;

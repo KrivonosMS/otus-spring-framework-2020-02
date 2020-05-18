@@ -141,6 +141,12 @@ module.exports = {
                     "success": true
                 }
             ));
+            app.post('/library/book/delete/comment/2', (req, res) => res.send(
+                {
+                    "success": false,
+                    "message": "Непредвиденная ошибка при удалении комментария. Обратитесь к администратору"
+                }
+            ));
             app.post('/library/book/1/add/comment', (req, res) => res.send(
                 {
                     "id": 5,

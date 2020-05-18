@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
 import Divider from "@material-ui/core/Divider";
+import DeleteCommentConfirmWindow from "../components/DeleteCommentConfirmWindow";
 
 class Book extends Component {
     constructor(props) {
@@ -19,13 +20,17 @@ class Book extends Component {
             author: '',
             genre: '',
             comments: [],
-            newComment: ''
+            newComment: '',
+            isOpenDeleteCommentConfirmWindow: false,
+            commentId: ''
         };
 
         this.updateInfo = this.updateInfo.bind(this);
-        this.deleteComment = this.deleteComment.bind(this);
+        this.updateComments = this.updateComments.bind(this);
         this.saveComment = this.saveComment.bind(this);
         this.setNewComment = this.setNewComment.bind(this);
+        this.openDeleteBookConfirmWindow = this.openDeleteBookConfirmWindow.bind(this);
+        this.closeDeleteCommentConfirmWindow = this.closeDeleteCommentConfirmWindow.bind(this);
     }
 
     componentDidMount() {
@@ -43,20 +48,11 @@ class Book extends Component {
             })
     }
 
-    deleteComment(commentId) {
-        fetch('/library/book/delete/comment/' + commentId, {
-            method: 'POST'
-        })
-            .then(response => response.json())
-            .then(result => {
-                if (result.success === true) {
-                    let newArr = this.state.comments.filter(v => v.id !== commentId);
-                    console.log(newArr);
-                    this.setState({
-                        comments: newArr
-                    })
-                }
-            });
+    updateComments(commentId) {
+        let newArr = this.state.comments.filter(v => v.id !== commentId);
+        this.setState({
+            comments: newArr
+        });
     }
 
     saveComment(evt) {
@@ -90,6 +86,19 @@ class Book extends Component {
                 newComment: value
             }
         )
+    }
+
+    openDeleteBookConfirmWindow(commentId) {
+        this.setState({
+            isOpenDeleteCommentConfirmWindow: true,
+            commentId: commentId
+        })
+    }
+
+    closeDeleteCommentConfirmWindow() {
+        this.setState({
+            isOpenDeleteCommentConfirmWindow: false
+        })
     }
 
     render() {
@@ -144,7 +153,7 @@ class Book extends Component {
                 </Grid>
                 <Grid item xs={6}>
                     <Box m={3}>
-                        <Typography color="textSecondary"  variant="h5">комментарии:</Typography>
+                        <Typography color="textSecondary" variant="h5">комментарии:</Typography>
                         {this.state.comments.map((comment) => (
                             <Box key={comment.id} mb={1}>
                                 <Card key={comment.id} elevation={3}>
@@ -153,13 +162,19 @@ class Book extends Component {
                                         <Typography variant="body2">{comment.text}</Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button size="small" variant="contained" onClick={() => this.deleteComment(comment.id)}>Удалить</Button>
+                                        <Button size="small" variant="contained" onClick={() => this.openDeleteBookConfirmWindow(comment.id)}>Удалить</Button>
                                     </CardActions>
                                 </Card>
                             </Box>
                         ))}
                     </Box>
                 </Grid>
+                <DeleteCommentConfirmWindow
+                    updateComments={this.updateComments}
+                    isOpen={this.state.isOpenDeleteCommentConfirmWindow}
+                    closeModal={this.closeDeleteCommentConfirmWindow}
+                    commentId={this.state.commentId}
+                />
             </Grid>
         );
     }
