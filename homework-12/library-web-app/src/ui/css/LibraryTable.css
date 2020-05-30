@@ -1,0 +1,12 @@
+body {
+    padding: 50px;
+}
+
+.books td {
+    border: 1px solid lightgray;
+    padding: 5px;
+}
+
+.books {
+    margin-bottom: 20px;
+}
