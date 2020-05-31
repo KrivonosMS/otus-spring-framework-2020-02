@@ -40,18 +40,18 @@ public class BookServiceImpl implements BookService {
 		bookTitle = bookTitle == null ? "" : bookTitle.trim();
 		authorName = authorName == null ? "" : authorName.trim();
 		if ("".equals(bookTitle)) {
-			throw new BookServiceException("Не задано название книги");
+			throw new BookServiceException("Не задано название книги", String.format("Не задано название книги, bookId=%s authorName='%s' genreId=%s", bookId, authorName, genreId));
 		}
 		if ("".equals(authorName)) {
-			throw new BookServiceException("Не задан автор книги");
+			throw new BookServiceException("Не задан автор книги",String.format("Не задано название книги, bookId=%s bookTitle='%s' genreId=%s", bookId, bookTitle, genreId));
 		}
 		Author author = authorRepository.findByName(authorName).orElse(new Author(authorName));
-		Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new BookServiceException("Отсутствует литературный жанр c Id=" + genreId));
+		Genre genre = genreRepository.findById(genreId).orElseThrow(() -> new BookServiceException("Указанный литературный жанр отсутствует в библиотеке", "Отсутствует литературный жанр c Id=" + genreId));
 		Book book;
 		if (bookId == 0) {
 			book = new Book(0, bookTitle, author, genre);
 		} else {
-			book = bookRepository.findById(bookId).orElseThrow(() -> new BookServiceException("Отсутствует книга c Id=" + bookId));
+			book = bookRepository.findById(bookId).orElseThrow(() -> new BookServiceException("Отредактированная книга отстуствует в библиотеке", "Отсутствует книга c Id=" + bookId));
 			book.setTitle(bookTitle);
 			book.setAuthor(author);
 			book.setGenre(genre);
@@ -65,7 +65,7 @@ public class BookServiceImpl implements BookService {
 		long startTime = System.currentTimeMillis();
 		LOG.debug("method=findBookBy action=\"получение книги\" bookId={}", id);
 
-		Book book = bookRepository.findById(id).orElseThrow(() -> new BookServiceException("Книга с id='" + id + "' в библиотеке не найдена"));
+		Book book = bookRepository.findById(id).orElseThrow(() -> new BookServiceException("Книга не найдена", "Книга с id='" + id + "' в библиотеке не найдена"));
 
 		long endTime = System.currentTimeMillis();
 		LOG.debug("method=findBookBy action=\"найдена книга\" book={} time={}ms", book, endTime - startTime);
@@ -104,7 +104,7 @@ public class BookServiceImpl implements BookService {
 		long startTime = System.currentTimeMillis();
 		LOG.debug("method=deleteBookBy action=\"удаление книги\" bookId={}", id);
 
-		Book book = bookRepository.findById(id).orElseThrow(() -> new BookServiceException("Книга с id='" + id + "' в библиотеке не найдена"));
+		Book book = bookRepository.findById(id).orElseThrow(() -> new BookServiceException("Книга не найдена", "Книга с id='" + id + "' в библиотеке не найдена"));
 		bookRepository.delete(book);
 
 		long endTime = System.currentTimeMillis();

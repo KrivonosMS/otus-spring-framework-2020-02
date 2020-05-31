@@ -68,7 +68,7 @@ public class GenreController {
     public ResultDTO handleMainException(MainException ex) {
         LOG.debug("method=handleMainException", ex);
 
-        return ResultDTO.error(ex.getInfo());
+        return ResultDTO.error(ex.getClientMessage());
     }
 
     @ExceptionHandler(Exception.class)

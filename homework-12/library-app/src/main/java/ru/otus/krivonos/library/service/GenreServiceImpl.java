@@ -45,18 +45,18 @@ public class GenreServiceImpl implements GenreService {
 
 	private Genre saveGenre(long id, String type) {
 		if (type == null || "".equals(type.trim())) {
-			throw new GenreServiceException("Не задан литературный жанр");
+			throw new GenreServiceException("Не задан литературный жанр", String.format("Не задан литературный жанр, genreId=%s", id));
 		}
 
 		if (genreRepository.existsByType(type)) {
-			throw new GenreServiceException("Указанный литературный жанр '" + type + "' уже существует");
+			throw new GenreServiceException("Указанный литературный жанр '" + type + "' уже существует", String.format("Указанный литературный жанр '%s' уже существует, genreId=%s", type, id));
 		}
 
 		Genre genre;
 		if (id == 0) {
 			genre = new Genre(type);
 		} else {
-			genre = genreRepository.findById(id).orElseThrow(() -> new GenreServiceException("Отсутствует литературный жанр c Id=" + id));
+			genre = genreRepository.findById(id).orElseThrow(() -> new GenreServiceException("Указанный литературный жанр отстуствует в библиотеке", String.format("Отсутствует литературный жанр c Id=%s", id)));
 			genre.setType(type);
 		}
 		genreRepository.save(genre);

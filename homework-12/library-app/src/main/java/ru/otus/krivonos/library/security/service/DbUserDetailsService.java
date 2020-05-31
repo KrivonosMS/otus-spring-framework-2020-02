@@ -25,7 +25,6 @@ public class DbUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-		LOG.debug(passwordEncoder.encode("user"));
 		LOG.debug("method=loadUserByUsername action=\"аутентификация пользователя '{}'\"", login);
 
 		ApplicationUser applicationUser = userRepository.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException(login));

@@ -3,7 +3,6 @@ package ru.otus.krivonos.library.controller.rest;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.krivonos.library.controller.rest.dto.BookAndCommentsDTO;
 import ru.otus.krivonos.library.controller.rest.dto.BookDTO;
@@ -134,7 +133,7 @@ public class BookController {
 	public ResultDTO handleMainException(MainException ex) {
 		LOG.debug("method=handleMainException", ex);
 
-		return ResultDTO.error(ex.getInfo());
+		return ResultDTO.error(ex.getClientMessage());
 	}
 
 	@ExceptionHandler(Exception.class)

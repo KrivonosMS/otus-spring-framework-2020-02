@@ -33,7 +33,7 @@ class CommentServiceImplTest {
 			libraryService.addBookComment(1, null);
 		});
 
-		assertEquals("Не задан комментарий для сохранения", exception.getInfo());
+		assertEquals("Не задан комментарий для сохранения", exception.getClientMessage());
 	}
 
 	@Test
@@ -42,22 +42,22 @@ class CommentServiceImplTest {
 			libraryService.addBookComment(1, "");
 		});
 
-		assertEquals("Не задан комментарий для сохранения", exception.getInfo());
+		assertEquals("Не задан комментарий для сохранения", exception.getClientMessage());
 	}
 
 	@Test
-	void shouldThrowServiceExceptionWhenSaveCommentAndBookIsNotExist() throws Exception {
+	void shouldThrowServiceExceptionWhenSaveCommentAndBookIsNotExist() {
 		when(bookRepository.findById(1l)).thenReturn(Optional.empty());
 		CommentServiceException exception = Assertions.assertThrows(CommentServiceException.class, () -> {
 			libraryService.addBookComment(1, "тестовый комментарий");
 		});
 
-		assertThat(exception).hasMessage("Не найдена книга для добавления комментария");
+		assertEquals("Не найдена книга для добавления комментария", exception.getClientMessage());
 		verify(commentRepository, never()).save(any());
 	}
 
 	@Test
-	void shouldSaveComment() throws Exception {
+	void shouldSaveComment() {
 		when(bookRepository.findById(1l)).thenReturn(Optional.of(mock(Book.class)));
 		libraryService.addBookComment(1, "тестовый комментарий");
 
@@ -65,13 +65,13 @@ class CommentServiceImplTest {
 	}
 
 	@Test
-	void shouldThrowServiceExceptionWhenDeleteCommentWhichIsNotExist() throws Exception {
+	void shouldThrowServiceExceptionWhenDeleteCommentWhichIsNotExist() {
 		when(commentRepository.existsById(1l)).thenReturn(false);
 		CommentServiceException exception = Assertions.assertThrows(CommentServiceException.class, () -> {
 			libraryService.deleteCommentById(1l);
 		});
 
-		assertThat(exception).hasMessage("Отсутствует комментарий для удаления");
+		assertEquals("Отсутствует комментарий для удаления", exception.getClientMessage());
 		verify(commentRepository, never()).deleteById(1l);
 	}
 

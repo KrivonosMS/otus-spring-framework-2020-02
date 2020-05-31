@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.krivonos.library.dao.AuthorRepository;
 import ru.otus.krivonos.library.dao.BookRepository;
@@ -39,7 +38,7 @@ class BookServiceImplTest {
 			() -> bookService.createBook(null, "test_author_name'", 1)
 		);
 
-		assertEquals("Не задано название книги", exception.getInfo());
+		assertEquals("Не задано название книги", exception.getClientMessage());
 	}
 
 	@Test
@@ -48,7 +47,7 @@ class BookServiceImplTest {
 			() -> bookService.createBook("", "test_author_name'", 1)
 		);
 
-		assertEquals("Не задано название книги", exception.getInfo());
+		assertEquals("Не задано название книги", exception.getClientMessage());
 	}
 
 	@Test
@@ -57,7 +56,7 @@ class BookServiceImplTest {
 			() -> bookService.createBook("test_title", "", 1)
 		);
 
-		assertEquals("Не задан автор книги", exception.getInfo());
+		assertEquals("Не задан автор книги", exception.getClientMessage());
 	}
 
 	@Test
@@ -66,7 +65,7 @@ class BookServiceImplTest {
 		BookServiceException exception = Assertions.assertThrows(BookServiceException.class,
 			() -> bookService.createBook("test_title", "test_author", 1));
 
-		assertEquals("Отсутствует литературный жанр c Id=1", exception.getInfo());
+		assertEquals("Указанный литературный жанр отсутствует в библиотеке", exception.getClientMessage());
 	}
 
 	@Test
@@ -111,7 +110,7 @@ class BookServiceImplTest {
 			() -> bookService.updateBook(1, "", "", 1)
 		);
 
-		assertEquals("Не задано название книги", exception.getInfo());
+		assertEquals("Не задано название книги", exception.getClientMessage());
 	}
 
 	@Test
@@ -120,7 +119,7 @@ class BookServiceImplTest {
 			() -> bookService.updateBook(1, null, "", 1)
 		);
 
-		assertEquals("Не задано название книги", exception.getInfo());
+		assertEquals("Не задано название книги", exception.getClientMessage());
 	}
 
 	@Test
@@ -129,7 +128,7 @@ class BookServiceImplTest {
 			() -> bookService.updateBook(1, "book_title", "", 1)
 		);
 
-		assertEquals("Не задан автор книги", exception.getInfo());
+		assertEquals("Не задан автор книги", exception.getClientMessage());
 	}
 
 	@Test
@@ -138,7 +137,7 @@ class BookServiceImplTest {
 			() -> bookService.updateBook(1, "book_title", null, 1)
 		);
 
-		assertEquals("Не задан автор книги", exception.getInfo());
+		assertEquals("Не задан автор книги", exception.getClientMessage());
 	}
 
 	@Test
@@ -149,7 +148,7 @@ class BookServiceImplTest {
 			() -> bookService.updateBook(1, "test_title", "test_author", 1)
 		);
 
-		assertEquals("Отсутствует литературный жанр c Id=1", exception.getInfo());
+		assertEquals("Указанный литературный жанр отсутствует в библиотеке", exception.getClientMessage());
 	}
 
 	@Test
@@ -160,7 +159,7 @@ class BookServiceImplTest {
 			() -> bookService.updateBook(1, "test_title", "test_author", 1)
 		);
 
-		assertEquals("Отсутствует книга c Id=1", exception.getInfo());
+		assertEquals("Отредактированная книга отстуствует в библиотеке", exception.getClientMessage());
 	}
 
 	@Test
@@ -180,7 +179,7 @@ class BookServiceImplTest {
 			() -> bookService.deleteBookBy(1L)
 		);
 
-		assertEquals("Книга с id='1' в библиотеке не найдена", exception.getInfo());
+		assertEquals("Книга не найдена", exception.getClientMessage());
 	}
 
 	@Test

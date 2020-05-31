@@ -1,42 +1,19 @@
 package ru.otus.krivonos.library.exception;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class MainException extends RuntimeException {
-	private final List<String> errors;
+	private final String clientMessage;
 
-	public MainException(List<String> errors) {
-		super();
-		this.errors = errors;
-	}
-
-	public MainException() {
-		this.errors = new ArrayList<>();
-	}
-
-	public MainException(String message) {
+	public MainException(String clientMessage, String message) {
 		super(message);
-		this.errors = Arrays.asList(message);
+		this.clientMessage = clientMessage;
 	}
 
-	public MainException(String message, Throwable cause) {
+	public MainException(String clientMessage, String message, Throwable cause) {
 		super(message, cause);
-		this.errors = Arrays.asList(message);
+		this.clientMessage = clientMessage;
 	}
 
-	public MainException(Throwable cause) {
-		super(cause);
-		this.errors = new ArrayList<>();
-	}
-
-	@Override
-	public String getMessage() {
-		return getInfo();
-	}
-
-	public String getInfo() {
-		return String.join("; ", errors);
+	public String getClientMessage() {
+		return clientMessage;
 	}
 }

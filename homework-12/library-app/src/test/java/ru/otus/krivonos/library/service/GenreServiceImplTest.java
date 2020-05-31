@@ -36,7 +36,7 @@ class GenreServiceImplTest {
 			genreService.createGenre(null);
 		});
 
-		assertEquals("Не задан литературный жанр", exception.getInfo());
+		assertEquals("Не задан литературный жанр", exception.getClientMessage());
 	}
 
 	@Test
@@ -45,7 +45,7 @@ class GenreServiceImplTest {
 			genreService.createGenre("");
 		});
 
-		assertEquals("Не задан литературный жанр", exception.getInfo());
+		assertEquals("Не задан литературный жанр", exception.getClientMessage());
 	}
 
 	@Test
@@ -61,7 +61,7 @@ class GenreServiceImplTest {
 			genreService.updateGenre(1, null);
 		});
 
-		assertEquals("Не задан литературный жанр", exception.getInfo());
+		assertEquals("Не задан литературный жанр", exception.getClientMessage());
 	}
 
 	@Test
@@ -70,7 +70,7 @@ class GenreServiceImplTest {
 			genreService.updateGenre(1, "");
 		});
 
-		assertEquals("Не задан литературный жанр", exception.getInfo());
+		assertEquals("Не задан литературный жанр", exception.getClientMessage());
 	}
 
 	@Test

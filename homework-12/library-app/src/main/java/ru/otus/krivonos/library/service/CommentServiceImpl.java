@@ -23,13 +23,13 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(rollbackFor = Exception.class)
     public Comment addBookComment(long bookId, String text) {
         if (text == null || "".equals(text.trim())) {
-            throw new CommentServiceException("Не задан комментарий для сохранения");
+            throw new CommentServiceException("Не задан комментарий для сохранения", String.format("Не задан комментарий для сохранения для книги с bookId=%s", bookId));
         }
         long startTime = System.currentTimeMillis();
         LOG.debug("method=addBookComment action=\"сохранение комментария к книге\" bookId={}", bookId);
         LOG.trace("method=addBookComment action=\"сохранение комментария к книге\" bookId={} text={}", bookId, text);
 
-			Book book = bookRepository.findById(bookId).orElseThrow(() -> new CommentServiceException("Не найдена книга для добавления комментария"));
+			Book book = bookRepository.findById(bookId).orElseThrow(() -> new CommentServiceException("Не найдена книга для добавления комментария", String.format("Не найдена книга с id=%s для добавления комментария", bookId)));
 			Comment comment = new Comment(book, text);
 			commentRepository.save(comment);
 
@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         if (commentRepository.existsById(id)) {
             commentRepository.deleteById(id);
         } else {
-            throw new CommentServiceException("Отсутствует комментарий для удаления");
+            throw new CommentServiceException("Отсутствует комментарий для удаления", String.format("Отсутствует комментарий с id=%s для удаления", id));
         }
 
         long endTime = System.currentTimeMillis();
