@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.otus.krivonos.library.security.dao.UserRepository;
-import ru.otus.krivonos.library.security.model.ApplicationUser;
+import ru.otus.krivonos.library.dao.UserRepository;
+import ru.otus.krivonos.library.model.ApplicationUser;
 
 import java.util.stream.Collectors;
 

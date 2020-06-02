@@ -1,4 +1,4 @@
-package ru.otus.krivonos.library.security.model;
+package ru.otus.krivonos.library.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

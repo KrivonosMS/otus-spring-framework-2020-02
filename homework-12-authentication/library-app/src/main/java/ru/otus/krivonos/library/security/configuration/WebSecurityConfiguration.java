@@ -22,8 +22,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.and()
 			.logout().logoutUrl("/library/logout").permitAll().invalidateHttpSession(true).logoutSuccessUrl("/login")
 			.and()
-			.rememberMe();
-		http.rememberMe().key("MySecret").tokenValiditySeconds(50000);
+			.rememberMe().key("MySecret").tokenValiditySeconds(50000);
 	}
 
 	@Bean
