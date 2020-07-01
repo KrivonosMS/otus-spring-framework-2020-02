@@ -1,0 +1,26 @@
+directory:
+  input-folder: homework-15-spring-integration/input
+
+mail:
+  host: smtp.gmail.com
+  port: 587
+  protocol: smtp
+  user: # указать e-mail
+  password: # указать пароль от e-mail
+  from: # указать e-mail
+  debug: false
+  smtp-start-tls-enable: true
+  smtp-auth: true
+  encoding: utf-8
+
+logging:
+  file: log/app-info.log
+  pattern:
+    file: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+    console: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+  level:
+    root: INFO
+    ru.otus.krivonos: TRACE
+    org.springframework.web: INFO
+    guru.springframework.controllers: INFO
+    org.hibernate: WARN
