@@ -1,0 +1,4 @@
+.buttons-horiz-right {
+    display: flex;
+    justify-content: right;
+}

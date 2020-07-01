@@ -1,0 +1,74 @@
+[INFO ] 2020-04-26 12:49:14.637 [main] r.o.k.l.Application - Starting Application on DESKTOP-FLJFUP6 with PID 13384 (E:\WorldOfProgramming\Java\JavaProjects\Spring-OTUS\otus-spring-framework-2020-02\homework-09\target\classes started by Admin in E:\WorldOfProgramming\Java\JavaProjects\Spring-OTUS\otus-spring-framework-2020-02\homework-09\src\main\java)
+[DEBUG] 2020-04-26 12:49:14.644 [main] r.o.k.l.Application - Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+[INFO ] 2020-04-26 12:49:14.646 [main] r.o.k.l.Application - No active profile set, falling back to default profiles: default
+[INFO ] 2020-04-26 12:49:16.280 [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[INFO ] 2020-04-26 12:49:16.630 [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 332ms. Found 4 JPA repository interfaces.
+[INFO ] 2020-04-26 12:49:18.763 [main] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-04-26 12:49:18.778 [main] o.a.c.c.StandardService - Starting service [Tomcat]
+[INFO ] 2020-04-26 12:49:18.779 [main] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.31]
+[INFO ] 2020-04-26 12:49:18.933 [main] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-04-26 12:49:18.933 [main] o.s.w.c.ContextLoader - Root WebApplicationContext: initialization completed in 4172 ms
+[INFO ] 2020-04-26 12:49:19.082 [main] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+[INFO ] 2020-04-26 12:49:19.321 [main] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+[INFO ] 2020-04-26 12:49:21.431 [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[WARN ] 2020-04-26 12:49:22.332 [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[INFO ] 2020-04-26 12:49:22.575 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-04-26 12:49:22.858 [main] o.a.c.c.StandardService - Stopping service [Tomcat]
+[INFO ] 2020-04-26 12:49:22.870 [main] o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+[ERROR] 2020-04-26 12:49:22.873 [main] o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+[INFO ] 2020-04-26 12:49:22.876 [main] o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-04-26 12:49:22.878 [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2020-04-26 12:49:22.881 [main] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2020-04-26 12:49:22.889 [main] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.
+[INFO ] 2020-04-26 12:51:05.819 [main] r.o.k.l.Application - Starting Application on DESKTOP-FLJFUP6 with PID 10812 (E:\WorldOfProgramming\Java\JavaProjects\Spring-OTUS\otus-spring-framework-2020-02\homework-09\target\classes started by Admin in E:\WorldOfProgramming\Java\JavaProjects\Spring-OTUS\otus-spring-framework-2020-02\homework-09\src\main\java)
+[DEBUG] 2020-04-26 12:51:05.823 [main] r.o.k.l.Application - Running with Spring Boot v2.2.5.RELEASE, Spring v5.2.4.RELEASE
+[INFO ] 2020-04-26 12:51:05.824 [main] r.o.k.l.Application - No active profile set, falling back to default profiles: default
+[INFO ] 2020-04-26 12:51:08.170 [main] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[INFO ] 2020-04-26 12:51:08.636 [main] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 390ms. Found 4 JPA repository interfaces.
+[INFO ] 2020-04-26 12:51:11.558 [main] o.s.b.w.e.t.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+[INFO ] 2020-04-26 12:51:11.584 [main] o.a.c.c.StandardService - Starting service [Tomcat]
+[INFO ] 2020-04-26 12:51:11.585 [main] o.a.c.c.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.31]
+[INFO ] 2020-04-26 12:51:11.818 [main] o.a.c.c.C.[.[.[/] - Initializing Spring embedded WebApplicationContext
+[INFO ] 2020-04-26 12:51:11.818 [main] o.s.w.c.ContextLoader - Root WebApplicationContext: initialization completed in 5898 ms
+[INFO ] 2020-04-26 12:51:11.976 [main] c.z.h.HikariDataSource - HikariPool-1 - Starting...
+[INFO ] 2020-04-26 12:51:12.302 [main] c.z.h.HikariDataSource - HikariPool-1 - Start completed.
+[INFO ] 2020-04-26 12:51:14.590 [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[WARN ] 2020-04-26 12:51:15.685 [main] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[INFO ] 2020-04-26 12:51:15.929 [main] o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-04-26 12:51:16.348 [main] o.a.c.c.StandardService - Stopping service [Tomcat]
+[INFO ] 2020-04-26 12:51:16.358 [main] o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+[ERROR] 2020-04-26 12:51:16.360 [main] o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+[INFO ] 2020-04-26 12:51:16.363 [main] o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+[INFO ] 2020-04-26 12:51:16.364 [main] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+[INFO ] 2020-04-26 12:51:16.367 [main] c.z.h.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[INFO ] 2020-04-26 12:51:16.374 [main] c.z.h.HikariDataSource - HikariPool-1 - Shutdown completed.

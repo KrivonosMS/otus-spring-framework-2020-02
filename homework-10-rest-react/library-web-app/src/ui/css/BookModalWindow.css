@@ -1,0 +1,22 @@
+body {
+    padding: 50px;
+}
+
+button {
+    margin-right: 5px;
+}
+
+.buttons-horiz-right {
+    display: flex;
+    justify-content: right;
+}
+
+label {
+    display: inline-block;
+    width: 150px;
+}
+
+.row {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
