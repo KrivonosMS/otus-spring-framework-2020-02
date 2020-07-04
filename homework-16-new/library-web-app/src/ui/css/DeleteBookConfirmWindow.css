@@ -1,0 +1,4 @@
+.buttons-horiz-centre {
+    display: flex;
+    justify-content: center;
+}
