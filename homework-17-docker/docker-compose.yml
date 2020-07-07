@@ -1,0 +1,27 @@
+version: '3'
+services:
+  springbootapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    ports:
+      - 1515:8080
+    depends_on:
+      - postgres
+    environment:
+      - DB_DRIVER=org.postgresql.Driver
+      - DB_URL=jdbc:postgresql://postgres:5432/library
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - WAIT_FOR=postgres:5432
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=library
