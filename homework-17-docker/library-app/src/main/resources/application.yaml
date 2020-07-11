@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driverClassName: ${DB_DRIVER}
+    initialization-mode: always
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  file: log/app-info.log
+  pattern:
+    file: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+    console: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+  level:
+    root: INFO
+    ru.otus.krivonos: TRACE
+    org.springframework.web: INFO
+    guru.springframework.controllers: INFO
+    org.hibernate: WARN
